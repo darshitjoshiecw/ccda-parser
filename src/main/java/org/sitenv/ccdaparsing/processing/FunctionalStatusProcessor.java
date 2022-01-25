@@ -1,6 +1,7 @@
 package org.sitenv.ccdaparsing.processing;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.sitenv.ccdaparsing.model.CCDAFunctionalStatus;
 import org.sitenv.ccdaparsing.model.CCDAID;
 import org.sitenv.ccdaparsing.util.ApplicationConstants;
@@ -23,8 +24,7 @@ import java.util.concurrent.Future;
 
 @Service
 public class FunctionalStatusProcessor {
-	private static final Logger logger = Logger.getLogger(FunctionalStatusProcessor.class);
-
+	private static final Logger logger = LogManager.getLogger(FunctionalStatusProcessor.class);
 	@Async()
 	public Future<CCDAFunctionalStatus> retrieveFunctionalStatusDetails(XPath xPath, Document doc) throws XPathExpressionException, TransformerException {
 		long startTime = System.currentTimeMillis();

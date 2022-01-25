@@ -1,6 +1,7 @@
 package org.sitenv.ccdaparsing.processing;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.sitenv.ccdaparsing.model.CCDAMentalStatus;
 import org.sitenv.ccdaparsing.model.CCDAID;
 import org.sitenv.ccdaparsing.util.ApplicationConstants;
@@ -23,7 +24,7 @@ import java.util.concurrent.Future;
 
 @Service
 public class MentalStatusProcessor {
-	private static final Logger logger = Logger.getLogger(MentalStatusProcessor.class);
+	private static final Logger logger = LogManager.getLogger(MentalStatusProcessor.class);
 
 	@Async()
 	public Future<CCDAMentalStatus> retrieveMentalStatusDetails(XPath xPath, Document doc) throws XPathExpressionException, TransformerException {
