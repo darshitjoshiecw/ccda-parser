@@ -31,6 +31,8 @@ public class CCDARefModel {
 	private UsrhSubType        usrhSubType;
 	private boolean isEmpty;
 
+	private ArrayList<String> errorSections = new ArrayList<>();
+
 	public CCDAII getDocTemplateId() {
 		return docTemplateId;
 	}
@@ -352,5 +354,19 @@ public class CCDARefModel {
 		} else if (!mentalStatus.equals(other.mentalStatus))
 			return false;
 		return true;
+	}
+
+	public ArrayList<String> getErrorSections() {
+		return errorSections;
+	}
+
+	public void setErrorSections(ArrayList<String> errorSections) {
+		this.errorSections = errorSections;
+	}
+	public void addToErrorSections(String sectionName) {
+		if(null == this.errorSections)
+			this.errorSections = new ArrayList<String>();
+
+		errorSections.add(sectionName);
 	}
 }

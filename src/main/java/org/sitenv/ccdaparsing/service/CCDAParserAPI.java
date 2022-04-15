@@ -9,13 +9,14 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import org.apache.log4j.Logger;
 
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.sitenv.ccdaparsing.model.CCDAAdvanceDirective;
 import org.sitenv.ccdaparsing.model.CCDAAllergy;
 import org.sitenv.ccdaparsing.model.CCDACareTeamMember;
@@ -69,7 +70,7 @@ import org.xml.sax.SAXException;
 @Service
 public class CCDAParserAPI {
 
-	private static final Logger logger = Logger.getLogger(CCDAParserAPI.class);
+	private static final Logger logger = LogManager.getLogger(CCDAParserAPI.class);
 	
 	private static XPath xPath = XPathFactory.newInstance().newXPath();
 	
@@ -141,8 +142,10 @@ public class CCDAParserAPI {
 	@Autowired
 	MentalStatusProcessor mentalStatusProcessor;
 
-
 	public CCDARefModel parseCCDA2_1(InputStream inputStream) {
+		return parseCCDA2_1(inputStream,false);
+	}
+	public CCDARefModel parseCCDA2_1(InputStream inputStream, boolean partialParsingSupported) {
 		
 		CCDARefModel refModel = new CCDARefModel();
 		Future<CCDAPatient> patient=null;
@@ -206,7 +209,10 @@ public class CCDAParserAPI {
 					try{
 						refModel.setPatient(patient.get(maxWaitTime, TimeUnit.MILLISECONDS));
 					}catch (Exception e) {
-						isTimeOut = true;
+						if(!partialParsingSupported)
+							isTimeOut = true;
+						logger.error("Parsing Patient data section failed",e);
+						refModel.addToErrorSections("Patient data");
 					}
 				}
 				
@@ -217,7 +223,10 @@ public class CCDAParserAPI {
 							idList.addAll(refModel.getEncounter().getIdLIst());
 						}
 					}catch (Exception e) {
-						isTimeOut = true;
+						if(!partialParsingSupported)
+							isTimeOut = true;
+						logger.error("Parsing encounters section failed",e);
+						refModel.addToErrorSections("Encounters");
 					}
 				}
 				
@@ -228,7 +237,10 @@ public class CCDAParserAPI {
 							idList.addAll(refModel.getProblem().getIdList());
 						}
 					}catch (Exception e) {
-						isTimeOut = true;
+						if(!partialParsingSupported)
+							isTimeOut = true;
+						logger.error("Parsing problem section failed",e);
+						refModel.addToErrorSections("Problems");
 					}
 				}
 				
@@ -239,7 +251,10 @@ public class CCDAParserAPI {
 							idList.addAll(refModel.getMedication().getIdList());
 						}
 					}catch (Exception e) {
-						isTimeOut = true;
+						if(!partialParsingSupported)
+							isTimeOut = true;
+						logger.error("Parsing medications section failed",e);
+						refModel.addToErrorSections("Medications");
 					}
 				}
 				
@@ -250,7 +265,10 @@ public class CCDAParserAPI {
 							idList.addAll(refModel.getAllergy().getIdList());
 						}
 					}catch (Exception e) {
-						isTimeOut = true;
+						if(!partialParsingSupported)
+							isTimeOut = true;
+						logger.error("Parsing allergies section failed",e);
+						refModel.addToErrorSections("Allergies");
 					}
 				}
 				
@@ -261,7 +279,10 @@ public class CCDAParserAPI {
 							idList.addAll(refModel.getSmokingStatus().getIdList());
 						}
 					}catch (Exception e) {
-						isTimeOut = true;
+						if(!partialParsingSupported)
+							isTimeOut = true;
+						logger.error("Parsing Smoking status section failed",e);
+						refModel.addToErrorSections("Smoking status");
 					}
 				}
 				
@@ -272,7 +293,10 @@ public class CCDAParserAPI {
 							idList.addAll(refModel.getLabTests().getIdList());
 						}
 					}catch (Exception e) {
-						isTimeOut = true;
+						if(!partialParsingSupported)
+							isTimeOut = true;
+						logger.error("Parsing Lab Tests section failed",e);
+						refModel.addToErrorSections("Lab Tests");
 					}
 				}
 				
@@ -283,7 +307,10 @@ public class CCDAParserAPI {
 							idList.addAll(refModel.getLabResults().getIdList());
 						}
 					}catch (Exception e) {
-						isTimeOut = true;
+						if(!partialParsingSupported)
+							isTimeOut = true;
+						logger.error("Parsing Lab Results section failed",e);
+						refModel.addToErrorSections("Lab Results");
 					}
 				}
 				
@@ -294,7 +321,10 @@ public class CCDAParserAPI {
 							idList.addAll(refModel.getVitalSigns().getIdList());
 						}
 					}catch (Exception e) {
-						isTimeOut = true;
+						if(!partialParsingSupported)
+							isTimeOut = true;
+						logger.error("Parsing Vitals section failed",e);
+						refModel.addToErrorSections("Vitals");
 					}
 				}
 				
@@ -305,7 +335,10 @@ public class CCDAParserAPI {
 							idList.addAll(refModel.getProcedure().getIdList());
 						}
 					}catch (Exception e) {
-						isTimeOut = true;
+						if(!partialParsingSupported)
+							isTimeOut = true;
+						logger.error("Parsing procedures section failed",e);
+						refModel.addToErrorSections("Procedures");
 					}
 				}
 				
@@ -313,7 +346,10 @@ public class CCDAParserAPI {
 					try{
 						refModel.setMembers(careTeamMembers.get(isTimeOut?minWaitTime:maxWaitTime, TimeUnit.MILLISECONDS));
 					}catch (Exception e) {
-						isTimeOut = true;
+						if(!partialParsingSupported)
+							isTimeOut = true;
+						logger.error("Parsing Care team members section failed",e);
+						refModel.addToErrorSections("Care team members");
 					}
 				}
 				
@@ -324,7 +360,10 @@ public class CCDAParserAPI {
 							idList.addAll(refModel.getImmunization().getIdList());
 						}
 					}catch (Exception e) {
-						isTimeOut = true;
+						if(!partialParsingSupported)
+							isTimeOut = true;
+						logger.error("Parsing immunizations section failed",e);
+						refModel.addToErrorSections("Immunizations");
 					}
 				}
 				refModel.setUdi(uDIProcessor.retrieveUDIDetails(refModel.getProcedure()));
@@ -336,7 +375,10 @@ public class CCDAParserAPI {
 							idList.addAll(refModel.getPlanOfTreatment().getIdList());
 						}
 					}catch (Exception e) {
-						isTimeOut = true;
+						if(!partialParsingSupported)
+							isTimeOut = true;
+						logger.error("Parsing Plan of treatment section failed",e);
+						refModel.addToErrorSections("Plan of treatment");
 					}
 				}
 				
@@ -344,7 +386,10 @@ public class CCDAParserAPI {
 					try{
 						refModel.setGoals(goals.get(isTimeOut?minWaitTime:maxWaitTime, TimeUnit.MILLISECONDS));
 					}catch (Exception e) {
-						isTimeOut = true;
+						if(!partialParsingSupported)
+							isTimeOut = true;
+						logger.error("Parsing goals section failed",e);
+						refModel.addToErrorSections("Goals");
 					}
 				}
 				
@@ -352,7 +397,10 @@ public class CCDAParserAPI {
 					try{
 						refModel.setHcs(healthConcerns.get(isTimeOut?minWaitTime:maxWaitTime, TimeUnit.MILLISECONDS));
 					}catch (Exception e) {
-						isTimeOut = true;
+						if(!partialParsingSupported)
+							isTimeOut = true;
+						logger.error("Parsing Health concerns section failed",e);
+						refModel.addToErrorSections("Health concerns");
 					}
 				}
 				
@@ -360,7 +408,10 @@ public class CCDAParserAPI {
 					try{
 						refModel.setUsrhSubType(usrhSubType.get(isTimeOut?minWaitTime:maxWaitTime, TimeUnit.MILLISECONDS));
 					}catch (Exception e) {
-						isTimeOut = true;
+						if(!partialParsingSupported)
+							isTimeOut = true;
+						logger.error("Parsing Usrh sub type section failed",e);
+						refModel.addToErrorSections("Usrh sub type");
 					}
 				}
 
@@ -371,14 +422,20 @@ public class CCDAParserAPI {
 							idList.addAll(refModel.getFamilyHistory().getIdList());
 						}
 					}catch (Exception e) {
-						isTimeOut = true;
+						if(!partialParsingSupported)
+							isTimeOut = true;
+						logger.error("Parsing Family History section failed",e);
+						refModel.addToErrorSections("Family History");
 					}
 				}
 				if(medicalEquipments!=null){
 					try {
 						refModel.setMedicalEquipment(medicalEquipments.get(isTimeOut?minWaitTime:maxWaitTime, TimeUnit.MILLISECONDS));
 					} catch (InterruptedException | ExecutionException | TimeoutException e) {
-						isTimeOut = true;
+						if(!partialParsingSupported)
+							isTimeOut = true;
+						logger.error("Parsing Medical equipment section failed",e);
+						refModel.addToErrorSections("Medical equipment");
 					}
 					if(refModel.getMedicalEquipment()!=null){
 						idList.addAll(refModel.getMedicalEquipment().getIds());
@@ -392,7 +449,10 @@ public class CCDAParserAPI {
 							idList.addAll(refModel.getAdvanceDirective().getIdList());
 						}
 					}catch (Exception e) {
-						isTimeOut = true;
+						if(!partialParsingSupported)
+							isTimeOut = true;
+						logger.error("Parsing Advance directive section failed",e);
+						refModel.addToErrorSections("Advance directive");
 					}
 				}
 
@@ -403,7 +463,10 @@ public class CCDAParserAPI {
 							idList.addAll(refModel.getFunctionalStatus().getIdList());
 						}
 					}catch (Exception e) {
-						isTimeOut = true;
+						if(!partialParsingSupported)
+							isTimeOut = true;
+						logger.error("Parsing functional status section failed",e);
+						refModel.addToErrorSections("Functional status");
 					}
 				}
 
@@ -414,7 +477,10 @@ public class CCDAParserAPI {
 							idList.addAll(refModel.getMentalStatus().getIdList());
 						}
 					}catch (Exception e) {
-						isTimeOut = true;
+						if(!partialParsingSupported)
+							isTimeOut = true;
+						logger.error("Parsing mental status section failed",e);
+						refModel.addToErrorSections("Mental status");
 					}
 				}
 				
