@@ -1,12 +1,72 @@
 package org.sitenv.ccdaparsing.model;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.util.ArrayList;
 
 public class CCDACareTeamMember extends CCDAXmlSnippet {
 
+	private static Logger log = LogManager.getLogger(CCDACareTeamMember.class.getName());
+
 	private ArrayList<CCDAParticipant> members;
-	
-	public CCDACareTeamMember(){}
+
+	private ArrayList<CCDAII>       		sectionTemplateId;
+	private CCDACode sectionCode;
+	private ArrayList<CCDACareTeamMemberAct> memberActs;
+	private CCDAAuthor author;
+
+	public void log() {
+
+		for (int i = 0; i < members.size(); i++) {
+			members.get(i).log();
+		}
+
+		if(author != null)
+			author.log();
+
+		for(int j = 0; j < memberActs.size(); j++) {
+			memberActs.get(j).log();
+		}
+	}
+
+	public CCDACareTeamMember()
+	{
+		members = new ArrayList<CCDAParticipant>();
+		memberActs = new ArrayList<CCDACareTeamMemberAct>();
+	}
+
+	public ArrayList<CCDAII> getSectionTemplateId() {
+		return sectionTemplateId;
+	}
+
+	public void setSectionTemplateId(ArrayList<CCDAII> sectionTemplateId) {
+		this.sectionTemplateId = sectionTemplateId;
+	}
+
+	public CCDACode getSectionCode() {
+		return sectionCode;
+	}
+
+	public void setSectionCode(CCDACode sectionCode) {
+		this.sectionCode = sectionCode;
+	}
+
+	public ArrayList<CCDACareTeamMemberAct> getMemberActs() {
+		return memberActs;
+	}
+
+	public void setMemberActs(ArrayList<CCDACareTeamMemberAct> memberActs) {
+		this.memberActs = memberActs;
+	}
+
+	public CCDAAuthor getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(CCDAAuthor author) {
+		this.author = author;
+	}
 
 	public ArrayList<CCDAParticipant> getMembers() {
 		return members;

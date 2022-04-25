@@ -104,4 +104,8 @@ public class CCDAEncounter extends CCDAXmlSnippet {
 		return true;
 	}
 
+	public void log() {
+
+	}
+
 }

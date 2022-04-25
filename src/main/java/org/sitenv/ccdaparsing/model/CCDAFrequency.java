@@ -1,11 +1,22 @@
 package org.sitenv.ccdaparsing.model;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class CCDAFrequency extends CCDAXmlSnippet {
+
+	private static Logger log = LogManager.getLogger(CCDAFrequency.class.getName());
 	
 	private boolean institutionSpecified;
 	private String operator;
 	private String value;
 	private String unit;
+	public void log() {
+		log.info("Institution Specified = " + institutionSpecified );
+		log.info("Operator = " + operator );
+		log.info("Value = " + value );
+		log.info("Unit = " + unit );
+	}
 	public boolean isInstitutionSpecified() {
 		return institutionSpecified;
 	}
