@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CCDAAllergy extends CCDAXmlSnippet {
-
+	// Update Pojo
 	private boolean isSectionNullFlavourWithNI;
 	private ArrayList<CCDAII>       		sectionTemplateId;
 	private CCDACode                 		sectionCode;
