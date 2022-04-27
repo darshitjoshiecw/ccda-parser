@@ -19,6 +19,7 @@ import org.sitenv.ccdaparsing.model.CCDALabResultOrg;
 import org.sitenv.ccdaparsing.model.CCDAPQ;
 import org.sitenv.ccdaparsing.util.ApplicationConstants;
 import org.sitenv.ccdaparsing.util.ApplicationUtil;
+import org.sitenv.ccdaparsing.util.ParserUtilities;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
@@ -163,6 +164,14 @@ public class LaboratoryResultsProcessor {
 			
 			resultObservation.setInterpretationCode(ApplicationUtil.readCode((Element) xPath.compile("./interpretationCode[not(@nullFlavor)]").
 					evaluate(resultObservationElement, XPathConstants.NODE)));
+
+			// Add Notes Activity if present in Lab Result Observtaion entryRelationship
+			resultObservation.setNotesActivity(
+					ParserUtilities.readNotesActivity((NodeList) CCDAConstants.REL_ENTRY_REL_NOTES_ACTIVITY_EXPRESSION
+							.evaluate(resultObservationElement, XPathConstants.NODESET), null));
+
+			resultObservation.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(resultObservationElement, XPathConstants.NODE)));
 			
 			Element resultValue = (Element) xPath.compile("./value[not(@nullFlavor)]").
 					evaluate(resultObservationElement, XPathConstants.NODE);
@@ -193,6 +202,8 @@ public class LaboratoryResultsProcessor {
 					else if (xsiType.equalsIgnoreCase("ST"))
 					{
 						resultObservation.setResults(new CCDAPQ(resultValue.getTextContent(),"ST"));
+						String value = resultValue.getFirstChild().getNodeValue();
+						resultObservation.setResultString(value);
 					}
 					else if (xsiType.equalsIgnoreCase("ED"))
 					{

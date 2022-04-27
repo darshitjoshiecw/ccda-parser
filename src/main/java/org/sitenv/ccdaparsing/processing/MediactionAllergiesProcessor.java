@@ -20,6 +20,7 @@ import org.sitenv.ccdaparsing.model.CCDAAuthor;
 import org.sitenv.ccdaparsing.model.CCDAID;
 import org.sitenv.ccdaparsing.util.ApplicationConstants;
 import org.sitenv.ccdaparsing.util.ApplicationUtil;
+import org.sitenv.ccdaparsing.util.ParserUtilities;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
@@ -223,7 +224,7 @@ public class MediactionAllergiesProcessor {
 							evaluate(allergyReactionElement, XPathConstants.NODE)));
 				
 					Element allergySeverityElement = (Element) xPath.compile(ApplicationConstants.ALLERGY_SEVERITY_EXPRESSION).
-							evaluate(allergyObservationElement, XPathConstants.NODE);
+							evaluate(allergyReactionElement, XPathConstants.NODE);
 				
 					if(allergySeverityElement != null)
 					{
@@ -242,9 +243,12 @@ public class MediactionAllergiesProcessor {
 							idList.add(ApplicationUtil.readID((Element) xPath.compile("./id[not(@nullFlavor)]").
 								evaluate(allergySeverityElement, XPathConstants.NODE),"allergySeverity"));
 						}
-						
+						allergySeverity.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+								evaluate(allergySeverityElement, XPathConstants.NODE)));
 						allergyReaction.setSeverity(allergySeverity);
 					}
+					allergyReaction.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+							evaluate(allergyReactionElement, XPathConstants.NODE)));
 				}
 				allergyReactionList.add(allergyReaction);
 			}

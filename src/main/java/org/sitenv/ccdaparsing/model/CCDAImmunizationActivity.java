@@ -13,6 +13,7 @@ public class CCDAImmunizationActivity extends CCDAXmlSnippet {
 	private CCDAOrganization					organization;
 	private CCDADataElement referenceText;
 	private Boolean negationInd;
+	private CCDAAuthor	author;
 	
 	public CCDAImmunizationActivity()
 	{
@@ -96,6 +97,14 @@ public class CCDAImmunizationActivity extends CCDAXmlSnippet {
 
 	public void setNegationInd(Boolean negationInd) {
 		this.negationInd = negationInd;
+	}
+
+	public CCDAAuthor getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(CCDAAuthor author) {
+		this.author = author;
 	}
 
 	@Override

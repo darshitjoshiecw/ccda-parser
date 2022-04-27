@@ -11,6 +11,8 @@ public class CCDAEncounterActivity extends CCDAXmlSnippet {
 	private ArrayList<CCDAServiceDeliveryLoc> sdLocs;
 	private ArrayList<CCDAProblemObs> indications;
 	private CCDADataElement referenceText;
+	private ArrayList<CCDANotesActivity>		notesActivity;
+	private CCDAAuthor	author;
 	
 	public ArrayList<CCDAII> getTemplateId() {
 		return templateId;
@@ -66,6 +68,22 @@ public class CCDAEncounterActivity extends CCDAXmlSnippet {
 
 	public void setReferenceText(CCDADataElement referenceText) {
 		this.referenceText = referenceText;
+	}
+
+	public ArrayList<CCDANotesActivity> getNotesActivity() {
+		return notesActivity;
+	}
+
+	public void setNotesActivity(ArrayList<CCDANotesActivity> notesActivity) {
+		this.notesActivity = notesActivity;
+	}
+
+	public CCDAAuthor getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(CCDAAuthor author) {
+		this.author = author;
 	}
 
 	@Override
