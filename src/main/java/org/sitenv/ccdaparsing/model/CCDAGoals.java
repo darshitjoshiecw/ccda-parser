@@ -8,6 +8,7 @@ public class CCDAGoals extends CCDAXmlSnippet {
 	private ArrayList<CCDAII>    templateId;
 	private CCDACode  sectionCode;
 	private CCDADataElement narrativeText;
+	private CCDAAuthor author;
 	
 	public boolean isSectionNullFlavourWithNI() {
 		return isSectionNullFlavourWithNI;
@@ -35,6 +36,13 @@ public class CCDAGoals extends CCDAXmlSnippet {
 	public void setNarrativeText(CCDADataElement narrativeText) {
 		this.narrativeText = narrativeText;
 	}
+	public CCDAAuthor getAuthor() {
+		return author;
+	}
+	public void setAuthor(CCDAAuthor author) {
+		this.author = author;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

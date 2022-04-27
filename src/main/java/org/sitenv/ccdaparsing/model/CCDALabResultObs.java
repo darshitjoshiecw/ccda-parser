@@ -13,6 +13,9 @@ public class CCDALabResultObs extends CCDAXmlSnippet{
 	private CCDACode						interpretationCode;
 	private ArrayList<CCDAPQ>		    	referenceRange;
 	private CCDADataElement referenceText;
+	private String 							resultString;
+	private ArrayList<CCDANotesActivity>		notesActivity;
+	private CCDAAuthor	author;
 	
 	public CCDALabResultObs()
 	{
@@ -89,6 +92,30 @@ public class CCDALabResultObs extends CCDAXmlSnippet{
 
 	public void setReferenceText(CCDADataElement referenceText) {
 		this.referenceText = referenceText;
+	}
+
+	public String getResultString() {
+		return resultString;
+	}
+
+	public void setResultString(String resultString) {
+		this.resultString = resultString;
+	}
+
+	public ArrayList<CCDANotesActivity> getNotesActivity() {
+		return notesActivity;
+	}
+
+	public void setNotesActivity(ArrayList<CCDANotesActivity> notesActivity) {
+		this.notesActivity = notesActivity;
+	}
+
+	public CCDAAuthor getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(CCDAAuthor author) {
+		this.author = author;
 	}
 
 	@Override

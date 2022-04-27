@@ -8,6 +8,7 @@ public class CCDATobaccoUse extends CCDAXmlSnippet{
 	private CCDACode							tobaccoUseCode;
 	private CCDAEffTime							tobaccoUseTime;
 	private CCDADataElement referenceText;
+	private CCDAAuthor author;
 	
 	public ArrayList<CCDAII> getTobaccoUseTemplateIds() {
 		return tobaccoUseTemplateIds;
@@ -47,6 +48,14 @@ public class CCDATobaccoUse extends CCDAXmlSnippet{
 
 	public void setReferenceText(CCDADataElement referenceText) {
 		this.referenceText = referenceText;
+	}
+
+	public CCDAAuthor getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(CCDAAuthor author) {
+		this.author = author;
 	}
 
 	public CCDATobaccoUse()

@@ -11,7 +11,8 @@ public class CCDAVitalObs extends CCDAXmlSnippet{
 	private CCDACode						interpretationCode;
 	private ArrayList<CCDAPQ>			    referenceValue;
 	private CCDADataElement referenceText;
-	
+	private CCDAAuthor author;
+
 	public CCDAVitalObs()
 	{
 		
@@ -79,6 +80,14 @@ public class CCDAVitalObs extends CCDAXmlSnippet{
 
 	public void setReferenceText(CCDADataElement referenceText) {
 		this.referenceText = referenceText;
+	}
+
+	public CCDAAuthor getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(CCDAAuthor author) {
+		this.author = author;
 	}
 
 	@Override

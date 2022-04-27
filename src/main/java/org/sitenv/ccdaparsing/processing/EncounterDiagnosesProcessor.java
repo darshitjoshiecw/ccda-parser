@@ -57,6 +57,10 @@ public class EncounterDiagnosesProcessor {
 					evaluate(sectionElement, XPathConstants.NODE)));
 			encounters.setEncActivities(readEncounterActivity((NodeList) xPath.compile("./entry/encounter[not(@nullFlavor)]").
 					evaluate(sectionElement, XPathConstants.NODESET), xPath,idLIst));
+			encounters.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(sectionElement, XPathConstants.NODE)));
+			encounters.setNotesActivity(ParserUtilities.readNotesActivity((NodeList) CCDAConstants.REL_NOTES_ACTIVITY_EXPRESSION.
+					evaluate(sectionElement, XPathConstants.NODESET), null));
 			sectionElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
 			encounters.setLineNumber(sectionElement.getUserData("lineNumber") + " - " + sectionElement.getUserData("endLineNumber") );
 			encounters.setXmlString(ApplicationUtil.nodeToString((Node)sectionElement));
@@ -124,6 +128,13 @@ public class EncounterDiagnosesProcessor {
 								evaluate(encounterActivityElement, XPathConstants.NODESET);
 				
 				encounterActivity.setIndications(readProblemObservation(indicationNodeList, xPath,idList));
+
+				encounterActivity.setNotesActivity(ParserUtilities.readNotesActivity((NodeList) CCDAConstants.REL_ENTRY_REL_NOTES_ACTIVITY_EXPRESSION
+								.evaluate(encounterActivityElement, XPathConstants.NODESET), null));
+
+				encounterActivity.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+						evaluate(encounterActivityElement, XPathConstants.NODE)));
+
 				encounterActivityList.add(encounterActivity);
 			}
 		}
@@ -166,6 +177,9 @@ public class EncounterDiagnosesProcessor {
 			NodeList problemObservationNodeList = (NodeList) xPath.compile("./entryRelationship/observation[not(@nullFlavor)]").
 										evaluate(encounterDiagnosisElement, XPathConstants.NODESET);
 			encounterDiagnosis.setProblemObs(readProblemObservation(problemObservationNodeList,xPath,idList));
+			encounterDiagnosis.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(encounterDiagnosisElement, XPathConstants.NODE)));
+
 			encounterDiagnosisList.add(encounterDiagnosis);
 		}
 		

@@ -18,6 +18,7 @@ import org.sitenv.ccdaparsing.model.CCDAVitalOrg;
 import org.sitenv.ccdaparsing.model.CCDAVitalSigns;
 import org.sitenv.ccdaparsing.util.ApplicationConstants;
 import org.sitenv.ccdaparsing.util.ApplicationUtil;
+import org.sitenv.ccdaparsing.util.ParserUtilities;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
@@ -54,6 +55,8 @@ public class VitalSignProcessor {
 					evaluate(sectionElement, XPathConstants.NODE)));
 			vitalSigns.setVitalsOrg(readVitalOrganizer((NodeList) xPath.compile("./entry/organizer[not(@nullFlavor)]").
 					evaluate(sectionElement, XPathConstants.NODESET), xPath,idList));
+			vitalSigns.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(sectionElement, XPathConstants.NODE)));
 			
 			sectionElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
 			vitalSigns.setLineNumber(sectionElement.getUserData("lineNumber") + " - " + sectionElement.getUserData("endLineNumber") );
@@ -113,6 +116,10 @@ public class VitalSignProcessor {
 			
 			vitalOrganizer.setVitalObs(readVitalObservation((NodeList) xPath.compile("./component/observation[not(@nullFlavor)]").
 					evaluate(vitalOrganizerElement, XPathConstants.NODESET), xPath,idList));
+
+			vitalOrganizer.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(vitalOrganizerElement, XPathConstants.NODE)));
+
 			vitalOrganizerList.add(vitalOrganizer);
 		}
 		return vitalOrganizerList;
@@ -156,6 +163,9 @@ public class VitalSignProcessor {
 					evaluate(resultObservationElement, XPathConstants.NODE),xPath));
 			
 			vitalObservation.setInterpretationCode(ApplicationUtil.readCode((Element) xPath.compile("./interpretationCode[not(@nullFlavor)]").
+					evaluate(resultObservationElement, XPathConstants.NODE)));
+
+			vitalObservation.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
 					evaluate(resultObservationElement, XPathConstants.NODE)));
 			
 			Element vsResult = (Element) xPath.compile("./value[not(@nullFlavor)]").

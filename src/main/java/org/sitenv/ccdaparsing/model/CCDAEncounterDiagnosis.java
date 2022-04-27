@@ -8,7 +8,8 @@ public class CCDAEncounterDiagnosis extends CCDAXmlSnippet {
 	private CCDACode                  entryCode;
 	private ArrayList<CCDAProblemObs> problemObs;
 	private CCDADataElement referenceText;
-
+	private CCDAAuthor author;
+	
 	
 	public ArrayList<CCDAII> getTemplateId() {
 		return templateId;
@@ -48,6 +49,13 @@ public class CCDAEncounterDiagnosis extends CCDAXmlSnippet {
 		this.referenceText = referenceText;
 	}
 
+	public CCDAAuthor getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(CCDAAuthor author) {
+		this.author = author;
+	}
 
 	@Override
 	public int hashCode() {
