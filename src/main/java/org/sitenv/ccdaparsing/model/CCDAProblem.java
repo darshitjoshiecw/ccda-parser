@@ -11,7 +11,25 @@ public class CCDAProblem extends CCDAXmlSnippet{
 	private ArrayList<CCDAProblemConcern>  	problemConcerns;
 	private ArrayList<String> referenceLinks;
 	private List<CCDAID> idList;
-	
+	private ArrayList<CCDAProblemObs>       pastIllnessProblems;
+	private CCDAAuthor 						author;
+
+	public ArrayList<CCDAProblemObs> getPastIllnessProblems() {
+		return pastIllnessProblems;
+	}
+
+	public void setPastIllnessProblems(ArrayList<CCDAProblemObs> pastIllnessProblems) {
+		this.pastIllnessProblems = pastIllnessProblems;
+	}
+
+	public CCDAAuthor getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(CCDAAuthor author) {
+		this.author = author;
+	}
+
 	public boolean isSectionNullFlavourWithNI() {
 		return isSectionNullFlavourWithNI;
 	}
@@ -66,7 +84,7 @@ public class CCDAProblem extends CCDAXmlSnippet{
 
 	public CCDAProblem()
 	{
-		
+		pastIllnessProblems = new ArrayList<CCDAProblemObs>();
 	}
 
 	@Override

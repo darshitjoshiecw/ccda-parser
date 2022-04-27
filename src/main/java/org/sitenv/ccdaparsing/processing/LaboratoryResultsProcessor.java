@@ -19,6 +19,7 @@ import org.sitenv.ccdaparsing.model.CCDALabResultOrg;
 import org.sitenv.ccdaparsing.model.CCDAPQ;
 import org.sitenv.ccdaparsing.util.ApplicationConstants;
 import org.sitenv.ccdaparsing.util.ApplicationUtil;
+import org.sitenv.ccdaparsing.util.ParserUtilities;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
@@ -70,6 +71,14 @@ public class LaboratoryResultsProcessor {
 			
 			}
 			labResults.setIsLabTestInsteadOfResult(false);
+
+			// Add Notes Activity if present in Results entry
+			labResults.setNotesActivity(ParserUtilities.readNotesActivity((NodeList) CCDAConstants.REL_NOTES_ACTIVITY_EXPRESSION.
+					evaluate(sectionElement, XPathConstants.NODESET), null));
+
+			labResults.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(sectionElement, XPathConstants.NODE)));
+
 			labResults.setIdList(idList);
 		}
 		logger.info("lab results parsing End time:"+ (System.currentTimeMillis() - startTime));
@@ -118,6 +127,15 @@ public class LaboratoryResultsProcessor {
 			
 			labResultOrg.setResultObs(readResultObservation((NodeList) xPath.compile("./component/observation[not(@nullFlavor)]").
 					evaluate(labResultOrgElement, XPathConstants.NODESET), xPath, idList));
+
+			// Add Notes Activity if present in Lab Result Observtaion entryRelationship
+			labResultOrg.setNotesActivity(
+					ParserUtilities.readNotesActivity((NodeList) CCDAConstants.REL_COMPONENT_ACTIVITY_EXPRESSION
+							.evaluate(labResultOrgElement, XPathConstants.NODESET), null));
+
+			labResultOrg.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(labResultOrgElement, XPathConstants.NODE)));
+
 			labResultOrgList.add(labResultOrg);
 		}
 		return labResultOrgList;

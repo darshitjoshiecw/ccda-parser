@@ -20,6 +20,7 @@ import org.sitenv.ccdaparsing.model.CCDAServiceDeliveryLoc;
 import org.sitenv.ccdaparsing.model.CCDAUDI;
 import org.sitenv.ccdaparsing.util.ApplicationConstants;
 import org.sitenv.ccdaparsing.util.ApplicationUtil;
+import org.sitenv.ccdaparsing.util.ParserUtilities;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
@@ -214,7 +215,8 @@ public class ProcedureProcessor {
 					evaluate(deviceElement, XPathConstants.NODE)));
 			device.setScopingEntityId(ApplicationUtil.readTemplateIdList((NodeList) xPath.compile("./scopingEntity/id[not(@nullFlavor)]").
 					evaluate(deviceElement, XPathConstants.NODESET)));
-			
+			device.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(deviceElement, XPathConstants.NODE)));
 			
 			deviceList.add(device);
 			

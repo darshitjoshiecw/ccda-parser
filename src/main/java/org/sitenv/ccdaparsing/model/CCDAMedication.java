@@ -11,7 +11,16 @@ public class CCDAMedication extends CCDAXmlSnippet{
 	private ArrayList<CCDAMedicationActivity>  	medActivities;
 	private ArrayList<String> referenceLinks;
 	private List<CCDAID> idList;
-	
+	private CCDAAuthor author;
+
+	public CCDAAuthor getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(CCDAAuthor author) {
+		this.author = author;
+	}
+
 	public boolean isSectionNullFlavourWithNI() {
 		return isSectionNullFlavourWithNI;
 	}

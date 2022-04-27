@@ -18,6 +18,7 @@ import org.sitenv.ccdaparsing.model.CCDAProblemConcern;
 import org.sitenv.ccdaparsing.model.CCDAProblemObs;
 import org.sitenv.ccdaparsing.util.ApplicationConstants;
 import org.sitenv.ccdaparsing.util.ApplicationUtil;
+import org.sitenv.ccdaparsing.util.ParserUtilities;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
@@ -54,7 +55,8 @@ public class ProblemProcessor {
 					evaluate(sectionElement, XPathConstants.NODE)));
 			problems.setProblemConcerns(readProblemConcern((NodeList) xPath.compile("./entry/act[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.3']]").
 					evaluate(sectionElement, XPathConstants.NODESET), xPath,idList));
-			
+			problems.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(sectionElement, XPathConstants.NODE)));
 			sectionElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
 			problems.setLineNumber(sectionElement.getUserData("lineNumber") + " - " + sectionElement.getUserData("endLineNumber") );
 			problems.setXmlString(ApplicationUtil.nodeToString((Node)sectionElement));
@@ -68,8 +70,27 @@ public class ProblemProcessor {
 			}
 			problems.setIdList(idList);
 		}
+		if (problems != null) {
+			problems.setPastIllnessProblems(readPastIllnessProblems(doc, xPath));
+		}
 		logger.info("Problems parsing End time:"+ (System.currentTimeMillis() - startTime));
 		return new AsyncResult<CCDAProblem>(problems);
+	}
+
+	public ArrayList<CCDAProblemObs> readPastIllnessProblems(Document doc, XPath xPath) throws XPathExpressionException, TransformerException {
+		ArrayList<CCDAProblemObs> probs = new ArrayList<CCDAProblemObs>();
+
+		Element sectionElement = (Element) CCDAConstants.PAST_ILLNESS_EXP.evaluate(doc, XPathConstants.NODE);
+
+		if(sectionElement != null)
+		{
+			logger.info(" Found Past Illness Section ");
+
+			probs = readProblemObservation((NodeList) CCDAConstants.PAST_ILLNESS_PROBLEM_OBS_EXPRESSION.
+					evaluate(sectionElement, XPathConstants.NODESET), xPath, new ArrayList<>());
+		}
+
+		return probs;
 	}
 	
 	public ArrayList<CCDAProblemConcern> readProblemConcern(NodeList problemConcernNodeList, XPath xPath, List<CCDAID> idList) throws XPathExpressionException,TransformerException
