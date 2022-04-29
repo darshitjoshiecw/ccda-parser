@@ -492,6 +492,15 @@
 							</tbody>
 						</table>
 					</text>
+					<!-- Add author for testing. This is NOT standard to have an author in a section.
+					But, C-CDA is an open standard, so testing anyway -dbTest -->
+					<author typeCode="AUT">
+						<!-- Same as Concern effectiveTime/low -->
+						<time value="199805011146-0800" />
+						<assignedAuthor>
+							<id extension="555555559" root="1.1.1.1.1.1.1.2" />
+						</assignedAuthor>
+					</author>
 					<!-- replaced Allergy Problem Act (R1.1) with 
 					Allergy Concern Act (V3) to meet R2.1 validation requirements -DB-->
 					<entry typeCode="DRIV">
@@ -543,6 +552,14 @@
 											<reference value="#reaction1"/>
 										</originalText>
 									</value>
+									<!-- Add author for testing -dbTest -->
+									<author typeCode="AUT">
+										<!-- Same as Concern effectiveTime/low -->
+										<time value="199805011148-0800" />
+										<assignedAuthor>
+											<id extension="555555556" root="1.1.1.1.1.1.1.2" />
+										</assignedAuthor>
+									</author>
 									<participant typeCode="CSM">
 										<participantRole classCode="MANU">
 											<playingEntity classCode="MMAT">
@@ -573,6 +590,15 @@
 												displayName="Moderate"
 												codeSystem="2.16.840.1.113883.6.96"
 												codeSystemName="SNOMED CT"/>
+											<!-- Add author for testing. This is NOT standard to have an author in Reaction Observation
+											But, C-CDA is an open standard, and it's in our mode as an optionl, so testing anyway -dbTest -->
+											<author typeCode="AUT">
+												<!-- Same as Concern effectiveTime/low -->
+												<time value="199805011147-0800" />
+												<assignedAuthor>
+													<id extension="555565667" root="1.1.1.1.1.1.1.2" />
+												</assignedAuthor>
+											</author>
 										</observation>
 									</entryRelationship>
 									<entryRelationship typeCode="MFST" inversionInd="true">
@@ -593,6 +619,15 @@
 											<value xsi:type="CD" code="247472004"
 												codeSystem="2.16.840.1.113883.6.96"
 												displayName="Hives"/>
+											<!-- Add author for testing. This is NOT standard to have an author in Reaction Observation
+											But, C-CDA is an open standard, and it's in our mode as an optionl, so testing anyway -dbTest -->
+											<author typeCode="AUT">
+												<!-- Same as Concern effectiveTime/low -->
+												<time value="199805011145-0800" />
+												<assignedAuthor>
+													<id extension="555555665" root="1.1.1.1.1.1.1.2" />
+												</assignedAuthor>
+											</author>
 											<entryRelationship typeCode="SUBJ" inversionInd="true">
 												<observation classCode="OBS" moodCode="EVN">
 													<!-- ** Severity observation ** -->
@@ -606,6 +641,15 @@
 														displayName="Moderate"
 														codeSystem="2.16.840.1.113883.6.96"
 														codeSystemName="SNOMED CT"/>
+													<!-- Add author for testing. This is NOT standard to have an author in Reaction Observation
+													But, C-CDA is an open standard, and it's in our mode as an optionl, so testing anyway -dbTest -->
+													<author typeCode="AUT">
+														<!-- Same as Concern effectiveTime/low -->
+														<time value="199805011147-0800" />
+														<assignedAuthor>
+															<id extension="555565667" root="1.1.1.1.1.1.1.2" />
+														</assignedAuthor>
+													</author>
 												</observation>
 											</entryRelationship>
 										</observation>

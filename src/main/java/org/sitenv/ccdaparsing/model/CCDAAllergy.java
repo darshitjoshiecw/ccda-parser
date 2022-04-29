@@ -11,6 +11,15 @@ public class CCDAAllergy extends CCDAXmlSnippet {
 	private ArrayList<CCDAAllergyConcern>	allergyConcern;
 	private ArrayList<String> referenceLinks;
 	private List<CCDAID> idList;
+	private CCDAAuthor 						author;
+
+	public CCDAAuthor getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(CCDAAuthor author) {
+		this.author = author;
+	}
 	
 	public boolean isSectionNullFlavourWithNI() {
 		return isSectionNullFlavourWithNI;
