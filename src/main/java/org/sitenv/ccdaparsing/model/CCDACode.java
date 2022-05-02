@@ -8,7 +8,6 @@ import org.sitenv.ccdaparsing.dto.enums.ContentValidationResultLevel;
 import java.util.ArrayList;
 
 public class CCDACode extends CCDADataElement {
-	private static Logger log = LogManager.getLogger(CCDAProblemObs.class.getName());
 	private String  code;
 	private String  codeSystem;
 	private String  codeSystemName;
@@ -65,7 +64,6 @@ public class CCDACode extends CCDADataElement {
 				(code.equalsIgnoreCase(cd.getCode())) &&
 				(codeSystem.equalsIgnoreCase(cd.getCodeSystem()))) {
 
-			log.info(" Code : " + code + " is same as passed in code. ");
 			return true;
 		}
 
@@ -77,12 +75,10 @@ public class CCDACode extends CCDADataElement {
 					(trans.getCode().equalsIgnoreCase(cd.getCode())) &&
 					(trans.getCodeSystem().equalsIgnoreCase(cd.getCodeSystem()))) {
 
-				log.info(" Translation Code : " + trans.getCode() + " is same as passed in code.");
 				return true;
 			}
 		}
 
-		log.info(" Passed in Code : " + ((cd.getCode() != null)?cd.getCode():"Null") + " is not present ");
 		return false;
 	}
 
