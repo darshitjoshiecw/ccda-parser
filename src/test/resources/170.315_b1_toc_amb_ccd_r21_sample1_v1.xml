@@ -1478,6 +1478,15 @@
 							</tbody>
 						</table>
 					</text>
+					<!-- Add author for testing. This is NOT standard to have an author in a section.
+					But, C-CDA is an open standard, so testing anyway -dbTest -->
+					<author typeCode="AUT">
+						<!-- Same as Concern effectiveTime/low -->
+						<time value="199805011145-0800" />
+						<assignedAuthor>
+							<id extension="555555555" root="1.1.1.1.1.1.1.2" />
+						</assignedAuthor>
+					</author>
 					<!-- Influenza Virus Vaccine -->
 					<entry typeCode="DRIV">
 						<substanceAdministration classCode="SBADM" moodCode="EVN" negationInd="false">
@@ -1548,6 +1557,14 @@
 
 								</act>
 							</entryRelationship>
+							<!-- Add author for testing. SHOULD in IG -dbTest -->
+							<author typeCode="AUT">
+								<!-- Same as Concern effectiveTime/low -->
+								<time value="199805011145-0800" />
+								<assignedAuthor>
+									<id extension="555555555" root="1.1.1.1.1.1.1.2" />
+								</assignedAuthor>
+							</author>
 						</substanceAdministration>
 					</entry>
 					<!-- Tetanus and diphtheria toxoids -->
@@ -2289,6 +2306,13 @@
 									</text>
 									<statusCode code="completed"/>
 									<effectiveTime value="20150622"/>
+									<author typeCode="AUT">
+										<!-- Same as Concern effectiveTime/low -->
+										<time value="199805011145-0800" />
+										<assignedAuthor>
+											<id extension="555555555" root="1.1.1.1.1.1.1.2" />
+										</assignedAuthor>
+									</author>
 									<!-- value usage and comment for this scenario sourced from https://github.com/jddamore/HL7-Task-Force-Examples/blob/master/RESULT_Use_of_String_Value.xml
 									-db -->
 									<!-- Representing a result returned as unstructured string-->
@@ -2300,8 +2324,47 @@
 										<observationRange>
 											<value xsi:type="ST">YELLOW</value>
 										</observationRange>
-									</referenceRange>									
+									</referenceRange>
+
+									<entryRelationship typeCode="COMP">
+										<act classCode="ACT" moodCode="EVN">
+											<templateId
+													root="2.16.840.1.113883.10.20.22.4.202"
+													extension="2016-11-01" />
+											<text>
+												<reference
+														value="#Result.1.2.840.114350.1.13.11511.1.7.2.798268.1066797.Narrative" />
+											</text>
+											<statusCode code="completed" />
+											<effectiveTime value="20150622" />
+											<author>
+												<templateId
+														root="2.16.840.1.113883.10.20.22.4.119" />
+												<templateId root="2.16.840.1.113883.10.20.22.5.6"
+															extension="2019-10-01" />
+												<time value="20150622" />
+												<assignedAuthor>
+													<id root="1.2.840.114350.1.13.11511.1.7.1.1133"
+														extension="759830220" />
+													<id root="2.16.840.1.113883.4.6" nullFlavor="UNK" />
+													<addr nullFlavor="UNK" />
+													<telecom nullFlavor="UNK" />
+													<representedOrganization>
+														<id root="2.16.840.1.113883.4.2" nullFlavor="UNK" />
+														<name>VALUE LABS</name>
+														<addr>
+															<streetAddressLine>1002 Healthcare Dr</streetAddressLine>
+															<city>PORTLAND</city>
+															<state>OR</state>
+															<postalCode>97266</postalCode>
+														</addr>
+													</representedOrganization>
+												</assignedAuthor>
+											</author>
+										</act>
+									</entryRelationship>
 								</observation>
+
 							</component>
 							<component>
 								<observation classCode="OBS" moodCode="EVN">
