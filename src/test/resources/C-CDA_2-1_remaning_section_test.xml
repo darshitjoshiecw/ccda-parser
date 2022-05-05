@@ -776,6 +776,14 @@
                             <effectiveTime value="20130512"/>
                             <targetSiteCode code="28273000" displayName="bile duct" codeSystem="2.16.840.1.113883.6.96"
                                             codeSystemName="SNOMED CT"/>
+                            <!-- Add author for testing. This is NOT standard to have an author in a section.
+					        But, C-CDA is an open standard, so testing anyway -dbTest -->
+                            <author typeCode="AUT">
+                                <time value="199805011150-0800" />
+                                <assignedAuthor>
+                                    <id extension="555555666" root="1.1.1.1.1.1.1.2" />
+                                </assignedAuthor>
+                            </author>
                             <specimen typeCode="SPC">
                                 <specimenRole classCode="SPEC">
                                     <id root="a6d7b927-2b70-43c7-bdf3-0e7c4133062c"/>

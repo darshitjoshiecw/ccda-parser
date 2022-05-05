@@ -124,11 +124,11 @@ public class CCDAMedicationActivity extends CCDAXmlSnippet{
 		}
 
 		if(doseQuantity != null){
-			doseQuantity.log();
+			//doseQuantity.log();
 		}
 
 		if(rateQuantity != null){
-			rateQuantity.log();
+			//rateQuantity.log();
 		}
 
 		if(consumable != null) {

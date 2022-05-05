@@ -7,8 +7,6 @@ import java.util.ArrayList;
 
 public class CCDAII extends CCDADataElement{
 	
-	private static Logger log = LogManager.getLogger(CCDAII.class.getName());
-
 	private String  rootValue;
 	private String  extValue;
 
@@ -42,10 +40,10 @@ public class CCDAII extends CCDADataElement{
 
 	public void log() {
 
-		log.info(" *** Intance Identifier *** ");
+		/*log.info(" *** Intance Identifier *** ");
 
 		log.info(" Root : " + rootValue);
-		log.info(" Extension : " + extValue);
+		log.info(" Extension : " + extValue);*/
 
 	}
 

@@ -1,7 +1,5 @@
 package org.sitenv.ccdaparsing.model;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.sitenv.ccdaparsing.dto.ContentValidationResult;
 import org.sitenv.ccdaparsing.dto.enums.ContentValidationResultLevel;
 import org.sitenv.ccdaparsing.processing.CCDAConstants;
@@ -10,7 +8,6 @@ import org.sitenv.ccdaparsing.util.ParserUtilities;
 import java.util.ArrayList;
 
 public class CCDAAuthor extends CCDAXmlSnippet{
-	private static Logger log = LogManager.getLogger(CCDAAuthor.class.getName());
 
 	private CCDAII templateId;
 	private CCDAEffTime time;
@@ -106,7 +103,6 @@ public class CCDAAuthor extends CCDAXmlSnippet{
 
 	public void matches(CCDAAuthor subAuthor, ArrayList<ContentValidationResult> results, String elName,
 						ArrayList<CCDAAuthor> submittedAuthorsWithLinkedReferenceData) {
-		log.info(" Comparing data for Author Template Ids: ");
 
 		String elementName = "";
 
@@ -150,9 +146,9 @@ public class CCDAAuthor extends CCDAXmlSnippet{
 
 	public static void compareAuthors(ArrayList<CCDAAuthor> refAuths, ArrayList<CCDAAuthor> subAuths,
 									  ArrayList<ContentValidationResult> results, String elName, ArrayList<CCDAAuthor> authorsWithLinkedReferenceData) {
-		log.info(" Comparing data for Author.");
+		/*log.info(" Comparing data for Author.");
 		log.info(" Ref Model Auth Size = " + (refAuths != null ? refAuths.size() : 0));
-		log.info(" Sub Model Auth Size = " + (subAuths != null ? subAuths.size() : 0));
+		log.info(" Sub Model Auth Size = " + (subAuths != null ? subAuths.size() : 0));*/
 
 //		if (authorsWithLinkedReferenceData != null) {
 //			for (CCDAAuthor auth : authorsWithLinkedReferenceData) {
@@ -164,7 +160,7 @@ public class CCDAAuthor extends CCDAXmlSnippet{
 		if (refAuths != null && refAuths.size() != 0) { // If no authors in scenario (ref) file, skip the comparison
 			for (CCDAAuthor curRefAuth : refAuths) {
 
-				log.info("Checking Ref Author with Sub Authors ");
+				//log.info("Checking Ref Author with Sub Authors ");
 				if (isAuthorOfTypeProvenance(curRefAuth) || isAuthorOfTypeDocumentLevelProvenance(curRefAuth)) {
 					// If there's an effectiveTime with a value in the ref, and the ref has provenance but the sub does not...
 					if (curRefAuth.getEffTime() != null && curRefAuth.getEffTime().getValuePresent()
@@ -194,30 +190,30 @@ public class CCDAAuthor extends CCDAXmlSnippet{
 									ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0");
 							results.add(rs);
 						} else {
-							log.info(
-									" Found Provenance data in submitted authorsWithLinkedReferenceData, nothing else to do ..");
+							/*log.info(
+									" Found Provenance data in submitted authorsWithLinkedReferenceData, nothing else to do ..");*/
 						}
 
 
 					} else {
-						log.info(" Found Provenance data, nothing else to do ..");
+						//log.info(" Found Provenance data, nothing else to do ..");
 					}
 				} else {
-					log.info(" Since the author "
+					/*log.info(" Since the author "
 							+ ((curRefAuth.getTemplateIds() != null
 							&& curRefAuth.getTemplateIds().size() > 0
 							&& curRefAuth.getTemplateIds().get(0).getRootValue() != null)
 							? curRefAuth.getTemplateIds().get(0).getRootValue()
 							: "null or empty II")
 							+ " is not a provenance II, there is no reason to compare it with the submitted file"
-							+ "/check for provenance within it");
+							+ "/check for provenance within it");*/
 				}
 			}
 
 			// Validate time value in sub author time value instances specifically (not a comparison)
 			// Results are added as individual errors
 			if (subAuths != null && subAuths.size() > 0) {
-				log.info("starting subAuth validation routine");
+				//log.info("starting subAuth validation routine");
 				final String localElName = "Author Provenance";
 				final boolean isSub = true;
 				int subAuthIndex = -1;
@@ -227,18 +223,18 @@ public class CCDAAuthor extends CCDAXmlSnippet{
 					// Note: Check causes Site3241Test(s) to fail due to that test (mistakenly?) using author participation II vs provenance
 //					if (isAuthorOfTypeProvenance(subAuth)) {
 					if (subAuth.getEffTime() != null) {
-						log.info("validating subauth at index " + subAuthIndex);
+						//log.info("validating subauth at index " + subAuthIndex);
 						ParserUtilities.validateTimeValueLengthDateTimeAndTimezoneDependingOnPrecision(
 								subAuth.getEffTime(), results, localElName, elName, subAuthIndex, isSub);
 					} else {
-						log.info("subAuth effTime at index " + subAuthIndex + " is null" );
+						//log.info("subAuth effTime at index " + subAuthIndex + " is null" );
 					}
 //					} else {
 //						log.info("subAuth at index " + subAuthIndex + " does not contain the provenance II");
 //					}
 				}
 			} else {
-				log.info("subAuths is null or empty");
+				//log.info("subAuths is null or empty");
 			}
 
 			// Compare Author Sizes
@@ -253,7 +249,7 @@ public class CCDAAuthor extends CCDAXmlSnippet{
 			}
 
 		} else {
-			log.info("Skipping compareAuthors due to empty refAuths.");
+			//log.info("Skipping compareAuthors due to empty refAuths.");
 		}
 	}
 
@@ -275,9 +271,9 @@ public class CCDAAuthor extends CCDAXmlSnippet{
 								if (curLinkableAuthId.getRootValue() != null && curLinkableAuthId.getExtValue() != null) {
 									if (curSubAuthId.getRootValue().equals(curLinkableAuthId.getRootValue())
 											&& curSubAuthId.getExtValue().equals(curLinkableAuthId.getExtValue())) {
-										log.info("Found a linked author match. "
+										/*log.info("Found a linked author match. "
 												+ "Returning the linked author to compare instead of the inline one.");
-										log.info("Linked author: ");
+										log.info("Linked author: ");*/
 										//curLinkableAuth.log();
 										return curLinkableAuth;
 									}
@@ -312,14 +308,14 @@ public class CCDAAuthor extends CCDAXmlSnippet{
 		return author.templateIds == null || author.templateIds.isEmpty();
 	}
 	public static boolean isProvenancePresent(CCDAEffTime effTime, CCDADataElement refOrgName, ArrayList<CCDAAuthor> subAuths) {
-		log.info("enter isProvenancePresent(...)");
+		//log.info("enter isProvenancePresent(...)");
 
 		boolean isProvenanceMatched = false;
 		String elName = "Comparing Author Provenance Data";
 		ArrayList<ContentValidationResult> contentValidationResults = new ArrayList<ContentValidationResult>();
 
 		if (subAuths == null) {
-			log.info("subAuths is null, skipping: " + elName);
+			//log.info("subAuths is null, skipping: " + elName);
 		} else {
 			for(CCDAAuthor curSubAuth : subAuths) {
 				// TODO: Consider adding check if appropriate and updating tests as needed
@@ -328,7 +324,7 @@ public class CCDAAuthor extends CCDAXmlSnippet{
 				ParserUtilities.compareDataElementText(refOrgName, curSubAuth.getOrgName(), contentValidationResults, elName);
 
 				if (contentValidationResults != null && contentValidationResults.size() == 0 ) {
-					log.info(" Matched Provenance Data ");
+					//log.info(" Matched Provenance Data ");
 					isProvenanceMatched = true;
 					break;
 				} else {
@@ -343,14 +339,14 @@ public class CCDAAuthor extends CCDAXmlSnippet{
 
 	public static boolean isProvenancePresentInReferencesWithData(CCDAEffTime effTime, CCDADataElement curRefAuthOrgName,
 																  ArrayList<CCDAAuthor> subAuths, ArrayList<CCDAAuthor> authorsWithLinkedReferenceData) {
-		log.info("Checking current author(s) have a link and the linked reference (in authorsWithLinkedReferenceData) has valid data");
+		//log.info("Checking current author(s) have a link and the linked reference (in authorsWithLinkedReferenceData) has valid data");
 
 		boolean isProvenanceMatched = false;
 		String elName = "Comparing Author Provenance Data and cross-checking references";
 		ArrayList<ContentValidationResult> contentValidationResults = new ArrayList<ContentValidationResult>();
 
 		if (subAuths == null) {
-			log.info("subAuths is null, skipping: " + elName);
+			//log.info("subAuths is null, skipping: " + elName);
 		} else {
 			for (CCDAAuthor curSubAuth : subAuths) {
 				ParserUtilities.compareEffectiveTimeValue(effTime, curSubAuth.getEffTime(), contentValidationResults, elName);
@@ -364,7 +360,7 @@ public class CCDAAuthor extends CCDAXmlSnippet{
 				ParserUtilities.compareDataElementText(curRefAuthOrgName, curLinkedSubAuth.getOrgName(), contentValidationResults, elName);
 
 				if (contentValidationResults != null && contentValidationResults.size() == 0) {
-					log.info(" Matched Provenance Data ");
+					//log.info(" Matched Provenance Data ");
 					isProvenanceMatched = true;
 					break;
 				} else {
@@ -378,7 +374,7 @@ public class CCDAAuthor extends CCDAXmlSnippet{
 
 	public void log() {
 
-		log.info("***Author Entry ***");
+		/*log.info("***Author Entry ***");
 
 		if (templateIds != null) {
 			for(int i = 0; i < templateIds.size(); i++) {
@@ -426,6 +422,6 @@ public class CCDAAuthor extends CCDAXmlSnippet{
 
 		if(orgName != null) {
 			log.info(" Rep Org Name = " + orgName.getValue());
-		}
+		}*/
 	}
 }
