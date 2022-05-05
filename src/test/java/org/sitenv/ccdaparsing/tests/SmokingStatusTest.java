@@ -11,6 +11,8 @@ import javax.xml.xpath.XPathFactory;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.sitenv.ccdaparsing.model.CCDAAuthor;
+import org.sitenv.ccdaparsing.model.CCDABirthSexObs;
 import org.sitenv.ccdaparsing.model.CCDACode;
 import org.sitenv.ccdaparsing.model.CCDADataElement;
 import org.sitenv.ccdaparsing.model.CCDAEffTime;
@@ -198,5 +200,38 @@ public class SmokingStatusTest {
 		socialHistory.getTobaccoUse().get(0).getTobaccoUseTime().getHigh().setXmlString(null);
 		Assert.assertEquals("Tobacco use Time test case failed",tobaccoUseList.get(0).getTobaccoUseTime(),
 																	socialHistory.getTobaccoUse().get(0).getTobaccoUseTime());
+	}
+
+	@Test
+	public void testSmokingStatusAuthor(){
+		CCDAAuthor author = socialHistory.getSmokingStatus().get(0).getAuthor();
+		Assert.assertEquals("CCDASmokingStatus author time comparision test case failed","201209101145-0800",author.getTime().getValue());
+		Assert.assertEquals("CCDASmokingStatus author template root value comparision test case failed","2.16.840.1.113883.10.20.22.4.119",author.getTemplateIds().get(0).getRootValue());
+		Assert.assertEquals("CCDASmokingStatus author root value comparision test case failed","2.16.840.1.113883.4.6",author.getAuthorIds().get(0).getRootValue());
+		Assert.assertEquals("CCDASmokingStatus author ext value comparision test case failed","555555555",author.getAuthorIds().get(0).getExtValue());
+	}
+
+	@Test
+	public void testSocialHistoryBirthSexDetails(){
+		CCDABirthSexObs birthSex = socialHistory.getBirthSex();
+		Assert.assertEquals("CCDASocialHistory birthSex rootValue comparision test case failed","2.16.840.1.113883.10.20.22.4.200",birthSex.getTemplateIds().get(0).getRootValue());
+		Assert.assertEquals("CCDASocialHistory birthSex extValue comparision test case failed","2016-06-01",birthSex.getTemplateIds().get(0).getExtValue());
+		Assert.assertEquals("CCDASocialHistory birthSex obs code comparision test case failed","76689-9",birthSex.getBirthSexObsCode().getCode());
+		Assert.assertEquals("CCDASocialHistory birthSex obs system comparision test case failed","2.16.840.1.113883.6.1",birthSex.getBirthSexObsCode().getCodeSystem());
+		Assert.assertEquals("CCDASocialHistory birthSex obs code system name comparision test case failed","LOINC",birthSex.getBirthSexObsCode().getCodeSystemName());
+		Assert.assertEquals("CCDASocialHistory birthSex obs display name comparision test case failed","Sex Assigned At Birth",birthSex.getBirthSexObsCode().getDisplayName());
+		Assert.assertEquals("CCDASocialHistory birthSex sex code comparision test case failed","F",birthSex.getSexCode().getCode());
+		Assert.assertEquals("CCDASocialHistory birthSex sex code system comparision test case failed","2.16.840.1.113883.5.1",birthSex.getSexCode().getCodeSystem());
+		Assert.assertEquals("CCDASocialHistory birthSex sec dispayname comparision test case failed","Female",birthSex.getSexCode().getDisplayName());
+		Assert.assertEquals("CCDASocialHistory birthSex sex observation time comparision test case failed","20150622",birthSex.getObservationTime().getValue());
+	}
+
+	@Test
+	public void testTobaccoUseAuthor(){
+		CCDAAuthor author = socialHistory.getTobaccoUse().get(0).getAuthor();
+		Assert.assertEquals("CCDATobaccoUse author time comparision test case failed","201209101145-0800",author.getTime().getValue());
+		Assert.assertEquals("CCDATobaccoUse author template root value comparision test case failed","2.16.840.1.113883.10.20.22.4.119",author.getTemplateIds().get(0).getRootValue());
+		Assert.assertEquals("CCDATobaccoUse author root value comparision test case failed","2.16.840.1.113883.4.6",author.getAuthorIds().get(0).getRootValue());
+		Assert.assertEquals("CCDATobaccoUse author ext value comparision test case failed","555555555",author.getAuthorIds().get(0).getExtValue());
 	}
 }

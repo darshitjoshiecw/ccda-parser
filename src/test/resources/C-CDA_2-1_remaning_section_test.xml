@@ -774,16 +774,46 @@
                             </code>
                             <statusCode code="completed"/>
                             <effectiveTime value="20130512"/>
+                            <!-- Added Note Activity to PAP entryRelationship level for test parsing-dbTest -->
+                            <!-- Note Activity entry - this is the only Note Activity in this file  -dbTest -->
+                            <entryRelationship typeCode="COMP">
+                                <act classCode="ACT" moodCode="EVN">
+                                    <templateId root="2.16.840.1.113883.10.20.22.4.202"
+                                                extension="2016-11-01" />
+                                    <code code="34109-9" codeSystem="2.16.840.1.113883.6.1"
+                                          codeSystemName="LOINC" displayName="Note">
+                                        <translation code="28570-0"
+                                                     codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC"
+                                                     displayName="Procedure note" />
+                                    </code>
+                                    <text>
+                                        <reference value="#ProcedureNote1" />
+                                    </text>
+                                    <statusCode code="completed" />
+                                    <!-- Clinically-relevant time of the note -->
+                                    <effectiveTime value="20140203" />
+                                    <!-- Author Participation -->
+                                    <author>
+                                        <templateId root="2.16.840.1.113883.10.20.22.4.119" />
+                                        <!-- Time note was actually written -->
+                                        <time value="20140204083215-0500" />
+                                        <assignedAuthor>
+                                            <id root="20cf14fb-b65c-4c8c-a54d-b0cca834c18c" />
+                                            <name>Dr. Physician</name>
+                                        </assignedAuthor>
+                                    </author>
+                                    <!-- Reference to encounter -->
+                                    <entryRelationship typeCode="COMP"
+                                                       inversionInd="true">
+                                        <encounter>
+                                            <!-- Encounter ID matches an encounter in the Encounters Section -->
+                                            <id root="1.2.3.4" />
+                                        </encounter>
+                                    </entryRelationship>
+                                </act>
+                            </entryRelationship>
                             <targetSiteCode code="28273000" displayName="bile duct" codeSystem="2.16.840.1.113883.6.96"
                                             codeSystemName="SNOMED CT"/>
-                            <!-- Add author for testing. This is NOT standard to have an author in a section.
-					        But, C-CDA is an open standard, so testing anyway -dbTest -->
-                            <author typeCode="AUT">
-                                <time value="199805011150-0800" />
-                                <assignedAuthor>
-                                    <id extension="555555666" root="1.1.1.1.1.1.1.2" />
-                                </assignedAuthor>
-                            </author>
                             <specimen typeCode="SPC">
                                 <specimenRole classCode="SPEC">
                                     <id root="a6d7b927-2b70-43c7-bdf3-0e7c4133062c"/>
@@ -818,6 +848,24 @@
                                     </representedOrganization>
                                 </assignedEntity>
                             </performer>
+                            <author>
+                                <templateId root="2.16.840.1.113883.10.20.22.4.119" />
+                                <time value="202006221100-0500" />
+                                <assignedAuthor>
+                                    <id extension="111111" root="2.16.840.1.113883.4.6"/>
+                                    <assignedPerson>
+                                        <name>
+                                            <prefix>Dr</prefix>
+                                            <given>Albert</given>
+                                            <family>Davis</family>
+                                        </name>
+                                    </assignedPerson>
+                                    <representedOrganization>
+                                        <id root="2.16.840.1.113883.19.5" />
+                                        <name>Neighborhood Physicians Practice</name>
+                                    </representedOrganization>
+                                </assignedAuthor>
+                            </author>
                         </procedure>
                     </entry>
                 </section>

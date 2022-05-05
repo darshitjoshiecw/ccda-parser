@@ -152,6 +152,7 @@ public class CCDACode extends CCDADataElement {
 	public CCDACode()
 	{
 		super();
+		translations = new ArrayList<CCDACode>();
 	}
 
 	@Override
