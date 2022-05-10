@@ -11,7 +11,9 @@ import javax.xml.xpath.XPathFactory;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.sitenv.ccdaparsing.model.CCDAAuthor;
 import org.sitenv.ccdaparsing.model.CCDACode;
+import org.sitenv.ccdaparsing.model.CCDAEffTime;
 import org.sitenv.ccdaparsing.model.CCDAII;
 import org.sitenv.ccdaparsing.model.CCDAProcedure;
 import org.sitenv.ccdaparsing.model.CCDAUDI;
@@ -21,7 +23,7 @@ import org.w3c.dom.Document;
 
 public class UDITest {
 	
-	private static String CCDA_DOC = "src/test/resources/170.315_b1_toc_amb_ccd_r21_sample1_v1.xml";
+	private static String CCDA_DOC = "src/test/resources/170.315_b1_toc_amb_ccd_r21_sample1_v2.xml";
 	private static CCDAProcedure procedures;
 	private static ArrayList<CCDAUDI>  patientUDIList;
 	private static ArrayList<CCDAUDI>  udiList;
@@ -83,7 +85,8 @@ public class UDITest {
 		patientUDIList.get(1).getDeviceCode().setLineNumber(null);
 		patientUDIList.get(1).setLineNumber(null);
 		patientUDIList.get(1).setXmlString(null);
-		Assert.assertEquals("UDI test case failed",udiList,patientUDIList);
+		Assert.assertEquals("UDI test case failed",udiList.get(0),patientUDIList.get(0));
+		Assert.assertEquals("UDI test case failed",udiList.get(1),patientUDIList.get(1));
 	}
 	
 	@Test
@@ -108,5 +111,19 @@ public class UDITest {
 		Assert.assertEquals("UDI test device code value failed",udiList.get(0).getScopingEntityId(),patientUDIList.get(0).getScopingEntityId());
 	}
 
-
+	@Test
+	public void testCCDAUDIAuthor(){
+		CCDAUDI ccdaudi = procedures.getProcActsProcs().get(2).getPatientUDI().get(2);
+		Assert.assertEquals("CCDAUDI template root value comparison test case failed","2.16.840.1.113883.10.20.22.4.37", ccdaudi.getTemplateIds().get(0).getRootValue());
+		Assert.assertEquals("CCDAUDI UDI root value comparison test case failed","2.16.840.1.113883.3.3719", ccdaudi.getUDIValue().get(0).getRootValue());
+		Assert.assertEquals("CCDAUDI UDI ext value comparison test case failed","(01)00643169007222(17)160128(21)BLC200461H", ccdaudi.getUDIValue().get(0).getExtValue());
+		Assert.assertEquals("CCDAUDI device code value comparison test case failed","704708004", ccdaudi.getDeviceCode().getCode());
+		Assert.assertEquals("CCDAUDI device code system value comparison test case failed","2.16.840.1.113883.6.96", ccdaudi.getDeviceCode().getCodeSystem());
+		Assert.assertEquals("CCDAUDI device code system name value comparison test case failed","SNOMED-CT", ccdaudi.getDeviceCode().getCodeSystemName());
+		Assert.assertEquals("CCDAUDI device code display name comparison test case failed","Cardiac resynchronization therapy implantable pacemaker", ccdaudi.getDeviceCode().getDisplayName());
+		Assert.assertEquals("CCDAUDI scoping entity id comparison test case failed","2.16.840.1.113883.3.3719", ccdaudi.getScopingEntityId().get(0).getRootValue());
+		Assert.assertEquals("CCDAUDI Author time value comparison test case failed","199805011145-0800", ccdaudi.getAuthor().getTime().getValue());
+		Assert.assertEquals("CCDAUDI Author root value comparison test case failed","1.1.1.1.1.1.1.2", ccdaudi.getAuthor().getAuthorIds().get(0).getRootValue());
+		Assert.assertEquals("CCDAUDI Author ext value comparison test case failed","555555555", ccdaudi.getAuthor().getAuthorIds().get(0).getExtValue());
+	}
 }
