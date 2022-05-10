@@ -11,8 +11,6 @@ import java.util.regex.Pattern;
 
 public class CCDAEffTime extends CCDAXmlSnippet{
 
-	private static Logger log = LogManager.getLogger(CCDAEffTime.class.getName());
-	
 	private CCDADataElement low;
 	private Boolean         lowPresent;
 	private CCDADataElement high;
@@ -35,7 +33,6 @@ public class CCDAEffTime extends CCDAXmlSnippet{
 
 		String refTime;
 		String submittedtime;
-		log.info(" Comparing Effective Times for " + elementName);
 
 		// Compare low time values
 		if(lowPresent && subTime.getLowPresent() ) {
@@ -51,7 +48,6 @@ public class CCDAEffTime extends CCDAXmlSnippet{
 				submittedtime = subTime.getLow().getValue();
 
 			if(refTime.equalsIgnoreCase(submittedtime) ) {
-				log.info("Low Time element matches");
 			}
 			else {
 				String error = "The " + elementName + " (Effective Time: low time value) is " + low.getValue() + " , but submitted CCDA (Effective Time: low time value) is " + subTime.getLow().getValue() + " which does not match ";
@@ -74,7 +70,6 @@ public class CCDAEffTime extends CCDAXmlSnippet{
 			results.add(rs);
 		}
 		else {
-			log.info("Low value absent in both refernce and submitted models ");
 		}
 
 		// Compare High Times values
@@ -91,7 +86,6 @@ public class CCDAEffTime extends CCDAXmlSnippet{
 				submittedtime = subTime.getHigh().getValue();
 
 			if(refTime.equalsIgnoreCase(submittedtime) ) {
-				log.info("High Time element matches");
 			}
 			else {
 				String error = "The " + elementName + " (Effective Time: High time value) is " + high.getValue() + " , but submitted CCDA (Effective Time: High time value) is " + subTime.getHigh().getValue() + " which does not match ";
@@ -113,7 +107,6 @@ public class CCDAEffTime extends CCDAXmlSnippet{
 			results.add(rs);
 		}
 		else {
-			log.info("High value absent in both refernce and submitted models ");
 		}
 
 		// Compare Time value element
@@ -160,7 +153,6 @@ public class CCDAEffTime extends CCDAXmlSnippet{
 
 		String refTime;
 		String submittedtime;
-		log.info(" Comparing Effective Times for " + elementName);
 
 		// Compare Time value element
 		if(valuePresent && subTime.getValuePresent() ) {
@@ -176,7 +168,6 @@ public class CCDAEffTime extends CCDAXmlSnippet{
 				submittedtime = subTime.getValue();
 
 			if(refTime.equalsIgnoreCase(submittedtime) ) {
-				log.info("Value Time element matches");
 			}
 			else {
 				String error = "The " + elementName + " ( Time Value ) is : " + value
@@ -204,7 +195,6 @@ public class CCDAEffTime extends CCDAXmlSnippet{
 			results.add(rs);
 		}
 		else {
-			log.info("Value Time elements absent in both refernce and submitted models ");
 		}
 	}
 
@@ -212,7 +202,6 @@ public class CCDAEffTime extends CCDAXmlSnippet{
 
 		String refTime;
 		String submittedtime;
-		log.info(" Comparing Effective Times for " + elementName);
 
 		// Compare Time value element
 		if(valuePresent && subTime.getValuePresent() ) {
@@ -222,7 +211,6 @@ public class CCDAEffTime extends CCDAXmlSnippet{
 			submittedtime = subTime.getValue();
 
 			if(refTime.equalsIgnoreCase(submittedtime) ) {
-				log.info("Value Time element matches");
 			}
 			else {
 				String error = "The " + elementName + " (Effective Time: Value ) is " + value
@@ -245,10 +233,8 @@ public class CCDAEffTime extends CCDAXmlSnippet{
 		}
 		else if(!valuePresent && subTime.getValuePresent()) {
 
-			log.info(" It is ok to have author time even if it is not present in the Ref CCDA");
 		}
 		else {
-			log.info("Value Time elements absent in both refernce and submitted models ");
 		}
 	}
 
@@ -257,7 +243,6 @@ public class CCDAEffTime extends CCDAXmlSnippet{
 		System.out.println("!!: ENTER validateValueLengthDateTimeAndTimezoneDependingOnPrecision");
 
 		if (valuePresent) {
-			log.info(" Validating Times for " + localElName);
 			final String timeDocType = isSub ? "submitted" : "scenario";
 			final String errorPrefix = "The " + timeDocType + " Provenance (Time: Value) ";
 			final boolean isDisplayIndex = index > -1 && !parentElName.equalsIgnoreCase("Document Level");
@@ -267,11 +252,9 @@ public class CCDAEffTime extends CCDAXmlSnippet{
 			// instead of one big RegEx with an or condition and one mixed less-specific error
 			String dateOnly8CharTime;
 			if (value.length() > 8) {
-				log.info("!!: time > 8: " + value != null ? value : "null");
 				// we only have > 8 characters, store only the 1st 8
 				dateOnly8CharTime = value.substring(0, 8);
 			} else {
-				log.info("!!: time < 9: " + value != null ? value : "null");
 				// we only have 8 characters, store them all
 				dateOnly8CharTime = value;
 			}
@@ -286,9 +269,7 @@ public class CCDAEffTime extends CCDAXmlSnippet{
 			Pattern baseDatePattern = Pattern.compile("^[0-9]{8}$");
 			Matcher baseDateMatcher = baseDatePattern.matcher(dateOnly8CharTime);
 			if (baseDateMatcher.find()) {
-				log.info("We have a validly formatted base 8 character date");
 			} else {
-				log.info("!! The date portion of the " + timeDocType + " time element value " + dateOnly8CharTime + " is invalid data as per RegEx");
 				String error = errorPrefix + value + " at " + parentElName + (isDisplayIndex ? " index " + (index + 1) : "")
 						+ ", is invalid. Please ensure the value starts with an 8-digit date. "
 						+ "The invalid date portion of the value is " + baseDateMatcher + ".";
@@ -300,7 +281,6 @@ public class CCDAEffTime extends CCDAXmlSnippet{
 
 			// validate time and time-zone portions specifically
 			if (value.length() > 8) {
-				log.info("!!: time > 8 in time and time-zone validation: " + value != null ? value : "null");
 				String timeAndTimeZone = value.substring(8);
 				System.out.println("!!: stored timeAndTimeZone: " + timeAndTimeZone);
 				// validate timeAndTimeZone with RegEx for chars after first 8
@@ -330,9 +310,7 @@ public class CCDAEffTime extends CCDAXmlSnippet{
 				Pattern timeAndTimeZoneDatePattern = Pattern.compile("^([0-9]{4}|[0-9]{6})(-|\\+)([0-9]{4})$");
 				Matcher timeAndTimeZoneDateMatcher = timeAndTimeZoneDatePattern.matcher(timeAndTimeZone);
 				if (timeAndTimeZoneDateMatcher.find()) {
-					log.info("We have a validly formatted base 8 character date");
 				} else {
-					log.info("!! The time and time-zone portion of the " + timeDocType + " time element value " + timeAndTimeZone + " is invalid data as per RegEx");
 					String error = errorPrefix + value + " at " + parentElName + (isDisplayIndex ? " index " + (index + 1) : "")
 							+ " is invalid. Please ensure the time and time-zone starts with a 4 or 6-digit time, "
 							+ "followed by a '+' or a '-', and finally, a 4-digit time-zone. "
@@ -349,10 +327,6 @@ public class CCDAEffTime extends CCDAXmlSnippet{
 
 	public void log() {
 
-		log.info("Eff Time Low = " + (lowPresent ? low.getValue() : "No Low"));
-		log.info("Eff Time High = " + (highPresent ? high.getValue() : "No High"));
-		log.info("Eff Time Value = " + (valuePresent ? value : "No Value"));
-		log.info(" Single Admin = " + singleAdministration);
 	}
 	
 	public CCDAEffTime(String value)

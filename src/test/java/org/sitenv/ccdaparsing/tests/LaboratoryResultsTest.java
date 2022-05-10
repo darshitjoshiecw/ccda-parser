@@ -283,21 +283,52 @@ public class LaboratoryResultsTest {
 	}
 
 	@Test
-	public void testLabResultResultString(){
+	public void testLabResultResultObsString(){
 		Assert.assertEquals("CCDALabResultObs resultString comparision test case failed","YELLOW",labResults.getResultOrg().get(0).getResultObs().get(0).getResultString());
 	}
 
 	@Test
-	public void testLabResultAuthors(){
+	public void testLabResultObsAuthors(){
 		Assert.assertEquals("CCDALabResultObs Author time comparison test case failed", "199805011145-0800",labResults.getResultOrg().get(0).getResultObs().get(0).getAuthor().getTime().getValue());
 		Assert.assertEquals("CCDALabResultObs Author root value comparison test case failed", "1.1.1.1.1.1.1.2",labResults.getResultOrg().get(0).getResultObs().get(0).getAuthor().getAuthorIds().get(0).getRootValue());
 		Assert.assertEquals("CCDALabResultObs Author ext value comparison test case failed", "555555555",labResults.getResultOrg().get(0).getResultObs().get(0).getAuthor().getAuthorIds().get(0).getExtValue());
 	}
 
 	@Test
-	public void testLabResultNotesActivity(){
+	public void testLabResultObsNotesActivity(){
 		Assert.assertEquals("CCDALabResultObs notesActivity-templateId comparision test case failed","2.16.840.1.113883.10.20.22.4.202",labResults.getResultOrg().get(0).getResultObs().get(0).getNotesActivity().get(0).getTemplateId().get(0).getRootValue());
 		Assert.assertEquals("CCDALabResultObs notesActivity-EffTime comparision test case failed","20150622",labResults.getResultOrg().get(0).getResultObs().get(0).getNotesActivity().get(0).getEffTime().getValue());
 		Assert.assertEquals("CCDALabResultObs notesActivity-author comparision test case failed","VALUE LABS",labResults.getResultOrg().get(0).getResultObs().get(0).getNotesActivity().get(0).getAuthor().getOrgName().getValue());
+	}
+
+	@Test
+	public void testLabResultNotesActivity(){
+		Assert.assertEquals("CCDALabResult notesActivity-templateId root value comparision test case failed","2.16.840.1.113883.10.20.22.4.202",labResults.getNotesActivity().get(0).getTemplateId().get(0).getRootValue());
+		Assert.assertEquals("CCDALabResult notesActivity-templateId extValue comparision test case failed","2016-11-01",labResults.getNotesActivity().get(0).getTemplateId().get(0).getExtValue());
+		Assert.assertEquals("CCDALabResult notesActivity-activity code comparision test case failed","34109-9",labResults.getNotesActivity().get(0).getActivityCode().getCode());
+		Assert.assertEquals("CCDALabResult notesActivity-activity code system comparision test case failed","2.16.840.1.113883.6.1",labResults.getNotesActivity().get(0).getActivityCode().getCodeSystem());
+		Assert.assertEquals("CCDALabResult notesActivity-activity code system name comparision test case failed","LOINC",labResults.getNotesActivity().get(0).getActivityCode().getCodeSystemName());
+		Assert.assertEquals("CCDALabResult notesActivity-activity code display name comparision test case failed","Note",labResults.getNotesActivity().get(0).getActivityCode().getDisplayName());
+		Assert.assertEquals("CCDALabResult notesActivity-activity code translation code comparision test case failed","28570-0",labResults.getNotesActivity().get(0).getActivityCode().getTranslations().get(0).getCode());
+		Assert.assertEquals("CCDALabResult notesActivity-activity code translation code system comparision test case failed","2.16.840.1.113883.6.1",labResults.getNotesActivity().get(0).getActivityCode().getTranslations().get(0).getCodeSystem());
+		Assert.assertEquals("CCDALabResult notesActivity-activity code translation display name comparision test case failed","Procedure note",labResults.getNotesActivity().get(0).getActivityCode().getTranslations().get(0).getDisplayName());
+		Assert.assertEquals("CCDALabResult notesActivity-EffTime comparision test case failed","20140203",labResults.getNotesActivity().get(0).getEffTime().getValue());
+		Assert.assertEquals("CCDALabResult notesActivity-author time comparision test case failed","20140204083215-0500",labResults.getNotesActivity().get(0).getAuthor().getTime().getValue());
+		Assert.assertEquals("CCDALabResult notesActivity-author templateId root value comparision test case failed","2.16.840.1.113883.10.20.22.4.119",labResults.getNotesActivity().get(0).getAuthor().getTemplateIds().get(0).getRootValue());
+		Assert.assertEquals("CCDALabResult notesActivity-author authorId root value comparision test case failed","20cf14fb-b65c-4c8c-a54d-b0cca834c18c",labResults.getNotesActivity().get(0).getAuthor().getAuthorIds().get(0).getRootValue());
+	}
+
+	@Test
+	public void testLabResultAuthors(){
+		Assert.assertEquals("CCDALabResult Author time comparison test case failed", "199805011145-0800",labResults.getAuthor().getTime().getValue());
+		Assert.assertEquals("CCDALabResult Author root value comparison test case failed", "1.1.1.1.1.1.1.2",labResults.getAuthor().getAuthorIds().get(0).getRootValue());
+		Assert.assertEquals("CCDALabResult Author ext value comparison test case failed", "555555555",labResults.getAuthor().getAuthorIds().get(0).getExtValue());
+	}
+
+	@Test
+	public void testLabResultOrgAuthors(){
+		Assert.assertEquals("CCDALabResultOrg Author time comparison test case failed", "199805011145-0800",labResults.getResultOrg().get(0).getAuthor().getTime().getValue());
+		Assert.assertEquals("CCDALabResultOrg Author root value comparison test case failed", "1.1.1.1.1.1.1.2",labResults.getResultOrg().get(0).getAuthor().getAuthorIds().get(0).getRootValue());
+		Assert.assertEquals("CCDALabResultOrg Author ext value comparison test case failed", "555555555",labResults.getResultOrg().get(0).getAuthor().getAuthorIds().get(0).getExtValue());
 	}
 }

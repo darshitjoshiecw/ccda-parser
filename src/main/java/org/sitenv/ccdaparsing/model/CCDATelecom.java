@@ -1,26 +1,13 @@
 package org.sitenv.ccdaparsing.model;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.util.StringUtils;
 
 public class CCDATelecom extends CCDAXmlSnippet {
 
-	private static Logger log = LogManager.getLogger(CCDATelecom.class.getName());
-	
 	private String useAttribute;
 	private String valueAttribute;
 
-	public void log() {
-		log(-1);
-	}	
-	
-	public void log(int index) {
-		log.info("*** Logging Telecom" + (index != -1 ? " #" + index : "") + " ****");
-		log.info("useAttribute value: " + (useAttribute != null ? useAttribute : "null"));
-		log.info("valueAttribute value: " + (valueAttribute != null ? valueAttribute : "null"));
-	}
-	
+
 	public String getUseAttribute() {
 		return useAttribute;
 	}

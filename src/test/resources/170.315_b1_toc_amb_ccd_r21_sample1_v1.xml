@@ -900,6 +900,15 @@
 							</tbody>
 						</table>
 					</text>
+					<!-- Add author for testing. This is NOT standard to have an author in a section.
+					But, C-CDA is an open standard, so testing anyway -dbTest -->
+					<author typeCode="AUT">
+						<!-- Same as Concern effectiveTime/low -->
+						<time value="199805011145-0800" />
+						<assignedAuthor>
+							<id extension="555555555" root="1.1.1.1.1.1.1.2" />
+						</assignedAuthor>
+					</author>
 					<entry typeCode="DRIV">
 						<substanceAdministration classCode="SBADM" moodCode="EVN">
 							<!-- ** Medication Activity (V2) ** -->
@@ -1054,6 +1063,15 @@
 							</item>
 						</list>
 					</text>
+					<!-- Add author for testing. This is NOT standard to have an author in a section.
+					But, C-CDA is an open standard, so testing anyway -dbTest -->
+					<author typeCode="AUT">
+						<!-- Same as Concern effectiveTime/low -->
+						<time value="199805011145-0800" />
+						<assignedAuthor>
+							<id extension="555555555" root="1.1.1.1.1.1.1.2" />
+						</assignedAuthor>
+					</author>
 					<entry typeCode="DRIV">
 						<act classCode="ACT" moodCode="EVN">
 							<!-- ** Problem Concern Act (V3) ** -->
@@ -1334,10 +1352,65 @@
 								</observation>
 							</entryRelationship>
 						</act>
-					</entry>															
+					</entry>
 				</section>
 			</component>
-			
+			<!-- Add Past Medical History Section (was not here before), with author in its Problem Observation -dbTest -->
+			<!--
+			********************************************************
+			Mental History Section
+			********************************************************
+			-->
+			<component>
+				<section>
+					<templateId root="2.16.840.1.113883.10.20.22.2.20"
+								extension="2015-08-01" />
+					<!-- ** History of Past Illness Section ** -->
+					<code codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC"
+						  code="11348-0" displayName="HISTORY OF PAST ILLNESS" />
+					<title>PAST MEDICAL HISTORY</title>
+					<text>
+						<paragraph>Patient has had ..... </paragraph>
+					</text>
+					<entry>
+						<!-- Sample With Problem Observation. -->
+						<observation classCode="OBS" moodCode="EVN">
+							<!-- ** Problem Observation (V3) ** -->
+							<templateId root="2.16.840.1.113883.10.20.22.4.4"
+										extension="2015-08-01" />
+							<id root="ab1791b0-5c71-11db-b0de-0800200c9a66" />
+							<code code="64572001" displayName="Condition"
+								  codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT">
+								<translation code="75323-6"
+											 codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC"
+											 displayName="Condition" />
+							</code>
+							<!-- The statusCode reflects the status of the observation itself -->
+							<statusCode code="completed" />
+							<effectiveTime>
+								<!-- The low value reflects the date of onset -->
+								<!-- Based on patient symptoms, presumed onset is July 3, 2013 -->
+								<low value="20130703" />
+								<!-- The high value reflects when the problem was known to be resolved -->
+								<!-- Based on signs and symptoms, appears to be resolved on Aug 14, 2013 -->
+								<high value="20080814" />
+							</effectiveTime>
+							<value xsi:type="CD" code="233604007"
+								   codeSystem="2.16.840.1.113883.6.96" displayName="Pneumonia" />
+							<author typeCode="AUT">
+								<templateId root="2.16.840.1.113883.10.20.22.4.119" />
+								<time value="200808141030-0800" />
+								<assignedAuthor>
+									<id extension="555555555" root="2.16.840.1.113883.4.6" />
+									<code code="207QA0505X" displayName="Adult Medicine"
+										  codeSystem="2.16.840.1.113883.6.101"
+										  codeSystemName="Healthcare Provider Taxonomy (HIPAA)" />
+								</assignedAuthor>
+							</author>
+						</observation>
+					</entry>
+				</section>
+			</component>
 			<!-- ************************ ENCOUNTERS *********************** -->
 			<!-- edited as per test doc - NOT all data is relevant, but all entries themselves are relevant -db -->
 			<!-- Although only EO is needed, ER was used due to the Yellow highlight/2015 certification requirements 
@@ -1726,6 +1799,14 @@
 							</tbody>
 						</table>
 					</text>
+					<!-- Add author for testing. -dbTest -->
+					<author typeCode="AUT">
+						<!-- Same as Concern effectiveTime/low -->
+						<time value="199805011146-0800" />
+						<assignedAuthor>
+							<id extension="123455555" root="1.1.1.1.1.1.1.2" />
+						</assignedAuthor>
+					</author>
 					<entry typeCode="DRIV">
 						<organizer classCode="CLUSTER" moodCode="EVN">
 							<!-- ** Vital signs organizer (V3) ** -->
@@ -1741,6 +1822,14 @@
 								<low value="20150622"/>
 								<high value="20150622"/>
 							</effectiveTime>
+							<!-- Add author for testing. -dbTest -->
+							<author typeCode="AUT">
+								<!-- Same as Concern effectiveTime/low -->
+								<time value="199805011145-0800" />
+								<assignedAuthor>
+									<id extension="123456555" root="1.1.1.1.1.1.1.2" />
+								</assignedAuthor>
+							</author>
 							<component>
 								<observation classCode="OBS" moodCode="EVN">
 									<!-- ** Vital sign observation (V2) ** -->
@@ -2319,6 +2408,15 @@
 							</tbody>
 						</table>
 					</text>
+					<!-- Add author for testing. This is NOT standard to have an author in a section.
+                But, C-CDA is an open standard, so testing anyway -dbTest -->
+					<author typeCode="AUT">
+						<!-- Same as Concern effectiveTime/low -->
+						<time value="199805011145-0800" />
+						<assignedAuthor>
+							<id extension="555555555" root="1.1.1.1.1.1.1.2" />
+						</assignedAuthor>
+					</author>
 					<!-- this 1st item is from 'I) Laboratory Tests' and has no result yet as it is just a test -db -->
 					<entry typeCode="DRIV">
 						<organizer classCode="BATTERY" moodCode="EVN">
@@ -2361,6 +2459,14 @@
 								<low value="20150622"/>
 								<high value="20150622"/>
 							</effectiveTime>
+							<!-- Add author for testing. -dbTest -->
+							<author typeCode="AUT">
+								<!-- Same as Concern effectiveTime/low -->
+								<time value="199805011145-0800" />
+								<assignedAuthor>
+									<id extension="555555555" root="1.1.1.1.1.1.1.2" />
+								</assignedAuthor>
+							</author>
 							<component>
 								<observation classCode="OBS" moodCode="EVN">
 									<!-- ** Result Observation (V3) ** -->
@@ -2572,6 +2678,45 @@
 							</component>						
 						</organizer>
 					</entry>
+					<!-- Added Note Activity to section level of results to test parsing-dbTest -->
+					<!-- Note Activity entry - this is the only Note Activity in this file  -dbTest -->
+					<entry>
+						<act classCode="ACT" moodCode="EVN">
+							<templateId root="2.16.840.1.113883.10.20.22.4.202"
+										extension="2016-11-01" />
+							<code code="34109-9" codeSystem="2.16.840.1.113883.6.1"
+								  codeSystemName="LOINC" displayName="Note">
+								<translation code="28570-0"
+											 codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC"
+											 displayName="Procedure note" />
+							</code>
+							<text>
+								<reference value="#ProcedureNote1" />
+							</text>
+							<statusCode code="completed" />
+							<!-- Clinically-relevant time of the note -->
+							<effectiveTime value="20140203" />
+							<!-- Author Participation -->
+							<author>
+								<templateId root="2.16.840.1.113883.10.20.22.4.119" />
+								<!-- Time note was actually written -->
+								<time value="20140204083215-0500" />
+								<assignedAuthor>
+									<id root="20cf14fb-b65c-4c8c-a54d-b0cca834c18c" />
+									<name>Dr. Physician</name>
+								</assignedAuthor>
+							</author>
+							<!-- Reference to encounter -->
+							<entryRelationship typeCode="COMP"
+											   inversionInd="true">
+								<encounter>
+									<!-- Encounter ID matches an encounter in the Encounters Section -->
+									<id root="1.2.3.4" />
+								</encounter>
+							</entryRelationship>
+						</act>
+					</entry>
+
 				</section>
 			</component>			
 
