@@ -2220,6 +2220,9 @@
 									</assignedEntity>	
 
                         		</performer>
+								<participant typeCode="IND">
+									<participantRole nullFlavor="NI"/>
+								</participant>
                         	</act>
                         </component>
                     </organizer>

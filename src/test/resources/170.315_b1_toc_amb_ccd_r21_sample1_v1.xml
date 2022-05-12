@@ -1507,8 +1507,1828 @@
 						</encounter>
 					</entry>
 				</section>
-			</component>			
-
+			</component>
+			<component>
+				<section>
+					<templateId root="2.16.840.1.113883.10.20.22.2.11" />
+					<templateId root="2.16.840.1.113883.10.20.22.2.11"
+								extension="2015-08-01" />
+					<templateId root="2.16.840.1.113883.10.20.22.2.11.1" />
+					<templateId root="2.16.840.1.113883.10.20.22.2.11.1"
+								extension="2015-08-01" />
+					<id root="6B715E26-7636-11EB-80DE-0050568B6B1A" />
+					<code code="10183-2" codeSystem="2.16.840.1.113883.6.1"
+						  codeSystemName="LOINC"
+						  displayName="HOSPITAL DISCHARGE MEDICATIONS">
+						<translation code="75311-1"
+									 codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC"
+									 displayName="Discharge Medications" />
+					</code>
+					<title>Medications at Time of Discharge</title>
+					<text>
+						<table>
+							<colgroup>
+								<col width="25%" span="2" />
+								<col width="13%" />
+								<col width="12%" span="2" />
+								<col width="13%" />
+							</colgroup>
+							<thead>
+								<tr>
+									<th>Medication</th>
+									<th>Sig</th>
+									<th>Dispensed</th>
+									<th>Refills</th>
+									<th>Start Date</th>
+									<th>End Date</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ID="dcrx46" styleCode="xRowNormal">
+									<td>
+										<paragraph ID="med46">Aranesp, Albumin Free, 500 MCG/ML
+											solution prefilled syringe</paragraph>
+									</td>
+									<td ID="sig46">Inject 1 Units as directed 1 (one) time per week for
+										8 days.</td>
+									<td>
+										<paragraph>1 mL</paragraph>
+									</td>
+									<td>0</td>
+									<td>06/22/2015</td>
+									<td>06/30/2015</td>
+								</tr>
+								<tr ID="dcrx47" styleCode="xRowAlt">
+									<td>
+										<paragraph ID="med47">cefTRIAXone (cefTRIAXone Sodium) 350
+											mg/mL reconstituted solution</paragraph>
+									</td>
+									<td ID="sig47">Inject 1 Units as directed in the morning and at
+										bedtime for 8 days.</td>
+									<td>
+										<paragraph>16 each</paragraph>
+									</td>
+									<td>0</td>
+									<td>06/22/2015</td>
+									<td>06/30/2015</td>
+								</tr>
+								<tr ID="dcrx48" styleCode="xRowNormal">
+									<td>
+										<paragraph ID="med48">ciprofloxacin (Cipro) 250 MG tablet
+										</paragraph>
+									</td>
+									<td ID="sig48">Take 1 Units by mouth in the morning, at noon, and at
+										bedtime.</td>
+									<td>
+										<paragraph>90 tablet</paragraph>
+									</td>
+									<td>0</td>
+									<td>06/24/2015</td>
+									<td>07/24/2015</td>
+								</tr>
+								<tr ID="dcrx49" styleCode="xRowAlt">
+									<td>
+										<paragraph ID="med49">clindamycin (Cleocin) 300 MG capsule
+										</paragraph>
+									</td>
+									<td ID="sig49">Take 1 Units by mouth in the morning, at noon, and at
+										bedtime for 7 days.</td>
+									<td>
+										<paragraph>21 capsule</paragraph>
+									</td>
+									<td>0</td>
+									<td>06/23/2015</td>
+									<td>06/30/2015</td>
+								</tr>
+								<tr ID="dcrx50" styleCode="xRowNormal">
+									<td>
+										<paragraph ID="med50">everolimus (Zortress) 0.5 MG tablet
+										</paragraph>
+									</td>
+									<td ID="sig50">Take 1 Units by mouth in the morning and at bedtime
+										for 26 days</td>
+									<td>
+										<paragraph>52 tablet</paragraph>
+									</td>
+									<td>0</td>
+									<td>06/24/2015</td>
+									<td>07/20/2015</td>
+								</tr>
+								<tr ID="dcrx51" styleCode="xRowAlt">
+									<td>
+										<paragraph ID="med51">Fenofibric Acid 35 MG tablet
+										</paragraph>
+									</td>
+									<td ID="sig51">Take 1 Units by mouth at bedtime for 10 days.</td>
+									<td>
+										<paragraph>10 tablet</paragraph>
+									</td>
+									<td>0</td>
+									<td>06/24/2015</td>
+									<td>07/04/2015</td>
+								</tr>
+								<tr ID="dcrx52" styleCode="xRowNormal">
+									<td>
+										<paragraph ID="med52">Mycophenolate Sodium (Mycophenolic
+											Acid) 360 MG tablet delayed-release</paragraph>
+									</td>
+									<td ID="sig52">Take 1 Units by mouth in the morning and at bedtime
+										for 3 days.</td>
+									<td>
+										<paragraph>6 tablet</paragraph>
+									</td>
+									<td>0</td>
+									<td>06/24/2015</td>
+									<td>06/27/2015</td>
+								</tr>
+								<tr ID="dcrx53" styleCode="xRowAlt">
+									<td>
+										<paragraph ID="med53">torsemide (Demadex) 20 MG tablet
+										</paragraph>
+									</td>
+									<td ID="sig53">Take 1 Units by mouth in the morning for 7 days.</td>
+									<td>
+										<paragraph>7 tablet</paragraph>
+									</td>
+									<td>0</td>
+									<td>06/23/2015</td>
+									<td>06/30/2015</td>
+								</tr>
+								<tr ID="dcrx54" styleCode="xRowNormal">
+									<td>
+										<paragraph ID="med54">Tylenol Extra Strength 500 MG tablet
+										</paragraph>
+									</td>
+									<td ID="sig54">Take 1 Units by mouth if needed (As needed) for up to
+										8 days.</td>
+									<td>
+										<paragraph>60 tablet</paragraph>
+									</td>
+									<td>0</td>
+									<td>06/22/2015</td>
+									<td>06/30/2015</td>
+								</tr>
+							</tbody>
+						</table>
+						<footnote ID="subTitle45" styleCode="xSectionSubTitle">documented as of this
+							encounter</footnote>
+					</text>
+					<entry>
+						<act classCode="ACT" moodCode="EVN">
+							<templateId root="2.16.840.1.113883.10.20.22.4.35" />
+							<templateId root="2.16.840.1.113883.10.20.22.4.35"
+										extension="2016-03-01" />
+							<id root="6B71AF34-7636-11EB-80DE-0050568B6B1A" />
+							<code code="10183-2" codeSystem="2.16.840.1.113883.6.1"
+								  codeSystemName="LOINC"
+								  displayName="Hospital discharge medication">
+								<translation code="75311-1"
+											 codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC"
+											 displayName="Discharge medication" />
+							</code>
+							<statusCode code="completed" />
+							<entryRelationship typeCode="SUBJ">
+								<substanceAdministration
+										classCode="SBADM" moodCode="INT">
+									<templateId root="2.16.840.1.113883.10.20.22.4.16" />
+									<templateId root="2.16.840.1.113883.10.20.22.4.16"
+												extension="2014-06-09" />
+									<id root="1.2.840.114350.1.13.11511.1.7.2.798268"
+										extension="1066793" />
+									<text>
+										<reference value="#sig46" />
+									</text>
+									<statusCode code="completed" />
+									<effectiveTime xsi:type="IVL_TS"
+												   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+										<low value="20150622" />
+										<high value="20150701045900+0000" />
+									</effectiveTime>
+									<routeCode code="C38291"
+											   codeSystem="2.16.840.1.113883.3.26.1.1"
+											   codeSystemName="NCI Thesaurus" displayName="Injection">
+										<originalText>Injection</originalText>
+									</routeCode>
+									<doseQuantity unit="U" value="1" />
+									<consumable typeCode="CSM">
+										<manufacturedProduct classCode="MANU">
+											<templateId root="2.16.840.1.113883.10.20.22.4.23" />
+											<templateId root="2.16.840.1.113883.10.20.22.4.23"
+														extension="2014-06-09" />
+											<manufacturedMaterial>
+												<code code="731241" codeSystem="2.16.840.1.113883.6.88"
+													  codeSystemName="RxNorm">
+													<originalText>
+														<reference value="#med46" />
+													</originalText>
+													<translation code="55513-032-01"
+																 codeSystem="2.16.840.1.113883.6.69" codeSystemName="NDC" />
+													<translation code="189825"
+																 codeSystem="2.16.840.1.113883.6.253"
+																 codeSystemName="Medispan Drug Descriptor ID" />
+													<translation code="8240101510E590"
+																 codeSystem="2.16.840.1.113883.6.68"
+																 codeSystemName="Medi-Span Generic Product Identifier" />
+													<translation code="189825"
+																 codeSystem="2.16.840.1.113883.6.162"
+																 codeSystemName="Med-File (Medi-Span)" />
+												</code>
+											</manufacturedMaterial>
+										</manufacturedProduct>
+									</consumable>
+									<author>
+										<templateId root="2.16.840.1.113883.10.20.22.4.119" />
+										<templateId root="2.16.840.1.113883.10.20.22.5.6"
+													extension="2019-10-01" />
+										<time value="20201201172516-0600" />
+										<assignedAuthor>
+											<id root="1.2.840.114350.1.13.11511.1.7.1.1133"
+												extension="187338597" />
+										</assignedAuthor>
+									</author>
+									<entryRelationship typeCode="SUBJ"
+													   inversionInd="true">
+										<act classCode="ACT" moodCode="INT">
+											<templateId root="2.16.840.1.113883.10.20.22.4.20" />
+											<templateId root="2.16.840.1.113883.10.20.22.4.20"
+														extension="2014-06-09" />
+											<code code="311401005"
+												  codeSystem="2.16.840.1.113883.6.96"
+												  codeSystemName="SNOMED CT" />
+											<text>
+												<reference value="#sig46" />
+											</text>
+											<statusCode code="completed" />
+											<author>
+												<templateId
+														root="2.16.840.1.113883.10.20.22.4.119" />
+												<templateId root="2.16.840.1.113883.10.20.22.5.6"
+															extension="2019-10-01" />
+												<time value="20201201172516-0600" />
+												<assignedAuthor>
+													<id root="1.2.840.114350.1.13.11511.1.7.1.1133"
+														extension="187338597" />
+												</assignedAuthor>
+											</author>
+										</act>
+									</entryRelationship>
+									<entryRelationship typeCode="REFR">
+										<supply classCode="SPLY" moodCode="INT">
+											<templateId root="2.16.840.1.113883.10.20.22.4.17" />
+											<templateId root="2.16.840.1.113883.10.20.22.4.17"
+														extension="2014-06-09" />
+											<id root="1.2.840.114350.1.13.11511.1.7.2.798268"
+												extension="1066793" />
+											<statusCode code="completed" />
+											<repeatNumber value="1" />
+											<quantity value="1" />
+											<product>
+												<manufacturedProduct classCode="MANU">
+													<templateId
+															root="2.16.840.1.113883.10.20.22.4.23" />
+													<templateId
+															root="2.16.840.1.113883.10.20.22.4.23"
+															extension="2014-06-09" />
+													<manufacturedMaterial>
+														<code code="731241"
+															  codeSystem="2.16.840.1.113883.6.88"
+															  codeSystemName="RxNorm">
+															<originalText>
+																<reference value="#med46" />
+															</originalText>
+															<translation code="55513-032-01"
+																		 codeSystem="2.16.840.1.113883.6.69" codeSystemName="NDC" />
+															<translation code="189825"
+																		 codeSystem="2.16.840.1.113883.6.253"
+																		 codeSystemName="Medispan Drug Descriptor ID" />
+															<translation code="8240101510E590"
+																		 codeSystem="2.16.840.1.113883.6.68"
+																		 codeSystemName="Medi-Span Generic Product Identifier" />
+															<translation code="189825"
+																		 codeSystem="2.16.840.1.113883.6.162"
+																		 codeSystemName="Med-File (Medi-Span)" />
+														</code>
+													</manufacturedMaterial>
+												</manufacturedProduct>
+											</product>
+										</supply>
+									</entryRelationship>
+									<entryRelationship typeCode="REFR">
+										<observation classCode="OBS" moodCode="EVN">
+											<templateId root="2.16.840.1.113883.10.20.1.47" />
+											<code code="33999-4" codeSystem="2.16.840.1.113883.6.1"
+												  codeSystemName="LOINC" displayName="Status" />
+											<statusCode code="completed" />
+											<value code="73425007"
+												   codeSystem="2.16.840.1.113883.6.96"
+												   codeSystemName="SNOMED CT" xsi:type="CE"
+												   displayName="No Longer Active"
+												   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" />
+										</observation>
+									</entryRelationship>
+									<entryRelationship typeCode="COMP">
+										<substanceAdministration
+												classCode="SBADM" moodCode="INT">
+											<templateId
+													root="2.16.840.1.113883.10.20.22.4.147" />
+											<code code="76662-6" codeSystem="2.16.840.1.113883.6.1"
+												  codeSystemName="LOINC" displayName="Medication Instructions" />
+											<text>
+												<reference value="#sig46" />
+											</text>
+											<consumable>
+												<manufacturedProduct>
+													<manufacturedLabeledDrug
+															nullFlavor="NA" />
+												</manufacturedProduct>
+											</consumable>
+										</substanceAdministration>
+									</entryRelationship>
+								</substanceAdministration>
+							</entryRelationship>
+						</act>
+					</entry>
+					<entry>
+						<act classCode="ACT" moodCode="EVN">
+							<templateId root="2.16.840.1.113883.10.20.22.4.35" />
+							<templateId root="2.16.840.1.113883.10.20.22.4.35"
+										extension="2016-03-01" />
+							<id root="6B734330-7636-11EB-80DE-0050568B6B1A" />
+							<code code="10183-2" codeSystem="2.16.840.1.113883.6.1"
+								  codeSystemName="LOINC"
+								  displayName="Hospital discharge medication">
+								<translation code="75311-1"
+											 codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC"
+											 displayName="Discharge medication" />
+							</code>
+							<statusCode code="completed" />
+							<entryRelationship typeCode="SUBJ">
+								<substanceAdministration
+										classCode="SBADM" moodCode="INT">
+									<templateId root="2.16.840.1.113883.10.20.22.4.16" />
+									<templateId root="2.16.840.1.113883.10.20.22.4.16"
+												extension="2014-06-09" />
+									<id root="1.2.840.114350.1.13.11511.1.7.2.798268"
+										extension="1066785" />
+									<text>
+										<reference value="#sig47" />
+									</text>
+									<statusCode code="completed" />
+									<effectiveTime xsi:type="IVL_TS"
+												   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+										<low value="20150622" />
+										<high value="20150701045900+0000" />
+									</effectiveTime>
+									<effectiveTime xsi:type="PIVL_TS"
+												   institutionSpecified="true" operator="A"
+												   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+										<period unit="d" value=".5" />
+									</effectiveTime>
+									<routeCode code="C38291"
+											   codeSystem="2.16.840.1.113883.3.26.1.1"
+											   codeSystemName="NCI Thesaurus" displayName="Injection">
+										<originalText>Injection</originalText>
+									</routeCode>
+									<doseQuantity unit="U" value="1" />
+									<consumable typeCode="CSM">
+										<manufacturedProduct classCode="MANU">
+											<templateId root="2.16.840.1.113883.10.20.22.4.23" />
+											<templateId root="2.16.840.1.113883.10.20.22.4.23"
+														extension="2014-06-09" />
+											<manufacturedMaterial>
+												<code code="309090" codeSystem="2.16.840.1.113883.6.88"
+													  codeSystemName="RxNorm">
+													<originalText>
+														<reference value="#med47" />
+													</originalText>
+													<translation code="66288-6100-1"
+																 codeSystem="2.16.840.1.113883.6.69" codeSystemName="NDC" />
+													<translation code="1000004064"
+																 codeSystem="2.16.840.1.113883.6.253"
+																 codeSystemName="Medispan Drug Descriptor ID" />
+													<translation code="02300090102180"
+																 codeSystem="2.16.840.1.113883.6.68"
+																 codeSystemName="Medi-Span Generic Product Identifier" />
+													<translation code="1000004064"
+																 codeSystem="2.16.840.1.113883.6.162"
+																 codeSystemName="Med-File (Medi-Span)" />
+												</code>
+											</manufacturedMaterial>
+										</manufacturedProduct>
+									</consumable>
+									<author>
+										<templateId root="2.16.840.1.113883.10.20.22.4.119" />
+										<templateId root="2.16.840.1.113883.10.20.22.5.6"
+													extension="2019-10-01" />
+										<time value="20201201172516-0600" />
+										<assignedAuthor>
+											<id root="1.2.840.114350.1.13.11511.1.7.1.1133"
+												extension="187338597" />
+										</assignedAuthor>
+									</author>
+									<entryRelationship typeCode="SUBJ"
+													   inversionInd="true">
+										<act classCode="ACT" moodCode="INT">
+											<templateId root="2.16.840.1.113883.10.20.22.4.20" />
+											<templateId root="2.16.840.1.113883.10.20.22.4.20"
+														extension="2014-06-09" />
+											<code code="311401005"
+												  codeSystem="2.16.840.1.113883.6.96"
+												  codeSystemName="SNOMED CT" />
+											<text>
+												<reference value="#sig47" />
+											</text>
+											<statusCode code="completed" />
+											<author>
+												<templateId
+														root="2.16.840.1.113883.10.20.22.4.119" />
+												<templateId root="2.16.840.1.113883.10.20.22.5.6"
+															extension="2019-10-01" />
+												<time value="20201201172516-0600" />
+												<assignedAuthor>
+													<id root="1.2.840.114350.1.13.11511.1.7.1.1133"
+														extension="187338597" />
+												</assignedAuthor>
+											</author>
+										</act>
+									</entryRelationship>
+									<entryRelationship typeCode="REFR">
+										<supply classCode="SPLY" moodCode="INT">
+											<templateId root="2.16.840.1.113883.10.20.22.4.17" />
+											<templateId root="2.16.840.1.113883.10.20.22.4.17"
+														extension="2014-06-09" />
+											<id root="1.2.840.114350.1.13.11511.1.7.2.798268"
+												extension="1066785" />
+											<statusCode code="completed" />
+											<repeatNumber value="1" />
+											<quantity value="16" />
+											<product>
+												<manufacturedProduct classCode="MANU">
+													<templateId
+															root="2.16.840.1.113883.10.20.22.4.23" />
+													<templateId
+															root="2.16.840.1.113883.10.20.22.4.23"
+															extension="2014-06-09" />
+													<manufacturedMaterial>
+														<code code="309090"
+															  codeSystem="2.16.840.1.113883.6.88"
+															  codeSystemName="RxNorm">
+															<originalText>
+																<reference value="#med47" />
+															</originalText>
+															<translation code="66288-6100-1"
+																		 codeSystem="2.16.840.1.113883.6.69" codeSystemName="NDC" />
+															<translation code="1000004064"
+																		 codeSystem="2.16.840.1.113883.6.253"
+																		 codeSystemName="Medispan Drug Descriptor ID" />
+															<translation code="02300090102180"
+																		 codeSystem="2.16.840.1.113883.6.68"
+																		 codeSystemName="Medi-Span Generic Product Identifier" />
+															<translation code="1000004064"
+																		 codeSystem="2.16.840.1.113883.6.162"
+																		 codeSystemName="Med-File (Medi-Span)" />
+														</code>
+													</manufacturedMaterial>
+												</manufacturedProduct>
+											</product>
+										</supply>
+									</entryRelationship>
+									<entryRelationship typeCode="REFR">
+										<observation classCode="OBS" moodCode="EVN">
+											<templateId root="2.16.840.1.113883.10.20.1.47" />
+											<code code="33999-4" codeSystem="2.16.840.1.113883.6.1"
+												  codeSystemName="LOINC" displayName="Status" />
+											<statusCode code="completed" />
+											<value code="73425007"
+												   codeSystem="2.16.840.1.113883.6.96"
+												   codeSystemName="SNOMED CT" xsi:type="CE"
+												   displayName="No Longer Active"
+												   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" />
+										</observation>
+									</entryRelationship>
+									<entryRelationship typeCode="COMP">
+										<substanceAdministration
+												classCode="SBADM" moodCode="INT">
+											<templateId
+													root="2.16.840.1.113883.10.20.22.4.147" />
+											<code code="76662-6" codeSystem="2.16.840.1.113883.6.1"
+												  codeSystemName="LOINC" displayName="Medication Instructions" />
+											<text>
+												<reference value="#sig47" />
+											</text>
+											<consumable>
+												<manufacturedProduct>
+													<manufacturedLabeledDrug
+															nullFlavor="NA" />
+												</manufacturedProduct>
+											</consumable>
+										</substanceAdministration>
+									</entryRelationship>
+								</substanceAdministration>
+							</entryRelationship>
+						</act>
+					</entry>
+					<entry>
+						<act classCode="ACT" moodCode="EVN">
+							<templateId root="2.16.840.1.113883.10.20.22.4.35" />
+							<templateId root="2.16.840.1.113883.10.20.22.4.35"
+										extension="2016-03-01" />
+							<id root="6B747E58-7636-11EB-80DE-0050568B6B1A" />
+							<code code="10183-2" codeSystem="2.16.840.1.113883.6.1"
+								  codeSystemName="LOINC"
+								  displayName="Hospital discharge medication">
+								<translation code="75311-1"
+											 codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC"
+											 displayName="Discharge medication" />
+							</code>
+							<statusCode code="completed" />
+							<entryRelationship typeCode="SUBJ">
+								<substanceAdministration
+										classCode="SBADM" moodCode="INT">
+									<templateId root="2.16.840.1.113883.10.20.22.4.16" />
+									<templateId root="2.16.840.1.113883.10.20.22.4.16"
+												extension="2014-06-09" />
+									<id root="1.2.840.114350.1.13.11511.1.7.2.798268"
+										extension="1066792" />
+									<text>
+										<reference value="#sig48" />
+									</text>
+									<statusCode code="completed" />
+									<effectiveTime xsi:type="IVL_TS"
+												   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+										<low value="20150624" />
+										<high value="20150725045900+0000" />
+									</effectiveTime>
+									<effectiveTime xsi:type="PIVL_TS"
+												   institutionSpecified="true" operator="A"
+												   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+										<period unit="d" value=".3333333333333333333" />
+									</effectiveTime>
+									<routeCode code="C38288"
+											   codeSystem="2.16.840.1.113883.3.26.1.1"
+											   codeSystemName="NCI Thesaurus" displayName="Oral">
+										<originalText>Oral</originalText>
+									</routeCode>
+									<doseQuantity unit="U" value="1" />
+									<consumable typeCode="CSM">
+										<manufacturedProduct classCode="MANU">
+											<templateId root="2.16.840.1.113883.10.20.22.4.23" />
+											<templateId root="2.16.840.1.113883.10.20.22.4.23"
+														extension="2014-06-09" />
+											<manufacturedMaterial>
+												<code code="197511" codeSystem="2.16.840.1.113883.6.88"
+													  codeSystemName="RxNorm">
+													<originalText>
+														<reference value="#med48" />
+													</originalText>
+													<translation code="0143-9927-01"
+																 codeSystem="2.16.840.1.113883.6.69" codeSystemName="NDC" />
+													<translation code="59829"
+																 codeSystem="2.16.840.1.113883.6.253"
+																 codeSystemName="Medispan Drug Descriptor ID" />
+													<translation code="05000020100310"
+																 codeSystem="2.16.840.1.113883.6.68"
+																 codeSystemName="Medi-Span Generic Product Identifier" />
+													<translation code="59829"
+																 codeSystem="2.16.840.1.113883.6.162"
+																 codeSystemName="Med-File (Medi-Span)" />
+												</code>
+											</manufacturedMaterial>
+										</manufacturedProduct>
+									</consumable>
+									<author>
+										<templateId root="2.16.840.1.113883.10.20.22.4.119" />
+										<templateId root="2.16.840.1.113883.10.20.22.5.6"
+													extension="2019-10-01" />
+										<time value="20201201172516-0600" />
+										<assignedAuthor>
+											<id root="1.2.840.114350.1.13.11511.1.7.1.1133"
+												extension="187338597" />
+										</assignedAuthor>
+									</author>
+									<entryRelationship typeCode="SUBJ"
+													   inversionInd="true">
+										<act classCode="ACT" moodCode="INT">
+											<templateId root="2.16.840.1.113883.10.20.22.4.20" />
+											<templateId root="2.16.840.1.113883.10.20.22.4.20"
+														extension="2014-06-09" />
+											<code code="311401005"
+												  codeSystem="2.16.840.1.113883.6.96"
+												  codeSystemName="SNOMED CT" />
+											<text>
+												<reference value="#sig48" />
+											</text>
+											<statusCode code="completed" />
+											<author>
+												<templateId
+														root="2.16.840.1.113883.10.20.22.4.119" />
+												<templateId root="2.16.840.1.113883.10.20.22.5.6"
+															extension="2019-10-01" />
+												<time value="20201201172516-0600" />
+												<assignedAuthor>
+													<id root="1.2.840.114350.1.13.11511.1.7.1.1133"
+														extension="187338597" />
+												</assignedAuthor>
+											</author>
+										</act>
+									</entryRelationship>
+									<entryRelationship typeCode="REFR">
+										<supply classCode="SPLY" moodCode="INT">
+											<templateId root="2.16.840.1.113883.10.20.22.4.17" />
+											<templateId root="2.16.840.1.113883.10.20.22.4.17"
+														extension="2014-06-09" />
+											<id root="1.2.840.114350.1.13.11511.1.7.2.798268"
+												extension="1066792" />
+											<statusCode code="completed" />
+											<repeatNumber value="1" />
+											<quantity value="90" />
+											<product>
+												<manufacturedProduct classCode="MANU">
+													<templateId
+															root="2.16.840.1.113883.10.20.22.4.23" />
+													<templateId
+															root="2.16.840.1.113883.10.20.22.4.23"
+															extension="2014-06-09" />
+													<manufacturedMaterial>
+														<code code="197511"
+															  codeSystem="2.16.840.1.113883.6.88"
+															  codeSystemName="RxNorm">
+															<originalText>
+																<reference value="#med48" />
+															</originalText>
+															<translation code="0143-9927-01"
+																		 codeSystem="2.16.840.1.113883.6.69" codeSystemName="NDC" />
+															<translation code="59829"
+																		 codeSystem="2.16.840.1.113883.6.253"
+																		 codeSystemName="Medispan Drug Descriptor ID" />
+															<translation code="05000020100310"
+																		 codeSystem="2.16.840.1.113883.6.68"
+																		 codeSystemName="Medi-Span Generic Product Identifier" />
+															<translation code="59829"
+																		 codeSystem="2.16.840.1.113883.6.162"
+																		 codeSystemName="Med-File (Medi-Span)" />
+														</code>
+													</manufacturedMaterial>
+												</manufacturedProduct>
+											</product>
+										</supply>
+									</entryRelationship>
+									<entryRelationship typeCode="REFR">
+										<observation classCode="OBS" moodCode="EVN">
+											<templateId root="2.16.840.1.113883.10.20.1.47" />
+											<code code="33999-4" codeSystem="2.16.840.1.113883.6.1"
+												  codeSystemName="LOINC" displayName="Status" />
+											<statusCode code="completed" />
+											<value code="73425007"
+												   codeSystem="2.16.840.1.113883.6.96"
+												   codeSystemName="SNOMED CT" xsi:type="CE"
+												   displayName="No Longer Active"
+												   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" />
+										</observation>
+									</entryRelationship>
+									<entryRelationship typeCode="COMP">
+										<substanceAdministration
+												classCode="SBADM" moodCode="INT">
+											<templateId
+													root="2.16.840.1.113883.10.20.22.4.147" />
+											<code code="76662-6" codeSystem="2.16.840.1.113883.6.1"
+												  codeSystemName="LOINC" displayName="Medication Instructions" />
+											<text>
+												<reference value="#sig48" />
+											</text>
+											<consumable>
+												<manufacturedProduct>
+													<manufacturedLabeledDrug
+															nullFlavor="NA" />
+												</manufacturedProduct>
+											</consumable>
+										</substanceAdministration>
+									</entryRelationship>
+								</substanceAdministration>
+							</entryRelationship>
+						</act>
+					</entry>
+					<entry>
+						<act classCode="ACT" moodCode="EVN">
+							<templateId root="2.16.840.1.113883.10.20.22.4.35" />
+							<templateId root="2.16.840.1.113883.10.20.22.4.35"
+										extension="2016-03-01" />
+							<id root="6B758514-7636-11EB-80DE-0050568B6B1A" />
+							<code code="10183-2" codeSystem="2.16.840.1.113883.6.1"
+								  codeSystemName="LOINC"
+								  displayName="Hospital discharge medication">
+								<translation code="75311-1"
+											 codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC"
+											 displayName="Discharge medication" />
+							</code>
+							<statusCode code="completed" />
+							<entryRelationship typeCode="SUBJ">
+								<substanceAdministration
+										classCode="SBADM" moodCode="INT">
+									<templateId root="2.16.840.1.113883.10.20.22.4.16" />
+									<templateId root="2.16.840.1.113883.10.20.22.4.16"
+												extension="2014-06-09" />
+									<id root="1.2.840.114350.1.13.11511.1.7.2.798268"
+										extension="1066787" />
+									<text>
+										<reference value="#sig49" />
+									</text>
+									<statusCode code="completed" />
+									<effectiveTime xsi:type="IVL_TS"
+												   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+										<low value="20150623" />
+										<high value="20150701045900+0000" />
+									</effectiveTime>
+									<effectiveTime xsi:type="PIVL_TS"
+												   institutionSpecified="true" operator="A"
+												   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+										<period unit="d" value=".3333333333333333333" />
+									</effectiveTime>
+									<routeCode code="C38288"
+											   codeSystem="2.16.840.1.113883.3.26.1.1"
+											   codeSystemName="NCI Thesaurus" displayName="Oral">
+										<originalText>Oral</originalText>
+									</routeCode>
+									<doseQuantity unit="U" value="1" />
+									<consumable typeCode="CSM">
+										<manufacturedProduct classCode="MANU">
+											<templateId root="2.16.840.1.113883.10.20.22.4.23" />
+											<templateId root="2.16.840.1.113883.10.20.22.4.23"
+														extension="2014-06-09" />
+											<manufacturedMaterial>
+												<code code="284215" codeSystem="2.16.840.1.113883.6.88"
+													  codeSystemName="RxNorm">
+													<originalText>
+														<reference value="#med49" />
+													</originalText>
+													<translation code="59762-5010-1"
+																 codeSystem="2.16.840.1.113883.6.69" codeSystemName="NDC" />
+													<translation code="26312"
+																 codeSystem="2.16.840.1.113883.6.253"
+																 codeSystemName="Medispan Drug Descriptor ID" />
+													<translation code="16220020100120"
+																 codeSystem="2.16.840.1.113883.6.68"
+																 codeSystemName="Medi-Span Generic Product Identifier" />
+													<translation code="26312"
+																 codeSystem="2.16.840.1.113883.6.162"
+																 codeSystemName="Med-File (Medi-Span)" />
+												</code>
+											</manufacturedMaterial>
+										</manufacturedProduct>
+									</consumable>
+									<author>
+										<templateId root="2.16.840.1.113883.10.20.22.4.119" />
+										<templateId root="2.16.840.1.113883.10.20.22.5.6"
+													extension="2019-10-01" />
+										<time value="20201201172516-0600" />
+										<assignedAuthor>
+											<id root="1.2.840.114350.1.13.11511.1.7.1.1133"
+												extension="187338597" />
+										</assignedAuthor>
+									</author>
+									<entryRelationship typeCode="SUBJ"
+													   inversionInd="true">
+										<act classCode="ACT" moodCode="INT">
+											<templateId root="2.16.840.1.113883.10.20.22.4.20" />
+											<templateId root="2.16.840.1.113883.10.20.22.4.20"
+														extension="2014-06-09" />
+											<code code="311401005"
+												  codeSystem="2.16.840.1.113883.6.96"
+												  codeSystemName="SNOMED CT" />
+											<text>
+												<reference value="#sig49" />
+											</text>
+											<statusCode code="completed" />
+											<author>
+												<templateId
+														root="2.16.840.1.113883.10.20.22.4.119" />
+												<templateId root="2.16.840.1.113883.10.20.22.5.6"
+															extension="2019-10-01" />
+												<time value="20201201172516-0600" />
+												<assignedAuthor>
+													<id root="1.2.840.114350.1.13.11511.1.7.1.1133"
+														extension="187338597" />
+												</assignedAuthor>
+											</author>
+										</act>
+									</entryRelationship>
+									<entryRelationship typeCode="REFR">
+										<supply classCode="SPLY" moodCode="INT">
+											<templateId root="2.16.840.1.113883.10.20.22.4.17" />
+											<templateId root="2.16.840.1.113883.10.20.22.4.17"
+														extension="2014-06-09" />
+											<id root="1.2.840.114350.1.13.11511.1.7.2.798268"
+												extension="1066787" />
+											<statusCode code="completed" />
+											<repeatNumber value="1" />
+											<quantity value="21" />
+											<product>
+												<manufacturedProduct classCode="MANU">
+													<templateId
+															root="2.16.840.1.113883.10.20.22.4.23" />
+													<templateId
+															root="2.16.840.1.113883.10.20.22.4.23"
+															extension="2014-06-09" />
+													<manufacturedMaterial>
+														<code code="284215"
+															  codeSystem="2.16.840.1.113883.6.88"
+															  codeSystemName="RxNorm">
+															<originalText>
+																<reference value="#med49" />
+															</originalText>
+															<translation code="59762-5010-1"
+																		 codeSystem="2.16.840.1.113883.6.69" codeSystemName="NDC" />
+															<translation code="26312"
+																		 codeSystem="2.16.840.1.113883.6.253"
+																		 codeSystemName="Medispan Drug Descriptor ID" />
+															<translation code="16220020100120"
+																		 codeSystem="2.16.840.1.113883.6.68"
+																		 codeSystemName="Medi-Span Generic Product Identifier" />
+															<translation code="26312"
+																		 codeSystem="2.16.840.1.113883.6.162"
+																		 codeSystemName="Med-File (Medi-Span)" />
+														</code>
+													</manufacturedMaterial>
+												</manufacturedProduct>
+											</product>
+										</supply>
+									</entryRelationship>
+									<entryRelationship typeCode="REFR">
+										<observation classCode="OBS" moodCode="EVN">
+											<templateId root="2.16.840.1.113883.10.20.1.47" />
+											<code code="33999-4" codeSystem="2.16.840.1.113883.6.1"
+												  codeSystemName="LOINC" displayName="Status" />
+											<statusCode code="completed" />
+											<value code="73425007"
+												   codeSystem="2.16.840.1.113883.6.96"
+												   codeSystemName="SNOMED CT" xsi:type="CE"
+												   displayName="No Longer Active"
+												   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" />
+										</observation>
+									</entryRelationship>
+									<entryRelationship typeCode="COMP">
+										<substanceAdministration
+												classCode="SBADM" moodCode="INT">
+											<templateId
+													root="2.16.840.1.113883.10.20.22.4.147" />
+											<code code="76662-6" codeSystem="2.16.840.1.113883.6.1"
+												  codeSystemName="LOINC" displayName="Medication Instructions" />
+											<text>
+												<reference value="#sig49" />
+											</text>
+											<consumable>
+												<manufacturedProduct>
+													<manufacturedLabeledDrug
+															nullFlavor="NA" />
+												</manufacturedProduct>
+											</consumable>
+										</substanceAdministration>
+									</entryRelationship>
+								</substanceAdministration>
+							</entryRelationship>
+						</act>
+					</entry>
+					<entry>
+						<act classCode="ACT" moodCode="EVN">
+							<templateId root="2.16.840.1.113883.10.20.22.4.35" />
+							<templateId root="2.16.840.1.113883.10.20.22.4.35"
+										extension="2016-03-01" />
+							<id root="6B7689C8-7636-11EB-80DE-0050568B6B1A" />
+							<code code="10183-2" codeSystem="2.16.840.1.113883.6.1"
+								  codeSystemName="LOINC"
+								  displayName="Hospital discharge medication">
+								<translation code="75311-1"
+											 codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC"
+											 displayName="Discharge medication" />
+							</code>
+							<statusCode code="completed" />
+							<entryRelationship typeCode="SUBJ">
+								<substanceAdministration
+										classCode="SBADM" moodCode="INT">
+									<templateId root="2.16.840.1.113883.10.20.22.4.16" />
+									<templateId root="2.16.840.1.113883.10.20.22.4.16"
+												extension="2014-06-09" />
+									<id root="1.2.840.114350.1.13.11511.1.7.2.798268"
+										extension="1066791" />
+									<text>
+										<reference value="#sig50" />
+									</text>
+									<statusCode code="completed" />
+									<effectiveTime xsi:type="IVL_TS"
+												   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+										<low value="20150624" />
+										<high value="20150721045900+0000" />
+									</effectiveTime>
+									<effectiveTime xsi:type="PIVL_TS"
+												   institutionSpecified="true" operator="A"
+												   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+										<period unit="d" value=".5" />
+									</effectiveTime>
+									<routeCode code="C38288"
+											   codeSystem="2.16.840.1.113883.3.26.1.1"
+											   codeSystemName="NCI Thesaurus" displayName="Oral">
+										<originalText>Oral</originalText>
+									</routeCode>
+									<doseQuantity unit="U" value="1" />
+									<consumable typeCode="CSM">
+										<manufacturedProduct classCode="MANU">
+											<templateId root="2.16.840.1.113883.10.20.22.4.23" />
+											<templateId root="2.16.840.1.113883.10.20.22.4.23"
+														extension="2014-06-09" />
+											<manufacturedMaterial>
+												<code code="977434" codeSystem="2.16.840.1.113883.6.88"
+													  codeSystemName="RxNorm">
+													<originalText>
+														<reference value="#med50" />
+													</originalText>
+													<translation code="152768"
+																 codeSystem="2.16.840.1.113883.6.253"
+																 codeSystemName="Medispan Drug Descriptor ID" />
+													<translation code="99404035000325"
+																 codeSystem="2.16.840.1.113883.6.68"
+																 codeSystemName="Medi-Span Generic Product Identifier" />
+													<translation code="152768"
+																 codeSystem="2.16.840.1.113883.6.162"
+																 codeSystemName="Med-File (Medi-Span)" />
+													<translation code="977436"
+																 codeSystem="2.16.840.1.113883.6.88"
+																 codeSystemName="RxNorm" />
+													<translation code="0078-0414-20"
+																 codeSystem="2.16.840.1.113883.6.69" codeSystemName="NDC" />
+													<translation code="152769"
+																 codeSystem="2.16.840.1.113883.6.253"
+																 codeSystemName="Medispan Drug Descriptor ID" />
+													<translation code="152769"
+																 codeSystem="2.16.840.1.113883.6.162"
+																 codeSystemName="Med-File (Medi-Span)" />
+												</code>
+											</manufacturedMaterial>
+										</manufacturedProduct>
+									</consumable>
+									<author>
+										<templateId root="2.16.840.1.113883.10.20.22.4.119" />
+										<templateId root="2.16.840.1.113883.10.20.22.5.6"
+													extension="2019-10-01" />
+										<time value="20201201172516-0600" />
+										<assignedAuthor>
+											<id root="1.2.840.114350.1.13.11511.1.7.1.1133"
+												extension="187338597" />
+										</assignedAuthor>
+									</author>
+									<entryRelationship typeCode="SUBJ"
+													   inversionInd="true">
+										<act classCode="ACT" moodCode="INT">
+											<templateId root="2.16.840.1.113883.10.20.22.4.20" />
+											<templateId root="2.16.840.1.113883.10.20.22.4.20"
+														extension="2014-06-09" />
+											<code code="311401005"
+												  codeSystem="2.16.840.1.113883.6.96"
+												  codeSystemName="SNOMED CT" />
+											<text>
+												<reference value="#sig50" />
+											</text>
+											<statusCode code="completed" />
+											<author>
+												<templateId
+														root="2.16.840.1.113883.10.20.22.4.119" />
+												<templateId root="2.16.840.1.113883.10.20.22.5.6"
+															extension="2019-10-01" />
+												<time value="20201201172516-0600" />
+												<assignedAuthor>
+													<id root="1.2.840.114350.1.13.11511.1.7.1.1133"
+														extension="187338597" />
+												</assignedAuthor>
+											</author>
+										</act>
+									</entryRelationship>
+									<entryRelationship typeCode="REFR">
+										<supply classCode="SPLY" moodCode="INT">
+											<templateId root="2.16.840.1.113883.10.20.22.4.17" />
+											<templateId root="2.16.840.1.113883.10.20.22.4.17"
+														extension="2014-06-09" />
+											<id root="1.2.840.114350.1.13.11511.1.7.2.798268"
+												extension="1066791" />
+											<statusCode code="completed" />
+											<repeatNumber value="1" />
+											<quantity value="52" />
+											<product>
+												<manufacturedProduct classCode="MANU">
+													<templateId
+															root="2.16.840.1.113883.10.20.22.4.23" />
+													<templateId
+															root="2.16.840.1.113883.10.20.22.4.23"
+															extension="2014-06-09" />
+													<manufacturedMaterial>
+														<code code="977434"
+															  codeSystem="2.16.840.1.113883.6.88"
+															  codeSystemName="RxNorm">
+															<originalText>
+																<reference value="#med50" />
+															</originalText>
+															<translation code="152768"
+																		 codeSystem="2.16.840.1.113883.6.253"
+																		 codeSystemName="Medispan Drug Descriptor ID" />
+															<translation code="99404035000325"
+																		 codeSystem="2.16.840.1.113883.6.68"
+																		 codeSystemName="Medi-Span Generic Product Identifier" />
+															<translation code="152768"
+																		 codeSystem="2.16.840.1.113883.6.162"
+																		 codeSystemName="Med-File (Medi-Span)" />
+															<translation code="977436"
+																		 codeSystem="2.16.840.1.113883.6.88"
+																		 codeSystemName="RxNorm" />
+															<translation code="0078-0414-20"
+																		 codeSystem="2.16.840.1.113883.6.69" codeSystemName="NDC" />
+															<translation code="152769"
+																		 codeSystem="2.16.840.1.113883.6.253"
+																		 codeSystemName="Medispan Drug Descriptor ID" />
+															<translation code="152769"
+																		 codeSystem="2.16.840.1.113883.6.162"
+																		 codeSystemName="Med-File (Medi-Span)" />
+														</code>
+													</manufacturedMaterial>
+												</manufacturedProduct>
+											</product>
+										</supply>
+									</entryRelationship>
+									<entryRelationship typeCode="REFR">
+										<observation classCode="OBS" moodCode="EVN">
+											<templateId root="2.16.840.1.113883.10.20.1.47" />
+											<code code="33999-4" codeSystem="2.16.840.1.113883.6.1"
+												  codeSystemName="LOINC" displayName="Status" />
+											<statusCode code="completed" />
+											<value code="73425007"
+												   codeSystem="2.16.840.1.113883.6.96"
+												   codeSystemName="SNOMED CT" xsi:type="CE"
+												   displayName="No Longer Active"
+												   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" />
+										</observation>
+									</entryRelationship>
+									<entryRelationship typeCode="COMP">
+										<substanceAdministration
+												classCode="SBADM" moodCode="INT">
+											<templateId
+													root="2.16.840.1.113883.10.20.22.4.147" />
+											<code code="76662-6" codeSystem="2.16.840.1.113883.6.1"
+												  codeSystemName="LOINC" displayName="Medication Instructions" />
+											<text>
+												<reference value="#sig50" />
+											</text>
+											<consumable>
+												<manufacturedProduct>
+													<manufacturedLabeledDrug
+															nullFlavor="NA" />
+												</manufacturedProduct>
+											</consumable>
+										</substanceAdministration>
+									</entryRelationship>
+								</substanceAdministration>
+							</entryRelationship>
+						</act>
+					</entry>
+					<entry>
+						<act classCode="ACT" moodCode="EVN">
+							<templateId root="2.16.840.1.113883.10.20.22.4.35" />
+							<templateId root="2.16.840.1.113883.10.20.22.4.35"
+										extension="2016-03-01" />
+							<id root="6B778CD8-7636-11EB-80DE-0050568B6B1A" />
+							<code code="10183-2" codeSystem="2.16.840.1.113883.6.1"
+								  codeSystemName="LOINC"
+								  displayName="Hospital discharge medication">
+								<translation code="75311-1"
+											 codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC"
+											 displayName="Discharge medication" />
+							</code>
+							<statusCode code="completed" />
+							<entryRelationship typeCode="SUBJ">
+								<substanceAdministration
+										classCode="SBADM" moodCode="INT">
+									<templateId root="2.16.840.1.113883.10.20.22.4.16" />
+									<templateId root="2.16.840.1.113883.10.20.22.4.16"
+												extension="2014-06-09" />
+									<id root="1.2.840.114350.1.13.11511.1.7.2.798268"
+										extension="1066789" />
+									<text>
+										<reference value="#sig51" />
+									</text>
+									<statusCode code="completed" />
+									<effectiveTime xsi:type="IVL_TS"
+												   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+										<low value="20150624" />
+										<high value="20150705045900+0000" />
+									</effectiveTime>
+									<routeCode code="C38288"
+											   codeSystem="2.16.840.1.113883.3.26.1.1"
+											   codeSystemName="NCI Thesaurus" displayName="Oral">
+										<originalText>Oral</originalText>
+									</routeCode>
+									<doseQuantity unit="U" value="1" />
+									<consumable typeCode="CSM">
+										<manufacturedProduct classCode="MANU">
+											<templateId root="2.16.840.1.113883.10.20.22.4.23" />
+											<templateId root="2.16.840.1.113883.10.20.22.4.23"
+														extension="2014-06-09" />
+											<manufacturedMaterial>
+												<code code="860886" codeSystem="2.16.840.1.113883.6.88"
+													  codeSystemName="RxNorm">
+													<originalText>
+														<reference value="#med51" />
+													</originalText>
+													<translation code="145386"
+																 codeSystem="2.16.840.1.113883.6.253"
+																 codeSystemName="Medispan Drug Descriptor ID" />
+													<translation code="39200024000320"
+																 codeSystem="2.16.840.1.113883.6.68"
+																 codeSystemName="Medi-Span Generic Product Identifier" />
+													<translation code="145386"
+																 codeSystem="2.16.840.1.113883.6.162"
+																 codeSystemName="Med-File (Medi-Span)" />
+													<translation code="860888"
+																 codeSystem="2.16.840.1.113883.6.88"
+																 codeSystemName="RxNorm" />
+													<translation code="71511-501-30"
+																 codeSystem="2.16.840.1.113883.6.69" codeSystemName="NDC" />
+													<translation code="145399"
+																 codeSystem="2.16.840.1.113883.6.253"
+																 codeSystemName="Medispan Drug Descriptor ID" />
+													<translation code="145399"
+																 codeSystem="2.16.840.1.113883.6.162"
+																 codeSystemName="Med-File (Medi-Span)" />
+												</code>
+											</manufacturedMaterial>
+										</manufacturedProduct>
+									</consumable>
+									<author>
+										<templateId root="2.16.840.1.113883.10.20.22.4.119" />
+										<templateId root="2.16.840.1.113883.10.20.22.5.6"
+													extension="2019-10-01" />
+										<time value="20201201180259-0600" />
+										<assignedAuthor>
+											<id root="1.2.840.114350.1.13.11511.1.7.1.1133"
+												extension="187338597" />
+										</assignedAuthor>
+									</author>
+									<entryRelationship typeCode="SUBJ"
+													   inversionInd="true">
+										<act classCode="ACT" moodCode="INT">
+											<templateId root="2.16.840.1.113883.10.20.22.4.20" />
+											<templateId root="2.16.840.1.113883.10.20.22.4.20"
+														extension="2014-06-09" />
+											<code code="311401005"
+												  codeSystem="2.16.840.1.113883.6.96"
+												  codeSystemName="SNOMED CT" />
+											<text>
+												<reference value="#sig51" />
+											</text>
+											<statusCode code="completed" />
+											<author>
+												<templateId
+														root="2.16.840.1.113883.10.20.22.4.119" />
+												<templateId root="2.16.840.1.113883.10.20.22.5.6"
+															extension="2019-10-01" />
+												<time value="20201201180259-0600" />
+												<assignedAuthor>
+													<id root="1.2.840.114350.1.13.11511.1.7.1.1133"
+														extension="187338597" />
+												</assignedAuthor>
+											</author>
+										</act>
+									</entryRelationship>
+									<entryRelationship typeCode="REFR">
+										<supply classCode="SPLY" moodCode="INT">
+											<templateId root="2.16.840.1.113883.10.20.22.4.17" />
+											<templateId root="2.16.840.1.113883.10.20.22.4.17"
+														extension="2014-06-09" />
+											<id root="1.2.840.114350.1.13.11511.1.7.2.798268"
+												extension="1066789" />
+											<statusCode code="completed" />
+											<repeatNumber value="1" />
+											<quantity value="10" />
+											<product>
+												<manufacturedProduct classCode="MANU">
+													<templateId
+															root="2.16.840.1.113883.10.20.22.4.23" />
+													<templateId
+															root="2.16.840.1.113883.10.20.22.4.23"
+															extension="2014-06-09" />
+													<manufacturedMaterial>
+														<code code="860886"
+															  codeSystem="2.16.840.1.113883.6.88"
+															  codeSystemName="RxNorm">
+															<originalText>
+																<reference value="#med51" />
+															</originalText>
+															<translation code="145386"
+																		 codeSystem="2.16.840.1.113883.6.253"
+																		 codeSystemName="Medispan Drug Descriptor ID" />
+															<translation code="39200024000320"
+																		 codeSystem="2.16.840.1.113883.6.68"
+																		 codeSystemName="Medi-Span Generic Product Identifier" />
+															<translation code="145386"
+																		 codeSystem="2.16.840.1.113883.6.162"
+																		 codeSystemName="Med-File (Medi-Span)" />
+															<translation code="860888"
+																		 codeSystem="2.16.840.1.113883.6.88"
+																		 codeSystemName="RxNorm" />
+															<translation code="71511-501-30"
+																		 codeSystem="2.16.840.1.113883.6.69" codeSystemName="NDC" />
+															<translation code="145399"
+																		 codeSystem="2.16.840.1.113883.6.253"
+																		 codeSystemName="Medispan Drug Descriptor ID" />
+															<translation code="145399"
+																		 codeSystem="2.16.840.1.113883.6.162"
+																		 codeSystemName="Med-File (Medi-Span)" />
+														</code>
+													</manufacturedMaterial>
+												</manufacturedProduct>
+											</product>
+										</supply>
+									</entryRelationship>
+									<entryRelationship typeCode="REFR">
+										<observation classCode="OBS" moodCode="EVN">
+											<templateId root="2.16.840.1.113883.10.20.1.47" />
+											<code code="33999-4" codeSystem="2.16.840.1.113883.6.1"
+												  codeSystemName="LOINC" displayName="Status" />
+											<statusCode code="completed" />
+											<value code="73425007"
+												   codeSystem="2.16.840.1.113883.6.96"
+												   codeSystemName="SNOMED CT" xsi:type="CE"
+												   displayName="No Longer Active"
+												   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" />
+										</observation>
+									</entryRelationship>
+									<entryRelationship typeCode="COMP">
+										<substanceAdministration
+												classCode="SBADM" moodCode="INT">
+											<templateId
+													root="2.16.840.1.113883.10.20.22.4.147" />
+											<code code="76662-6" codeSystem="2.16.840.1.113883.6.1"
+												  codeSystemName="LOINC" displayName="Medication Instructions" />
+											<text>
+												<reference value="#sig51" />
+											</text>
+											<consumable>
+												<manufacturedProduct>
+													<manufacturedLabeledDrug
+															nullFlavor="NA" />
+												</manufacturedProduct>
+											</consumable>
+										</substanceAdministration>
+									</entryRelationship>
+								</substanceAdministration>
+							</entryRelationship>
+						</act>
+					</entry>
+					<entry>
+						<act classCode="ACT" moodCode="EVN">
+							<templateId root="2.16.840.1.113883.10.20.22.4.35" />
+							<templateId root="2.16.840.1.113883.10.20.22.4.35"
+										extension="2016-03-01" />
+							<id root="6B78C24C-7636-11EB-80DE-0050568B6B1A" />
+							<code code="10183-2" codeSystem="2.16.840.1.113883.6.1"
+								  codeSystemName="LOINC"
+								  displayName="Hospital discharge medication">
+								<translation code="75311-1"
+											 codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC"
+											 displayName="Discharge medication" />
+							</code>
+							<statusCode code="completed" />
+							<entryRelationship typeCode="SUBJ">
+								<substanceAdministration
+										classCode="SBADM" moodCode="INT">
+									<templateId root="2.16.840.1.113883.10.20.22.4.16" />
+									<templateId root="2.16.840.1.113883.10.20.22.4.16"
+												extension="2014-06-09" />
+									<id root="1.2.840.114350.1.13.11511.1.7.2.798268"
+										extension="1066790" />
+									<text>
+										<reference value="#sig52" />
+									</text>
+									<statusCode code="completed" />
+									<effectiveTime xsi:type="IVL_TS"
+												   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+										<low value="20150624" />
+										<high value="20150628045900+0000" />
+									</effectiveTime>
+									<effectiveTime xsi:type="PIVL_TS"
+												   institutionSpecified="true" operator="A"
+												   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+										<period unit="d" value=".5" />
+									</effectiveTime>
+									<routeCode code="C38288"
+											   codeSystem="2.16.840.1.113883.3.26.1.1"
+											   codeSystemName="NCI Thesaurus" displayName="Oral">
+										<originalText>Oral</originalText>
+									</routeCode>
+									<doseQuantity unit="U" value="1" />
+									<consumable typeCode="CSM">
+										<manufacturedProduct classCode="MANU">
+											<templateId root="2.16.840.1.113883.10.20.22.4.23" />
+											<templateId root="2.16.840.1.113883.10.20.22.4.23"
+														extension="2014-06-09" />
+											<manufacturedMaterial>
+												<code code="485023" codeSystem="2.16.840.1.113883.6.88"
+													  codeSystemName="RxNorm">
+													<originalText>
+														<reference value="#med52" />
+													</originalText>
+													<translation code="0378-4202-78"
+																 codeSystem="2.16.840.1.113883.6.69" codeSystemName="NDC" />
+													<translation code="182285"
+																 codeSystem="2.16.840.1.113883.6.253"
+																 codeSystemName="Medispan Drug Descriptor ID" />
+													<translation code="99403030300630"
+																 codeSystem="2.16.840.1.113883.6.68"
+																 codeSystemName="Medi-Span Generic Product Identifier" />
+													<translation code="182285"
+																 codeSystem="2.16.840.1.113883.6.162"
+																 codeSystemName="Med-File (Medi-Span)" />
+												</code>
+											</manufacturedMaterial>
+										</manufacturedProduct>
+									</consumable>
+									<author>
+										<templateId root="2.16.840.1.113883.10.20.22.4.119" />
+										<templateId root="2.16.840.1.113883.10.20.22.5.6"
+													extension="2019-10-01" />
+										<time value="20201201172516-0600" />
+										<assignedAuthor>
+											<id root="1.2.840.114350.1.13.11511.1.7.1.1133"
+												extension="187338597" />
+										</assignedAuthor>
+									</author>
+									<entryRelationship typeCode="SUBJ"
+													   inversionInd="true">
+										<act classCode="ACT" moodCode="INT">
+											<templateId root="2.16.840.1.113883.10.20.22.4.20" />
+											<templateId root="2.16.840.1.113883.10.20.22.4.20"
+														extension="2014-06-09" />
+											<code code="311401005"
+												  codeSystem="2.16.840.1.113883.6.96"
+												  codeSystemName="SNOMED CT" />
+											<text>
+												<reference value="#sig52" />
+											</text>
+											<statusCode code="completed" />
+											<author>
+												<templateId
+														root="2.16.840.1.113883.10.20.22.4.119" />
+												<templateId root="2.16.840.1.113883.10.20.22.5.6"
+															extension="2019-10-01" />
+												<time value="20201201172516-0600" />
+												<assignedAuthor>
+													<id root="1.2.840.114350.1.13.11511.1.7.1.1133"
+														extension="187338597" />
+												</assignedAuthor>
+											</author>
+										</act>
+									</entryRelationship>
+									<entryRelationship typeCode="REFR">
+										<supply classCode="SPLY" moodCode="INT">
+											<templateId root="2.16.840.1.113883.10.20.22.4.17" />
+											<templateId root="2.16.840.1.113883.10.20.22.4.17"
+														extension="2014-06-09" />
+											<id root="1.2.840.114350.1.13.11511.1.7.2.798268"
+												extension="1066790" />
+											<statusCode code="completed" />
+											<repeatNumber value="1" />
+											<quantity value="6" />
+											<product>
+												<manufacturedProduct classCode="MANU">
+													<templateId
+															root="2.16.840.1.113883.10.20.22.4.23" />
+													<templateId
+															root="2.16.840.1.113883.10.20.22.4.23"
+															extension="2014-06-09" />
+													<manufacturedMaterial>
+														<code code="485023"
+															  codeSystem="2.16.840.1.113883.6.88"
+															  codeSystemName="RxNorm">
+															<originalText>
+																<reference value="#med52" />
+															</originalText>
+															<translation code="0378-4202-78"
+																		 codeSystem="2.16.840.1.113883.6.69" codeSystemName="NDC" />
+															<translation code="182285"
+																		 codeSystem="2.16.840.1.113883.6.253"
+																		 codeSystemName="Medispan Drug Descriptor ID" />
+															<translation code="99403030300630"
+																		 codeSystem="2.16.840.1.113883.6.68"
+																		 codeSystemName="Medi-Span Generic Product Identifier" />
+															<translation code="182285"
+																		 codeSystem="2.16.840.1.113883.6.162"
+																		 codeSystemName="Med-File (Medi-Span)" />
+														</code>
+													</manufacturedMaterial>
+												</manufacturedProduct>
+											</product>
+										</supply>
+									</entryRelationship>
+									<entryRelationship typeCode="REFR">
+										<observation classCode="OBS" moodCode="EVN">
+											<templateId root="2.16.840.1.113883.10.20.1.47" />
+											<code code="33999-4" codeSystem="2.16.840.1.113883.6.1"
+												  codeSystemName="LOINC" displayName="Status" />
+											<statusCode code="completed" />
+											<value code="73425007"
+												   codeSystem="2.16.840.1.113883.6.96"
+												   codeSystemName="SNOMED CT" xsi:type="CE"
+												   displayName="No Longer Active"
+												   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" />
+										</observation>
+									</entryRelationship>
+									<entryRelationship typeCode="COMP">
+										<substanceAdministration
+												classCode="SBADM" moodCode="INT">
+											<templateId
+													root="2.16.840.1.113883.10.20.22.4.147" />
+											<code code="76662-6" codeSystem="2.16.840.1.113883.6.1"
+												  codeSystemName="LOINC" displayName="Medication Instructions" />
+											<text>
+												<reference value="#sig52" />
+											</text>
+											<consumable>
+												<manufacturedProduct>
+													<manufacturedLabeledDrug
+															nullFlavor="NA" />
+												</manufacturedProduct>
+											</consumable>
+										</substanceAdministration>
+									</entryRelationship>
+								</substanceAdministration>
+							</entryRelationship>
+						</act>
+					</entry>
+					<entry>
+						<act classCode="ACT" moodCode="EVN">
+							<templateId root="2.16.840.1.113883.10.20.22.4.35" />
+							<templateId root="2.16.840.1.113883.10.20.22.4.35"
+										extension="2016-03-01" />
+							<id root="6B79DA88-7636-11EB-80DE-0050568B6B1A" />
+							<code code="10183-2" codeSystem="2.16.840.1.113883.6.1"
+								  codeSystemName="LOINC"
+								  displayName="Hospital discharge medication">
+								<translation code="75311-1"
+											 codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC"
+											 displayName="Discharge medication" />
+							</code>
+							<statusCode code="completed" />
+							<entryRelationship typeCode="SUBJ">
+								<substanceAdministration
+										classCode="SBADM" moodCode="INT">
+									<templateId root="2.16.840.1.113883.10.20.22.4.16" />
+									<templateId root="2.16.840.1.113883.10.20.22.4.16"
+												extension="2014-06-09" />
+									<id root="1.2.840.114350.1.13.11511.1.7.2.798268"
+										extension="1066788" />
+									<text>
+										<reference value="#sig53" />
+									</text>
+									<statusCode code="completed" />
+									<effectiveTime xsi:type="IVL_TS"
+												   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+										<low value="20150623" />
+										<high value="20150701045900+0000" />
+									</effectiveTime>
+									<effectiveTime xsi:type="PIVL_TS"
+												   institutionSpecified="true" operator="A"
+												   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+										<period unit="d" value="1" />
+									</effectiveTime>
+									<routeCode code="C38288"
+											   codeSystem="2.16.840.1.113883.3.26.1.1"
+											   codeSystemName="NCI Thesaurus" displayName="Oral">
+										<originalText>Oral</originalText>
+									</routeCode>
+									<doseQuantity unit="U" value="1" />
+									<consumable typeCode="CSM">
+										<manufacturedProduct classCode="MANU">
+											<templateId root="2.16.840.1.113883.10.20.22.4.23" />
+											<templateId root="2.16.840.1.113883.10.20.22.4.23"
+														extension="2014-06-09" />
+											<manufacturedMaterial>
+												<code code="198371" codeSystem="2.16.840.1.113883.6.88"
+													  codeSystemName="RxNorm">
+													<originalText>
+														<reference value="#med53" />
+													</originalText>
+													<translation code="50111-917-01"
+																 codeSystem="2.16.840.1.113883.6.69" codeSystemName="NDC" />
+													<translation code="46424"
+																 codeSystem="2.16.840.1.113883.6.253"
+																 codeSystemName="Medispan Drug Descriptor ID" />
+													<translation code="37200080000330"
+																 codeSystem="2.16.840.1.113883.6.68"
+																 codeSystemName="Medi-Span Generic Product Identifier" />
+													<translation code="46424"
+																 codeSystem="2.16.840.1.113883.6.162"
+																 codeSystemName="Med-File (Medi-Span)" />
+												</code>
+											</manufacturedMaterial>
+										</manufacturedProduct>
+									</consumable>
+									<author>
+										<templateId root="2.16.840.1.113883.10.20.22.4.119" />
+										<templateId root="2.16.840.1.113883.10.20.22.5.6"
+													extension="2019-10-01" />
+										<time value="20201201180259-0600" />
+										<assignedAuthor>
+											<id root="1.2.840.114350.1.13.11511.1.7.1.1133"
+												extension="187338597" />
+										</assignedAuthor>
+									</author>
+									<entryRelationship typeCode="SUBJ"
+													   inversionInd="true">
+										<act classCode="ACT" moodCode="INT">
+											<templateId root="2.16.840.1.113883.10.20.22.4.20" />
+											<templateId root="2.16.840.1.113883.10.20.22.4.20"
+														extension="2014-06-09" />
+											<code code="311401005"
+												  codeSystem="2.16.840.1.113883.6.96"
+												  codeSystemName="SNOMED CT" />
+											<text>
+												<reference value="#sig53" />
+											</text>
+											<statusCode code="completed" />
+											<author>
+												<templateId
+														root="2.16.840.1.113883.10.20.22.4.119" />
+												<templateId root="2.16.840.1.113883.10.20.22.5.6"
+															extension="2019-10-01" />
+												<time value="20201201180259-0600" />
+												<assignedAuthor>
+													<id root="1.2.840.114350.1.13.11511.1.7.1.1133"
+														extension="187338597" />
+												</assignedAuthor>
+											</author>
+										</act>
+									</entryRelationship>
+									<entryRelationship typeCode="REFR">
+										<supply classCode="SPLY" moodCode="INT">
+											<templateId root="2.16.840.1.113883.10.20.22.4.17" />
+											<templateId root="2.16.840.1.113883.10.20.22.4.17"
+														extension="2014-06-09" />
+											<id root="1.2.840.114350.1.13.11511.1.7.2.798268"
+												extension="1066788" />
+											<statusCode code="completed" />
+											<repeatNumber value="1" />
+											<quantity value="7" />
+											<product>
+												<manufacturedProduct classCode="MANU">
+													<templateId
+															root="2.16.840.1.113883.10.20.22.4.23" />
+													<templateId
+															root="2.16.840.1.113883.10.20.22.4.23"
+															extension="2014-06-09" />
+													<manufacturedMaterial>
+														<code code="198371"
+															  codeSystem="2.16.840.1.113883.6.88"
+															  codeSystemName="RxNorm">
+															<originalText>
+																<reference value="#med53" />
+															</originalText>
+															<translation code="50111-917-01"
+																		 codeSystem="2.16.840.1.113883.6.69" codeSystemName="NDC" />
+															<translation code="46424"
+																		 codeSystem="2.16.840.1.113883.6.253"
+																		 codeSystemName="Medispan Drug Descriptor ID" />
+															<translation code="37200080000330"
+																		 codeSystem="2.16.840.1.113883.6.68"
+																		 codeSystemName="Medi-Span Generic Product Identifier" />
+															<translation code="46424"
+																		 codeSystem="2.16.840.1.113883.6.162"
+																		 codeSystemName="Med-File (Medi-Span)" />
+														</code>
+													</manufacturedMaterial>
+												</manufacturedProduct>
+											</product>
+										</supply>
+									</entryRelationship>
+									<entryRelationship typeCode="REFR">
+										<observation classCode="OBS" moodCode="EVN">
+											<templateId root="2.16.840.1.113883.10.20.1.47" />
+											<code code="33999-4" codeSystem="2.16.840.1.113883.6.1"
+												  codeSystemName="LOINC" displayName="Status" />
+											<statusCode code="completed" />
+											<value code="73425007"
+												   codeSystem="2.16.840.1.113883.6.96"
+												   codeSystemName="SNOMED CT" xsi:type="CE"
+												   displayName="No Longer Active"
+												   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" />
+										</observation>
+									</entryRelationship>
+									<entryRelationship typeCode="COMP">
+										<substanceAdministration
+												classCode="SBADM" moodCode="INT">
+											<templateId
+													root="2.16.840.1.113883.10.20.22.4.147" />
+											<code code="76662-6" codeSystem="2.16.840.1.113883.6.1"
+												  codeSystemName="LOINC" displayName="Medication Instructions" />
+											<text>
+												<reference value="#sig53" />
+											</text>
+											<consumable>
+												<manufacturedProduct>
+													<manufacturedLabeledDrug
+															nullFlavor="NA" />
+												</manufacturedProduct>
+											</consumable>
+										</substanceAdministration>
+									</entryRelationship>
+								</substanceAdministration>
+							</entryRelationship>
+						</act>
+					</entry>
+					<entry>
+						<act classCode="ACT" moodCode="EVN">
+							<templateId root="2.16.840.1.113883.10.20.22.4.35" />
+							<templateId root="2.16.840.1.113883.10.20.22.4.35"
+										extension="2016-03-01" />
+							<id root="6B7B1CB8-7636-11EB-80DE-0050568B6B1A" />
+							<code code="10183-2" codeSystem="2.16.840.1.113883.6.1"
+								  codeSystemName="LOINC"
+								  displayName="Hospital discharge medication">
+								<translation code="75311-1"
+											 codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC"
+											 displayName="Discharge medication" />
+							</code>
+							<statusCode code="completed" />
+							<entryRelationship typeCode="SUBJ">
+								<substanceAdministration
+										classCode="SBADM" moodCode="INT">
+									<templateId root="2.16.840.1.113883.10.20.22.4.16" />
+									<templateId root="2.16.840.1.113883.10.20.22.4.16"
+												extension="2014-06-09" />
+									<id root="1.2.840.114350.1.13.11511.1.7.2.798268"
+										extension="1066786" />
+									<text>
+										<reference value="#sig54" />
+									</text>
+									<statusCode code="completed" />
+									<effectiveTime xsi:type="IVL_TS"
+												   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+										<low value="20150622" />
+										<high value="20150701045900+0000" />
+									</effectiveTime>
+									<routeCode code="C38288"
+											   codeSystem="2.16.840.1.113883.3.26.1.1"
+											   codeSystemName="NCI Thesaurus" displayName="Oral">
+										<originalText>Oral</originalText>
+									</routeCode>
+									<doseQuantity unit="U" value="1" />
+									<consumable typeCode="CSM">
+										<manufacturedProduct classCode="MANU">
+											<templateId root="2.16.840.1.113883.10.20.22.4.23" />
+											<templateId root="2.16.840.1.113883.10.20.22.4.23"
+														extension="2014-06-09" />
+											<manufacturedMaterial>
+												<code code="209459" codeSystem="2.16.840.1.113883.6.88"
+													  codeSystemName="RxNorm">
+													<originalText>
+														<reference value="#med54" />
+													</originalText>
+													<translation code="0045-0449-05"
+																 codeSystem="2.16.840.1.113883.6.69" codeSystemName="NDC" />
+													<translation code="22567"
+																 codeSystem="2.16.840.1.113883.6.253"
+																 codeSystemName="Medispan Drug Descriptor ID" />
+													<translation code="64200010000315"
+																 codeSystem="2.16.840.1.113883.6.68"
+																 codeSystemName="Medi-Span Generic Product Identifier" />
+													<translation code="22567"
+																 codeSystem="2.16.840.1.113883.6.162"
+																 codeSystemName="Med-File (Medi-Span)" />
+												</code>
+											</manufacturedMaterial>
+										</manufacturedProduct>
+									</consumable>
+									<author>
+										<templateId root="2.16.840.1.113883.10.20.22.4.119" />
+										<templateId root="2.16.840.1.113883.10.20.22.5.6"
+													extension="2019-10-01" />
+										<time value="20201201172516-0600" />
+										<assignedAuthor>
+											<id root="1.2.840.114350.1.13.11511.1.7.1.1133"
+												extension="187338597" />
+										</assignedAuthor>
+									</author>
+									<entryRelationship typeCode="SUBJ"
+													   inversionInd="true">
+										<act classCode="ACT" moodCode="INT">
+											<templateId root="2.16.840.1.113883.10.20.22.4.20" />
+											<templateId root="2.16.840.1.113883.10.20.22.4.20"
+														extension="2014-06-09" />
+											<code code="311401005"
+												  codeSystem="2.16.840.1.113883.6.96"
+												  codeSystemName="SNOMED CT" />
+											<text>
+												<reference value="#sig54" />
+											</text>
+											<statusCode code="completed" />
+											<author>
+												<templateId
+														root="2.16.840.1.113883.10.20.22.4.119" />
+												<templateId root="2.16.840.1.113883.10.20.22.5.6"
+															extension="2019-10-01" />
+												<time value="20201201172516-0600" />
+												<assignedAuthor>
+													<id root="1.2.840.114350.1.13.11511.1.7.1.1133"
+														extension="187338597" />
+												</assignedAuthor>
+											</author>
+										</act>
+									</entryRelationship>
+									<entryRelationship typeCode="REFR">
+										<supply classCode="SPLY" moodCode="INT">
+											<templateId root="2.16.840.1.113883.10.20.22.4.17" />
+											<templateId root="2.16.840.1.113883.10.20.22.4.17"
+														extension="2014-06-09" />
+											<id root="1.2.840.114350.1.13.11511.1.7.2.798268"
+												extension="1066786" />
+											<statusCode code="completed" />
+											<repeatNumber value="1" />
+											<quantity value="60" />
+											<product>
+												<manufacturedProduct classCode="MANU">
+													<templateId
+															root="2.16.840.1.113883.10.20.22.4.23" />
+													<templateId
+															root="2.16.840.1.113883.10.20.22.4.23"
+															extension="2014-06-09" />
+													<manufacturedMaterial>
+														<code code="209459"
+															  codeSystem="2.16.840.1.113883.6.88"
+															  codeSystemName="RxNorm">
+															<originalText>
+																<reference value="#med54" />
+															</originalText>
+															<translation code="0045-0449-05"
+																		 codeSystem="2.16.840.1.113883.6.69" codeSystemName="NDC" />
+															<translation code="22567"
+																		 codeSystem="2.16.840.1.113883.6.253"
+																		 codeSystemName="Medispan Drug Descriptor ID" />
+															<translation code="64200010000315"
+																		 codeSystem="2.16.840.1.113883.6.68"
+																		 codeSystemName="Medi-Span Generic Product Identifier" />
+															<translation code="22567"
+																		 codeSystem="2.16.840.1.113883.6.162"
+																		 codeSystemName="Med-File (Medi-Span)" />
+														</code>
+													</manufacturedMaterial>
+												</manufacturedProduct>
+											</product>
+										</supply>
+									</entryRelationship>
+									<entryRelationship typeCode="REFR">
+										<observation classCode="OBS" moodCode="EVN">
+											<templateId root="2.16.840.1.113883.10.20.1.47" />
+											<code code="33999-4" codeSystem="2.16.840.1.113883.6.1"
+												  codeSystemName="LOINC" displayName="Status" />
+											<statusCode code="completed" />
+											<value code="73425007"
+												   codeSystem="2.16.840.1.113883.6.96"
+												   codeSystemName="SNOMED CT" xsi:type="CE"
+												   displayName="No Longer Active"
+												   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" />
+										</observation>
+									</entryRelationship>
+									<entryRelationship typeCode="COMP">
+										<substanceAdministration
+												classCode="SBADM" moodCode="INT">
+											<templateId
+													root="2.16.840.1.113883.10.20.22.4.147" />
+											<code code="76662-6" codeSystem="2.16.840.1.113883.6.1"
+												  codeSystemName="LOINC" displayName="Medication Instructions" />
+											<text>
+												<reference value="#sig54" />
+											</text>
+											<consumable>
+												<manufacturedProduct>
+													<manufacturedLabeledDrug
+															nullFlavor="NA" />
+												</manufacturedProduct>
+											</consumable>
+										</substanceAdministration>
+									</entryRelationship>
+									<precondition typeCode="PRCN">
+										<criterion>
+											<templateId root="2.16.840.1.113883.10.20.22.4.25" />
+											<templateId root="2.16.840.1.113883.10.20.22.4.25"
+														extension="2014-06-09" />
+											<code code="ASSERTION"
+												  codeSystem="2.16.840.1.113883.5.4" />
+											<value xsi:type="CD" nullFlavor="OTH"
+												   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+												<originalText>As needed</originalText>
+											</value>
+										</criterion>
+									</precondition>
+								</substanceAdministration>
+							</entryRelationship>
+						</act>
+					</entry>
+				</section>
+			</component>
 			<!-- ******************** IMMUNIZATIONS ********************* -->
 			<!-- edited as per test doc - NOT all data is relevant, but all entries themselves are relevant -db -->	
 			<component>
