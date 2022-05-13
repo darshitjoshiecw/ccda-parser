@@ -606,7 +606,7 @@ public class ParserUtilities {
 					author.setAuthorFirstName(ParserUtilities.readTextContext((Element) CCDAConstants.REL_GIVEN_NAME_EXP.
 							evaluate(assignedPerson, XPathConstants.NODE)));
 					
-					author.setAuthorFirstName(ParserUtilities.readTextContext((Element) CCDAConstants.REL_FAMILY_NAME_EXP.
+					author.setAuthorLastName(ParserUtilities.readTextContext((Element) CCDAConstants.REL_FAMILY_NAME_EXP.
 							evaluate(assignedPerson, XPathConstants.NODE)));
 					
 					author.setAuthorName(ParserUtilities.readTextContext((Element) CCDAConstants.REL_NAME_EXP.

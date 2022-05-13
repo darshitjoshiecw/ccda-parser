@@ -316,5 +316,8 @@ public class MedicalEquipmentTest {
         Assert.assertEquals("111111", author.getAuthorIds().get(0).getExtValue());
         Assert.assertEquals("2.16.840.1.113883.19.5", author.getRepOrgIds().get(0).getRootValue());
         Assert.assertEquals("Neighborhood Physicians Practice", author.getOrgName().getValue());
+        /** Telecom Obj Validation **/
+        Assert.assertEquals("WP1", author.getTelecoms().get(0).getUseAttribute());
+        Assert.assertEquals("tel:+1(555)-555-5005", author.getTelecoms().get(0).getValueAttribute());
     }
 }

@@ -863,6 +863,7 @@
                                     <representedOrganization>
                                         <id root="2.16.840.1.113883.19.5" />
                                         <name>Neighborhood Physicians Practice</name>
+                                        <telecom use="WP1" value="tel:+1(555)-555-5005"/>
                                     </representedOrganization>
                                 </assignedAuthor>
                             </author>

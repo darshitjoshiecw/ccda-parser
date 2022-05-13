@@ -3876,7 +3876,79 @@
 					</entry>
 				</section>
 			</component>
-			
+
+			<!-- added Admission Diagnosis Section (V3), -db -->
+			<component>
+				<section>
+					<!-- Admission Diagnosis Section (V3) -->
+					<templateId root="2.16.840.1.113883.10.20.22.2.43" extension="2015-08-01"/>
+					<templateId root="2.16.840.1.113883.10.20.22.2.43"/>
+					<code code="46241-6" codeSystem="2.16.840.1.113883.6.1" displayName="Hospital Admission Diagnosis">
+						<translation code="42347-5" codeSystem="2.16.840.1.113883.6.1" displayName="Admission Diagnosis"></translation>
+					</code>
+					<title>ADMISSION DIAGNOSIS</title>
+					<text>Skin burn</text>
+					<entry>
+						<act classCode="ACT" moodCode="EVN">
+							<!-- Hospital Admission Diagnosis (V3)  -->
+							<templateId root="2.16.840.1.113883.10.20.22.4.34" extension="2015-08-01" />
+							<templateId root="2.16.840.1.113883.10.20.22.4.34" />
+							<id root="5a784260-6856-4f38-9638-80c751aff2fb" />
+							<code code="46241-6" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Hospital Admission Diagnosis" />
+							<statusCode code="active" />
+							<effectiveTime>
+								<low value="20150722" />
+							</effectiveTime>
+							<!-- added participant to include service delivery location -db -->
+							<participant typeCode="LOC">
+								<participantRole classCode="SDLOC">
+									<templateId root="2.16.840.1.113883.10.20.22.4.32"/>
+									<!-- Service Delivery Location template -->
+									<!-- the test data does not specify specific data for this code -db -->
+									<code code="1160-1" codeSystem="2.16.840.1.113883.6.259" codeSystemName="HL7 HealthcareServiceLocation" displayName="Urgent Care Center"/>
+									<addr>
+										<streetAddressLine>1002 Healthcare Dr</streetAddressLine>
+										<city>Beaverton</city>
+										<state>OR</state>
+										<postalCode>97266</postalCode>
+										<country>US</country>
+									</addr>
+									<playingEntity classCode="PLC">
+										<name>Community Health and Hospitals</name>
+									</playingEntity>
+								</participantRole>
+							</participant>
+							<entryRelationship typeCode="SUBJ">
+								<observation classCode="OBS" moodCode="EVN">
+									<!-- ** Problem observation  (V3)** -->
+									<templateId root="2.16.840.1.113883.10.20.22.4.4" extension="2015-08-01"/>
+									<templateId root="2.16.840.1.113883.10.20.22.4.4"/>
+									<id root="ab1791b0-5c71-11db-9832-0800200c9a69"/>
+									<code code="64572001" displayName="Condition" codeSystemName="SNOMED-CT" codeSystem="2.16.840.1.113883.6.96">
+										<!-- a.	This code SHALL contain at least one [1..*] translation, which SHOULD be selected from ValueSet Problem Type (LOINC) -->
+										<!-- Condition seems like the best option:
+										No EXACT requirement was given in the test data -db -->
+										<translation code="75323-6" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Condition"/>
+									</code>
+									<!-- The statusCode reflects the status of the observation itself -->
+									<statusCode code="completed"/>
+									<effectiveTime>
+										<!-- The low value reflects the date of onset -->
+										<low value="20150722"/>
+										<!-- The high value reflects when the problem was known to be resolved -->
+										<!-- Absence of effectiveTime/high means the condition is not resolved -->
+									</effectiveTime>
+									<value xsi:type="CD" code="T23.1" codeSystem="2.16.840.1.113883.6.90" displayName="Burn of first degree of wrist and hand" codeSystemName="ICD-10">
+										<translation code="211896002" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED-CT" displayName="First degree burn of multiple sites of wrist or hand"/>
+									</value>
+									<!-- removed author as not required -db -->
+								</observation>
+							</entryRelationship>
+						</act>
+					</entry>
+				</section>
+			</component>
+
 			<!-- ************** PROCEDURES and UDI ***************** -->
 			<!-- edited as per test doc - all of this data is directly relevant -db -->
 			<component>
