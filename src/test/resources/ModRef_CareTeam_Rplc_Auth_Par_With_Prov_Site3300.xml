@@ -2171,7 +2171,7 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td ID="ctm_1">Dr Albert Davis </td>
+                                <td ID="ctm_1">Dr Albert Davis</td>
                                 <td>PCP</td>
                             </tr>
                         </tbody>
@@ -2196,6 +2196,10 @@
                         <effectiveTime>
                         			<low value="20200601"/>
                         </effectiveTime>
+
+						<originalText xmlns = "urn:hl7-org:v3">
+							<reference value = "#ctm_1"></reference>
+						</originalText>
                         <component>
                         	<act classCode="PCPR" moodCode="EVN">
                         		<templateId root="2.16.840.1.113883.10.20.22.4.500.1" extension="2019-07-01"/>
@@ -2222,6 +2226,30 @@
                         		</performer>
 								<participant typeCode="IND">
 									<participantRole nullFlavor="NI"/>
+
+									<functionCode
+											xmlns = "urn:hl7-org:sdtc"
+											code = "PCP"
+											displayName = "primary care physician"
+											codeSystem = "2.16.840.1.113883.5.88"
+											codeSystemName = "ParticipationFunction">
+										<originalText xmlns = "urn:hl7-org:v3">
+											<reference value = "#CT1_M01"></reference>
+										</originalText>
+									</functionCode><!--A care team member role -->
+									<assignedEntity>
+										<id root = "B00B14E8-CDE4-48EA-8A09-01BC4945122A" extension = "1"/>
+										<id root = "1.5.5.5.5.5.5"/>
+
+										<assignedPerson>
+											<name>
+												<given>JohnParticipant</given>
+												<given>P</given>
+												<family>SmithParticipant</family>
+												<suffix>MD</suffix>
+											</name>
+										</assignedPerson>
+									</assignedEntity>
 								</participant>
                         	</act>
                         </component>

@@ -1,18 +1,10 @@
 package org.sitenv.ccdaparsing.processing;
 
-import java.util.ArrayList;
-import java.util.concurrent.Future;
-
-import javax.xml.transform.TransformerException;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.sitenv.ccdaparsing.model.CCDACareTeamMember;
 import org.sitenv.ccdaparsing.model.CCDACareTeamMemberAct;
+import org.sitenv.ccdaparsing.model.CCDADataElement;
 import org.sitenv.ccdaparsing.model.CCDAParticipant;
 import org.sitenv.ccdaparsing.util.ApplicationConstants;
 import org.sitenv.ccdaparsing.util.ApplicationUtil;
@@ -23,6 +15,20 @@ import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.concurrent.Future;
 
 @Service
 public class CareTeamMemberProcessor {
@@ -55,21 +61,19 @@ public class CareTeamMemberProcessor {
 			participantList.add(participant);
 		}
 		careTeamMember.setMembers(participantList);
+		CCDACareTeamMember ctMember = retrieveCareTeamSectionDetails(doc, careTeamMember);
 		logger.info("care team members parsing End time:"+ (System.currentTimeMillis() - startTime));
 		
-		return new AsyncResult<CCDACareTeamMember>(careTeamMember);
+		return new AsyncResult<CCDACareTeamMember>(ctMember);
 	}
 
-	@Async()
-	public Future<CCDACareTeamMember> retrieveCareTeamSectionDetails(Document doc) throws XPathExpressionException
+	public CCDACareTeamMember retrieveCareTeamSectionDetails(Document doc, CCDACareTeamMember careTeamMember) throws XPathExpressionException, TransformerException 
 	{
-		CCDACareTeamMember careTeamMember = null;
 		Element sectionElement = (Element) CCDAConstants.CARE_TEAM_SECTION_EXPRESSION.evaluate(doc, XPathConstants.NODE);
 
 		if(sectionElement != null)
 		{
 			logger.info(" Found Care Team Member section ");
-			careTeamMember = new CCDACareTeamMember();
 			careTeamMember.setSectionTemplateId(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
 					evaluate(sectionElement, XPathConstants.NODESET)));
 
@@ -80,14 +84,19 @@ public class CareTeamMemberProcessor {
 			careTeamMember.setMemberActs(readMemberActs((NodeList) CCDAConstants.REL_CARE_TEAM_ORG_EXPRESSION.
 					evaluate(sectionElement, XPathConstants.NODESET)));
 
+			readDataFromOrganization((NodeList) CCDAConstants.REL_CARE_TEAM_ORG_EXPRESSION.
+					evaluate(sectionElement, XPathConstants.NODESET), careTeamMember);
+
+			careTeamMember.setCareTeamName(readCareTeamName(careTeamMember.getReferenceText(), sectionElement));
+
 			careTeamMember.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
 					evaluate(sectionElement, XPathConstants.NODE)));
 		}
 
-		return new AsyncResult<>(careTeamMember);
+		return careTeamMember;
 	}
 
-	public ArrayList<CCDACareTeamMemberAct> readMemberActs(NodeList orgList) throws XPathExpressionException
+	public ArrayList<CCDACareTeamMemberAct> readMemberActs(NodeList orgList) throws XPathExpressionException, TransformerException 
 	{
 		ArrayList<CCDACareTeamMemberAct> careTeamMembers = new ArrayList<>();
 
@@ -108,10 +117,26 @@ public class CareTeamMemberProcessor {
 		return careTeamMembers;
 	}
 
-	public void retrieveMembers(NodeList memberActNodes, ArrayList<CCDACareTeamMemberAct> careTeamMembers) throws XPathExpressionException
-	{
-		if(memberActNodes != null)
-		{
+	public void readDataFromOrganization(NodeList orgList, CCDACareTeamMember careTeamMember) throws XPathExpressionException, TransformerException {
+		if (orgList != null && orgList.getLength() > 0) {
+			logger.info("Found Organizer ");
+			Element orgElement = (Element) orgList.item(0);
+
+			// Parse the Members status
+			careTeamMember.setStatusCode(ParserUtilities.readCode((Element) CCDAConstants.REL_STATUS_CODE_EXP.
+					evaluate(orgElement, XPathConstants.NODE)));
+
+			careTeamMember.setCareTeamEffectiveTime(ApplicationUtil.readEffectivetime((Element) CCDAConstants.REL_EFF_TIME_EXP.
+					evaluate(orgElement, XPathConstants.NODE), CCDAConstants.CCDAXPATH));
+
+			careTeamMember.setReferenceText(ParserUtilities.readDataElement((Element) CCDAConstants.REL_CARE_TEAM_ORG_REF.
+					evaluate(orgElement, XPathConstants.NODE)));
+
+		}
+	}
+
+	public void retrieveMembers(NodeList memberActNodes, ArrayList<CCDACareTeamMemberAct> careTeamMembers) throws XPathExpressionException, TransformerException {
+		if (memberActNodes != null) {
 			for (int i = 0; i < memberActNodes.getLength(); i++) {
 
 				logger.info(" Found Member Act Node ");
@@ -128,8 +153,8 @@ public class CareTeamMemberProcessor {
 				mact.setStatusCode(ParserUtilities.readCode((Element) CCDAConstants.REL_STATUS_CODE_EXP.
 						evaluate(memberActElement, XPathConstants.NODE)));
 
-				mact.setEffectiveTime(ParserUtilities.readEffectiveTime((Element) CCDAConstants.REL_EFF_TIME_EXP.
-						evaluate(memberActElement, XPathConstants.NODE)));
+				mact.setEffectiveTime(ApplicationUtil.readEffectivetime((Element) CCDAConstants.REL_EFF_TIME_EXP.
+						evaluate(memberActElement, XPathConstants.NODE), CCDAConstants.CCDAXPATH));
 
 				mact.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
 						evaluate(memberActElement, XPathConstants.NODE)));
@@ -155,7 +180,7 @@ public class CareTeamMemberProcessor {
 						logger.info(" Found Participants ");
 						CCDAParticipant opp = new CCDAParticipant();
 						readName((Element) CCDAConstants.REL_ASSN_ENTITY_PERSON_NAME.
-								evaluate(performerElement, XPathConstants.NODE), opp, XPathFactory.newInstance().newXPath());
+								evaluate(participantNodeList.item(j), XPathConstants.NODE), opp, XPathFactory.newInstance().newXPath());
 
 						mact.addParticipant(opp);
 					}
@@ -192,4 +217,18 @@ public class CareTeamMemberProcessor {
 		}
 	}
 
+	public String readCareTeamName(CCDADataElement referenceTextElement, Element sectionElement)  throws XPathExpressionException, TransformerException{
+		try {
+			if(referenceTextElement != null && referenceTextElement.getValue() != null) {
+				String xml = (ApplicationUtil.nodeToString(sectionElement));
+				InputSource is = new InputSource(new StringReader(xml));
+				Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(is);
+				String id = referenceTextElement.getValue().replace("#", "");
+				return ApplicationUtil.getTextByElementId(id, document);
+			}
+		} catch (ParserConfigurationException | SAXException | IOException e) {
+			logger.error("Parsing Care team section failed", e);
+		}
+		return null;
+	}
 }

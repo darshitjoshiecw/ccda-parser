@@ -142,6 +142,7 @@ public class CCDAConstants {
 	static public XPathExpression REL_CARE_TEAM_MEMBER_ACT_EXPRESSION;
 	static public XPathExpression REL_PERFORMER_EXP;
 	static public XPathExpression REL_PARTICIPANT_EXP;
+	static public XPathExpression REL_CARE_TEAM_ORG_REF;
 	
 	// Social history
 	static public XPathExpression SOCIAL_HISTORY_EXPRESSION;
@@ -311,6 +312,7 @@ public class CCDAConstants {
 		    CARE_TEAM_SECTION_EXPRESSION = CCDAConstants.CCDAXPATH.compile("/ClinicalDocument/component/structuredBody/component/section[not(@nullFlavor) and code[@code='85847-2']]");
 		    REL_CARE_TEAM_ORG_EXPRESSION = CCDAConstants.CCDAXPATH.compile("./entry/organizer[not(@nullFlavor)]");
 		    REL_CARE_TEAM_MEMBER_ACT_EXPRESSION = CCDAConstants.CCDAXPATH.compile("./component/act[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.500.1']]");
+			REL_CARE_TEAM_ORG_REF = CCDAConstants.CCDAXPATH.compile("./originalText/reference[not(@nullFlavor)]");
 		    		    
 			REL_TEMPLATE_ID_EXP = CCDAConstants.CCDAXPATH.compile("./templateId[not(@nullFlavor)]");
 			REL_CODE_EXP = CCDAConstants.CCDAXPATH.compile("./code[not(@nullFlavor)]");

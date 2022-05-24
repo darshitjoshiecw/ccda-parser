@@ -193,7 +193,6 @@ public class CCDAParserAPI {
 		Future<UsrhSubType> usrhSubType=null;
 		Future<CCDAAdmissionDiagnosis> admissionDiagnosisFuture=null;
 		Future<CCDADischargeDiagnosis> dischargeDiagnosisFuture = null;
-		Future<CCDACareTeamMember> careTeamMemberFuture = null;
 		Future<CCDACarePlanSections> carePlanSectionsFuture = null;
 		Future<CCDADischargeMedication> dischargeMedicationFuture = null;
 		Future<CCDAHeaderElements> headerElementsFuture = null;
@@ -228,7 +227,6 @@ public class CCDAParserAPI {
 				vitals = vitalSignProcessor.retrieveVitalSigns(xPath, doc);
 				procedures = procedureProcessor.retrievePrcedureDetails(xPath, doc);
 				careTeamMembers = careTeamMemberProcessor.retrieveCTMDetails(xPath, doc);
-				careTeamMemberFuture = careTeamMemberProcessor.retrieveCareTeamSectionDetails(doc);
 				carePlanSectionsFuture = carePlanSectionsParser.getSuggestedSections(doc);
 				dischargeMedicationFuture = medicationProcessor.retrieveDischargeMedicationDetails(xPath, doc);
 				headerElementsFuture = ccdaHeaderParser.getHeaderElements(doc, false);
@@ -292,17 +290,6 @@ public class CCDAParserAPI {
 							isTimeOut = true;
 						logger.error("Parsing Discharge Diagnosis section failed",e);
 						refModel.addToErrorSections("Discharge Diagnosis");
-					}
-				}
-
-				if (careTeamMemberFuture != null) {
-					try{
-						refModel.setCareTeamSectionMembers(careTeamMemberFuture.get(isTimeOut?minWaitTime:maxWaitTime, TimeUnit.MILLISECONDS));
-					} catch (ExecutionException | InterruptedException | TimeoutException e) {
-						if(!partialParsingSupported)
-							isTimeOut = true;
-						logger.error("Parsing Care Team Section Member section failed",e);
-						refModel.addToErrorSections("Care Team Section Member");
 					}
 				}
 

@@ -24,7 +24,7 @@ public class CCDACareTeamTest {
                 DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
         Document doc = builder.parse(new File(CCDA_DOC));
-        careTeamMember = careTeamMemberProcessor.retrieveCareTeamSectionDetails(doc).get();
+        careTeamMember = careTeamMemberProcessor.retrieveCareTeamSectionDetails(doc,new CCDACareTeamMember());
     }
 
     @Test
@@ -55,8 +55,17 @@ public class CCDACareTeamTest {
         Assert.assertEquals("", "2019-07-01", careTeamMember.getMemberActs().get(0).getTemplateIds().get(0).getExtValue());
         Assert.assertEquals("", "2.16.840.1.113883.10.20.22.4.500.1", careTeamMember.getMemberActs().get(0).getTemplateIds().get(0).getRootValue());
         Assert.assertEquals("", "Davis", careTeamMember.getMemberActs().get(0).getPrimaryPerformer().getLastName().getValue());
-        Assert.assertEquals("", "Albert", careTeamMember.getMemberActs().get(0).getOtherCareTeamMembers().get(0).getFirstName().getValue());
-        Assert.assertEquals("", "Davis", careTeamMember.getMemberActs().get(0).getOtherCareTeamMembers().get(0).getLastName().getValue());
+        Assert.assertEquals("", "JohnParticipant", careTeamMember.getMemberActs().get(0).getOtherCareTeamMembers().get(0).getFirstName().getValue());
+        Assert.assertEquals("", "SmithParticipant", careTeamMember.getMemberActs().get(0).getOtherCareTeamMembers().get(0).getLastName().getValue());
+    }
+
+    @Test
+    public void testCareTeamMember(){
+        Assert.assertEquals("", "active", careTeamMember.getStatusCode().getCode());
+        Assert.assertEquals("", "20200601", careTeamMember.getCareTeamEffectiveTime().getLow().getValue());
+        Assert.assertEquals("", true, careTeamMember.getCareTeamEffectiveTime().getLowPresent());
+        Assert.assertEquals("", "#ctm_1", careTeamMember.getReferenceText().getValue());
+        Assert.assertEquals("", "Dr Albert Davis", careTeamMember.getCareTeamName());
     }
 
 }

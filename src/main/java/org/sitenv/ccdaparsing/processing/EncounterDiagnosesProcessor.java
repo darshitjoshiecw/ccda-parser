@@ -227,8 +227,7 @@ public class EncounterDiagnosesProcessor {
 		return serviceDeliveryLocsList;
 	}
 
-	public ArrayList<CCDAProblemObs> readProblemObservation(NodeList problemObservationNodeList) throws XPathExpressionException
-	{
+	public ArrayList<CCDAProblemObs> readProblemObservation(NodeList problemObservationNodeList) throws XPathExpressionException, TransformerException {
 		ArrayList<CCDAProblemObs> problemObservationList = null;
 		if(problemObservationNodeList.getLength() > 0)
 		{
@@ -250,8 +249,8 @@ public class EncounterDiagnosesProcessor {
 			problemObservation.setTranslationProblemType(ParserUtilities.readCodeList((NodeList) CCDAConstants.REL_CODE_TRANS_EXP.
 					evaluate(problemObservationElement, XPathConstants.NODESET)));
 
-			problemObservation.setEffTime(ParserUtilities.readEffectiveTime((Element) CCDAConstants.REL_EFF_TIME_EXP.
-					evaluate(problemObservationElement, XPathConstants.NODE)));
+			problemObservation.setEffTime(ApplicationUtil.readEffectivetime((Element) CCDAConstants.REL_EFF_TIME_EXP.
+					evaluate(problemObservationElement, XPathConstants.NODE),CCDAConstants.CCDAXPATH));
 
 			problemObservation.setProblemCode(ParserUtilities.readCodeWithTranslation((Element) CCDAConstants.REL_VAL__WITH_TRANS_EXP.
 					evaluate(problemObservationElement, XPathConstants.NODE)));
@@ -313,8 +312,7 @@ public class EncounterDiagnosesProcessor {
 	}
 
 	@Async()
-	public Future<CCDAAdmissionDiagnosis> retrieveAdmissionDiagnosisDetails(Document doc) throws XPathExpressionException
-	{
+	public Future<CCDAAdmissionDiagnosis> retrieveAdmissionDiagnosisDetails(Document doc) throws XPathExpressionException, TransformerException {
 		Element sectionElement = (Element) CCDAConstants.ADMISSION_DIAG_EXP.evaluate(doc, XPathConstants.NODE);
 		CCDAAdmissionDiagnosis admDiag = null;
 
@@ -342,8 +340,7 @@ public class EncounterDiagnosesProcessor {
 		return new AsyncResult<CCDAAdmissionDiagnosis>(admDiag);
 	}
 
-	public ArrayList<CCDAProblemObs> readHospitalAdmissionDiagnosis(NodeList hospitalAdmDiag) throws XPathExpressionException
-	{
+	public ArrayList<CCDAProblemObs> readHospitalAdmissionDiagnosis(NodeList hospitalAdmDiag) throws XPathExpressionException, TransformerException {
 		ArrayList<CCDAProblemObs> encDiagList = new ArrayList<CCDAProblemObs>();
 
 		for (int i = 0; i < hospitalAdmDiag.getLength(); i++) {
@@ -364,8 +361,7 @@ public class EncounterDiagnosesProcessor {
 	}
 
 	@Async()
-	public Future<CCDADischargeDiagnosis> retrieveDischargeDiagnosisDetails(Document doc) throws XPathExpressionException
-	{
+	public Future<CCDADischargeDiagnosis> retrieveDischargeDiagnosisDetails(Document doc) throws XPathExpressionException, TransformerException {
 		Element sectionElement = (Element) CCDAConstants.DISCHARGE_DIAG_EXP.evaluate(doc, XPathConstants.NODE);
 		CCDADischargeDiagnosis dischargeDiag = null;
 
@@ -393,8 +389,7 @@ public class EncounterDiagnosesProcessor {
 		return new AsyncResult<CCDADischargeDiagnosis>(dischargeDiag);
 	}
 
-	public ArrayList<CCDAProblemObs> readHospitalDischargeDiagnosis(NodeList hospitalDischargeDiag) throws XPathExpressionException
-	{
+	public ArrayList<CCDAProblemObs> readHospitalDischargeDiagnosis(NodeList hospitalDischargeDiag) throws XPathExpressionException, TransformerException {
 		ArrayList<CCDAProblemObs> encDiagList = new ArrayList<CCDAProblemObs>();
 
 		for (int i = 0; i < hospitalDischargeDiag.getLength(); i++) {

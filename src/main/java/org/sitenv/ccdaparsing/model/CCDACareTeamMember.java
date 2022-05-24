@@ -13,8 +13,12 @@ public class CCDACareTeamMember extends CCDAXmlSnippet {
 
 	private ArrayList<CCDAII>       		sectionTemplateId;
 	private CCDACode sectionCode;
+	private CCDACode statusCode;
+	private CCDAEffTime careTeamEffectiveTime;
 	private ArrayList<CCDACareTeamMemberAct> memberActs;
 	private CCDAAuthor author;
+	private String careTeamName;
+	private CCDADataElement referenceText;
 
 	public void log() {
 
@@ -36,6 +40,22 @@ public class CCDACareTeamMember extends CCDAXmlSnippet {
 		memberActs = new ArrayList<CCDACareTeamMemberAct>();
 	}
 
+	public CCDAEffTime getCareTeamEffectiveTime() {
+		return careTeamEffectiveTime;
+	}
+
+	public void setCareTeamEffectiveTime(CCDAEffTime careTeamEffectiveTime) {
+		this.careTeamEffectiveTime = careTeamEffectiveTime;
+	}
+
+	public CCDACode getStatusCode() {
+		return statusCode;
+	}
+
+	public void setStatusCode(CCDACode statusCode) {
+		this.statusCode = statusCode;
+	}
+
 	public ArrayList<CCDAII> getSectionTemplateId() {
 		return sectionTemplateId;
 	}
@@ -54,6 +74,22 @@ public class CCDACareTeamMember extends CCDAXmlSnippet {
 
 	public ArrayList<CCDACareTeamMemberAct> getMemberActs() {
 		return memberActs;
+	}
+
+	public void setCareTeamName(String careTeamName) {
+		this.careTeamName = careTeamName;
+	}
+
+	public String getCareTeamName() {
+		return careTeamName;
+	}
+
+	public CCDADataElement getReferenceText() {
+		return referenceText;
+	}
+
+	public void setReferenceText(CCDADataElement referenceText) {
+		this.referenceText = referenceText;
 	}
 
 	public void setMemberActs(ArrayList<CCDACareTeamMemberAct> memberActs) {

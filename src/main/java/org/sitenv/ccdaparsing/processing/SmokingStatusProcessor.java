@@ -221,8 +221,7 @@ public class SmokingStatusProcessor {
 		return genderObs;
 	}
 
-	public static CCDABirthSexObs readBirthSex(NodeList bsList) throws XPathExpressionException
-	{
+	public static CCDABirthSexObs readBirthSex(NodeList bsList) throws XPathExpressionException, TransformerException {
 		CCDABirthSexObs birthSex  = null;
 		for (int i = 0; i < bsList.getLength(); i++) {
 
@@ -239,8 +238,8 @@ public class SmokingStatusProcessor {
 			birthSex.setSexCode(ParserUtilities.readCode((Element) CCDAConstants.REL_VAL_EXP.
 					evaluate(bsElement, XPathConstants.NODE)));
 
-			birthSex.setObservationTime(ParserUtilities.readEffectiveTime((Element) CCDAConstants.REL_EFF_TIME_EXP.
-					evaluate(bsElement, XPathConstants.NODE)));
+			birthSex.setObservationTime(ApplicationUtil.readEffectivetime((Element) CCDAConstants.REL_EFF_TIME_EXP.
+					evaluate(bsElement, XPathConstants.NODE),CCDAConstants.CCDAXPATH));
 
 		}
 

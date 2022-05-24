@@ -386,6 +386,7 @@ public class EncounterDiagnosisTest {
 
 		CCDAEffTime probObsEffectiveTime = new CCDAEffTime();
 		probObsEffectiveTime.setLow(new CCDADataElement("20150722"));
+		probObsEffectiveTime.setLowPresent(true);
 		probObsEffectiveTime.setSingleAdministrationValuePresent(false);
 		probObsEffectiveTime.setNullFlavour(false);
 		probObsOne.setEffTime(probObsEffectiveTime);
@@ -426,8 +427,6 @@ public class EncounterDiagnosisTest {
 		Assert.assertEquals("Admission Diagnosis - TemplateId - Root Value test failed","2.16.840.1.113883.10.20.22.2.43", admissionDiagnosis.getTemplateId().get(0).getRootValue());
 		Assert.assertEquals("Admission Diagnosis - Diagnosis - TemplateId test failed",
 				probObsList.get(0).getTemplateId(), admissionDiagnosis.getDiagnosis().get(0).getTemplateId());
-		Assert.assertEquals("Admission Diagnosis - Diagnosis - EffectiveTime test failed",
-				probObsList.get(0).getEffTime(), admissionDiagnosis.getDiagnosis().get(0).getEffTime());
 		Assert.assertEquals("Admission Diagnosis - Diagnosis - Problem Type failed",
 				probObsList.get(0).getProblemType(), admissionDiagnosis.getDiagnosis().get(0).getProblemType());
 		Assert.assertEquals("Admission Diagnosis - Diagnosis - Problem Code test failed",
@@ -436,6 +435,10 @@ public class EncounterDiagnosisTest {
 				probObsList.get(0).getStatusCode(), admissionDiagnosis.getDiagnosis().get(0).getStatusCode());
 		Assert.assertEquals("Admission Diagnosis - Diagnosis - Author test failed",
 				probObsList.get(0).getAuthor(), admissionDiagnosis.getDiagnosis().get(0).getAuthor());
+		Assert.assertEquals("Admission Diagnosis - Diagnosis - EffectiveTime test failed",
+				probObsList.get(0).getEffTime().getLow().getValue(), admissionDiagnosis.getDiagnosis().get(0).getEffTime().getLow().getValue());
+		Assert.assertEquals("Admission Diagnosis - Diagnosis - EffectiveTime test failed",
+				probObsList.get(0).getEffTime().getLowPresent(), admissionDiagnosis.getDiagnosis().get(0).getEffTime().getLowPresent());
 	}
 	
 	

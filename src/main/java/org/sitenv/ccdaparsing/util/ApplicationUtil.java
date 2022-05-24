@@ -22,6 +22,8 @@ import org.sitenv.ccdaparsing.model.CCDAID;
 import org.sitenv.ccdaparsing.model.CCDAII;
 import org.sitenv.ccdaparsing.model.CCDAPQ;
 import org.sitenv.ccdaparsing.model.CCDAPatientNameElement;
+import org.sitenv.ccdaparsing.processing.CCDAConstants;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -529,5 +531,10 @@ public class ApplicationUtil {
 	public static boolean checkForNullFlavourNI(Element element)
 	{
 		return element!=null && element.getAttribute("nullFlavor").equalsIgnoreCase("NI");
+	}
+
+	public static String getTextByElementId(String id, Document document) throws XPathExpressionException {
+			return (String) CCDAConstants.CCDAXPATH.compile("//*[@ID='" + id + "' or @id='" + id + "']")
+					.evaluate(document, XPathConstants.STRING);
 	}
 }
