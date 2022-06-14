@@ -67,5 +67,11 @@ public class CCDACareTeamTest {
         Assert.assertEquals("", "#ctm_1", careTeamMember.getReferenceText().getValue());
         Assert.assertEquals("", "Dr Albert Davis", careTeamMember.getCareTeamName());
     }
-
+    @Test
+    public void testCareTeamMemberParticipantRole(){
+        Assert.assertEquals("CareTeamMember Participant Role display name comparison test case failed", "primary care physician", careTeamMember.getMemberActs().get(0).getPrimaryPerformer().getParticipantRole().getDisplayName());
+        Assert.assertEquals("CareTeamMember Participant Role code comparison test case failed", "PCP", careTeamMember.getMemberActs().get(0).getPrimaryPerformer().getParticipantRole().getCode());
+        Assert.assertEquals("CareTeamMember Participant Role code system comparison test case failed", "2.16.840.1.113883.5.88", careTeamMember.getMemberActs().get(0).getPrimaryPerformer().getParticipantRole().getCodeSystem());
+        Assert.assertEquals("CareTeamMember Participant Role code system name comparison test case failed", "ParticipationFunction", careTeamMember.getMemberActs().get(0).getPrimaryPerformer().getParticipantRole().getCodeSystemName());
+    }
 }

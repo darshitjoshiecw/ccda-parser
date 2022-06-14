@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.sitenv.ccdaparsing.model.CCDACareTeamMember;
 import org.sitenv.ccdaparsing.model.CCDACareTeamMemberAct;
+import org.sitenv.ccdaparsing.model.CCDACode;
 import org.sitenv.ccdaparsing.model.CCDADataElement;
 import org.sitenv.ccdaparsing.model.CCDAParticipant;
 import org.sitenv.ccdaparsing.util.ApplicationConstants;
@@ -167,6 +168,8 @@ public class CareTeamMemberProcessor {
 					CCDAParticipant pp = new CCDAParticipant();
 					readName((Element) CCDAConstants.REL_ASSN_ENTITY_PERSON_NAME.
 							evaluate(performerElement, XPathConstants.NODE), pp, XPathFactory.newInstance().newXPath());
+
+					pp.setParticipantRole(ApplicationUtil.readCode((Element) CCDAConstants.REL_FUNCTION_CODE_EXP.evaluate(performerElement, XPathConstants.NODE)));
 
 					mact.setPrimaryPerformer(pp);
 				}

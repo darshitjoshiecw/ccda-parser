@@ -14,6 +14,7 @@ public class CCDAParticipant extends CCDAXmlSnippet{
 	private CCDADataElement suffix;
 	private CCDAAddress     address;
 	private CCDADataElement telecom;
+	private CCDACode participantRole;
 	
 	public CCDAParticipant()
 	{
@@ -86,6 +87,14 @@ public class CCDAParticipant extends CCDAXmlSnippet{
 
 	public void setTelecom(CCDADataElement telecom) {
 		this.telecom = telecom;
+	}
+
+	public CCDACode getParticipantRole() {
+		return participantRole;
+	}
+
+	public void setParticipantRole(CCDACode participantRole) {
+		this.participantRole = participantRole;
 	}
 
 	@Override

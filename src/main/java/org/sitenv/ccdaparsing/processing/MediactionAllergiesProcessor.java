@@ -226,7 +226,7 @@ public class MediactionAllergiesProcessor {
 							evaluate(allergyReactionElement, XPathConstants.NODE)));
 				
 					Element allergySeverityElement = (Element) xPath.compile(ApplicationConstants.ALLERGY_SEVERITY_EXPRESSION).
-							evaluate(allergyReactionElement, XPathConstants.NODE);
+							evaluate(allergyObservationElement, XPathConstants.NODE);
 				
 					if(allergySeverityElement != null)
 					{

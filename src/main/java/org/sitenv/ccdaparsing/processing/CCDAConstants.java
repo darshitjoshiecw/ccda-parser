@@ -170,6 +170,7 @@ public class CCDAConstants {
 	static public XPathExpression REL_AUTHOR_EXP;
 	static public XPathExpression REL_ASSIGNED_AUTHOR_EXP;
 	static public XPathExpression REL_ASSIGNED_PERSON_EXP;
+	static public XPathExpression REL_FUNCTION_CODE_EXP;
 	
 	static public String RACE_EL_NAME = "raceCode"; 
 	
@@ -354,7 +355,7 @@ public class CCDAConstants {
 			REL_NOTES_ACTIVITY_EXPRESSION = CCDAConstants.CCDAXPATH.compile("./entry/act[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.202']]");
 			REL_ENTRY_REL_NOTES_ACTIVITY_EXPRESSION = CCDAConstants.CCDAXPATH.compile("./entryRelationship/act[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.202']]");
 			NOTES_ACTIVITY_EXPRESSION = CCDAConstants.CCDAXPATH.compile("//act[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.202']]");
-			
+			REL_FUNCTION_CODE_EXP = CCDAConstants.CCDAXPATH.compile("./functionCode[not(@nullFlavor)]");
 
 		} catch (XPathExpressionException e) {
 			// TODO Auto-generated catch block

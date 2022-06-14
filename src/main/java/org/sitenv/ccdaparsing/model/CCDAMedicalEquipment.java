@@ -28,6 +28,11 @@ public class CCDAMedicalEquipment extends CCDAXmlSnippet {
     private ArrayList<CCDAUDI>			        udis;
     private CCDAAuthor 	                        author;
 
+    public CCDAMedicalEquipment()
+    {
+        udis = new ArrayList<CCDAUDI>();
+    }
+
     public List<CCDAID> getIds() {
         return ids == null ? new ArrayList<CCDAID>() : new ArrayList<>(ids);
     }
