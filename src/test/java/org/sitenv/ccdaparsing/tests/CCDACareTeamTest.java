@@ -52,6 +52,8 @@ public class CCDACareTeamTest {
         Assert.assertEquals("", "85847-2", careTeamMember.getMemberActs().get(0).getMemberActCode().getCode());
         Assert.assertEquals("", "active", careTeamMember.getMemberActs().get(0).getStatusCode().getCode());
         Assert.assertEquals("", "Albert",careTeamMember.getMemberActs().get(0).getPrimaryPerformer().getFirstName().getValue());
+        Assert.assertEquals("", "Davis",careTeamMember.getMemberActs().get(0).getPrimaryPerformer().getLastName().getValue());
+        Assert.assertEquals("", "Jr",careTeamMember.getMemberActs().get(0).getPrimaryPerformer().getSuffix().getValue());
         Assert.assertEquals("", "2019-07-01", careTeamMember.getMemberActs().get(0).getTemplateIds().get(0).getExtValue());
         Assert.assertEquals("", "2.16.840.1.113883.10.20.22.4.500.1", careTeamMember.getMemberActs().get(0).getTemplateIds().get(0).getRootValue());
         Assert.assertEquals("", "Davis", careTeamMember.getMemberActs().get(0).getPrimaryPerformer().getLastName().getValue());
@@ -73,5 +75,21 @@ public class CCDACareTeamTest {
         Assert.assertEquals("CareTeamMember Participant Role code comparison test case failed", "PCP", careTeamMember.getMemberActs().get(0).getPrimaryPerformer().getParticipantRole().getCode());
         Assert.assertEquals("CareTeamMember Participant Role code system comparison test case failed", "2.16.840.1.113883.5.88", careTeamMember.getMemberActs().get(0).getPrimaryPerformer().getParticipantRole().getCodeSystem());
         Assert.assertEquals("CareTeamMember Participant Role code system name comparison test case failed", "ParticipationFunction", careTeamMember.getMemberActs().get(0).getPrimaryPerformer().getParticipantRole().getCodeSystemName());
+    }
+
+
+    @Test
+    public void testCareTeamMemberAddress(){
+        Assert.assertEquals("CareTeamMember Address address line 1 comparison test case failed", "1007 Healthcare Drive", careTeamMember.getMemberActs().get(0).getPrimaryPerformer().getAddress().getAddressLine1().getValue());
+        Assert.assertEquals("CareTeamMember Address address line 2 comparison test case failed", "Abc Steet", careTeamMember.getMemberActs().get(0).getPrimaryPerformer().getAddress().getAddressLine2().getValue());
+        Assert.assertEquals("CareTeamMember Address city comparison test case failed", "Portland", careTeamMember.getMemberActs().get(0).getPrimaryPerformer().getAddress().getCity().getValue());
+        Assert.assertEquals("CareTeamMember Address state system comparison test case failed", "OR", careTeamMember.getMemberActs().get(0).getPrimaryPerformer().getAddress().getState().getValue());
+        Assert.assertEquals("CareTeamMember Address postal code system name comparison test case failed", "99123", careTeamMember.getMemberActs().get(0).getPrimaryPerformer().getAddress().getPostalCode().getValue());
+        Assert.assertEquals("CareTeamMember Address country system name comparison test case failed", "US", careTeamMember.getMemberActs().get(0).getPrimaryPerformer().getAddress().getCountry().getValue());
+    }
+
+    @Test
+    public void testCareTeamMemberTelecom(){
+        Assert.assertEquals("CareTeamMember telecom number comparison test case failed", "tel:+1(555)-555-1002", careTeamMember.getMemberActs().get(0).getPrimaryPerformer().getTelecom().getValue());
     }
 }

@@ -169,6 +169,12 @@ public class CareTeamMemberProcessor {
 					readName((Element) CCDAConstants.REL_ASSN_ENTITY_PERSON_NAME.
 							evaluate(performerElement, XPathConstants.NODE), pp, XPathFactory.newInstance().newXPath());
 
+					pp.setAddress(ApplicationUtil.readAddress((Element) CCDAConstants.REL_ASSN_ENTITY_ADDR
+							.evaluate(performerElement, XPathConstants.NODE), CCDAConstants.CCDAXPATH));
+
+					pp.setTelecom(ApplicationUtil.readDataElement((Element) CCDAConstants.REL_ASSN_ENTITY_TEL_EXP.
+							evaluate(performerElement, XPathConstants.NODE)));
+
 					pp.setParticipantRole(ApplicationUtil.readCode((Element) CCDAConstants.REL_FUNCTION_CODE_EXP.evaluate(performerElement, XPathConstants.NODE)));
 
 					mact.setPrimaryPerformer(pp);
