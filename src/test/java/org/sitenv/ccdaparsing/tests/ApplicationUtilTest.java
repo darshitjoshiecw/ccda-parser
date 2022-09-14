@@ -3,6 +3,7 @@ package org.sitenv.ccdaparsing.tests;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 
 import org.sitenv.ccdaparsing.model.CCDACode;
 import org.sitenv.ccdaparsing.model.CCDADataElement;
@@ -38,6 +39,12 @@ public class ApplicationUtilTest {
 		for (int k = 0; k < fields.length; k++) {
 			try {
 				fields[k].setAccessible(true);
+
+				if(fields[k].get(object) != null && "translations".equalsIgnoreCase(fields[k].getName())
+						&& ((ArrayList)fields[k].get(object)).size() <= 0) {
+					continue;
+				}
+
 				if (fields[k].get(object) != null
 						&& !"singleAdministrationValuePresent".equalsIgnoreCase(fields[k].getName())
 						&& !"lowPresent".equalsIgnoreCase(fields[k].getName())
@@ -139,10 +146,12 @@ public class ApplicationUtilTest {
 			fieldsModified[2] = fields[2];
 			fieldsModified[3] = fields[3];
 			fieldsModified[4] = fields[4];
+			fieldsModified[5] = fields[5];
+			fieldsModified[6] = fields[6];
 			CCDACode ccdaCodeObj = (CCDACode) object;
 			if (!StringUtils.isEmpty(ccdaCodeObj.getXpath())) {
 				try {
-					fieldsModified[5] = object.getClass().getSuperclass().getDeclaredField("xpath");
+					fieldsModified[7] = object.getClass().getSuperclass().getDeclaredField("xpath");
 				} catch (NoSuchFieldException e) {
 					e.printStackTrace();
 				} catch (SecurityException e) {

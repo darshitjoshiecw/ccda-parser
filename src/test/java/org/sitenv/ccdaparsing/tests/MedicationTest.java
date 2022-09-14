@@ -11,6 +11,7 @@ import javax.xml.xpath.XPathFactory;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.sitenv.ccdaparsing.model.CCDAAuthor;
 import org.sitenv.ccdaparsing.model.CCDACode;
 import org.sitenv.ccdaparsing.model.CCDAConsumable;
 import org.sitenv.ccdaparsing.model.CCDADataElement;
@@ -237,7 +238,14 @@ public class MedicationTest {
 		Assert.assertEquals("Medication Activity consumable manufacturing org test case failed",medActivities.get(0).getConsumable().getManufacturingOrg(),
 											medication.getMedActivities().get(0).getConsumable().getManufacturingOrg());
 	}
-	
+
+	@Test
+	public void testMedicationAuthor(){
+		CCDAAuthor author = medication.getAuthor();
+		Assert.assertEquals("Medication author effective time comparision test case failed","199805011145-0800",	author.getEffTime().getValue());
+		Assert.assertEquals("Medication author root value comparision test case failed","1.1.1.1.1.1.1.2", author.getAuthorIds().get(0).getRootValue());
+		Assert.assertEquals("Medication author ext value comparision test case failed","555555555", author.getAuthorIds().get(0).getExtValue());
+	}
 }
 
 

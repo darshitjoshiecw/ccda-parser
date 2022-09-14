@@ -13,9 +13,11 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.sitenv.ccdaparsing.model.CCDAAddress;
 import org.sitenv.ccdaparsing.model.CCDAAssignedEntity;
+import org.sitenv.ccdaparsing.model.CCDAAuthor;
 import org.sitenv.ccdaparsing.model.CCDACode;
 import org.sitenv.ccdaparsing.model.CCDADataElement;
 import org.sitenv.ccdaparsing.model.CCDAII;
+import org.sitenv.ccdaparsing.model.CCDANotesActivity;
 import org.sitenv.ccdaparsing.model.CCDAOrganization;
 import org.sitenv.ccdaparsing.model.CCDAProcActProc;
 import org.sitenv.ccdaparsing.model.CCDAProcedure;
@@ -179,7 +181,10 @@ public class ProcedureTest {
 	@Test
 	public void testProceduresSectionCode(){
 		setProcedureSectionCode();
-		Assert.assertEquals("Procedures  SectionCode test case failed",sectionCode,procedures.getSectionCode());
+		Assert.assertEquals("Procedures  SectionCode-code test case failed",sectionCode.getCode(),procedures.getSectionCode().getCode());
+		Assert.assertEquals("Procedures  SectionCode-codeSystem test case failed",sectionCode.getCodeSystem(),procedures.getSectionCode().getCodeSystem());
+		Assert.assertEquals("Procedures  SectionCode-codeSystemName test case failed",sectionCode.getCodeSystemName(),procedures.getSectionCode().getCodeSystemName());
+		Assert.assertEquals("Procedures  SectionCode-displayName test case failed",sectionCode.getDisplayName(),procedures.getSectionCode().getDisplayName());
 	}
 	
 	@Test
@@ -269,6 +274,31 @@ public class ProcedureTest {
 	public void testProcedureActivityPatientUDI(){
 		Assert.assertEquals("Procedures Activity Patient UDI test case failed",procActsProcs.get(0).getPatientUDI(),procedures.getProcActsProcs().get(2).getPatientUDI());
 	}
-	
 
+	@Test
+	public void testProceduresNotesActivity(){
+		CCDANotesActivity notesActivity = procedures.getNotesActivity().get(0);
+		Assert.assertEquals("Procedures notesActivity rootValue comparison test case failed","2.16.840.1.113883.10.20.22.4.202", notesActivity.getTemplateId().get(0).getRootValue());
+		Assert.assertEquals("Procedures notesActivity extValue comparison test case failed","2016-11-01", notesActivity.getTemplateId().get(0).getExtValue());
+		Assert.assertEquals("Procedures notesActivity activityCode value comparison test case failed","34109-9", notesActivity.getActivityCode().getCode());
+		Assert.assertEquals("Procedures notesActivity codeSystemName value comparison test case failed","LOINC", notesActivity.getActivityCode().getCodeSystemName());
+		Assert.assertEquals("Procedures notesActivity translations code comparison test case failed","28570-0", notesActivity.getActivityCode().getTranslations().get(0).getCode());
+		Assert.assertEquals("Procedures notesActivity translations displayName comparison test case failed","Procedure note", notesActivity.getActivityCode().getTranslations().get(0).getDisplayName());
+		Assert.assertEquals("Procedures notesActivity EffTime value comparison test case failed","20210125", notesActivity.getEffTime().getValue());
+		Assert.assertEquals("Procedures notesActivity author time comparison test case failed","202101251456-0500", notesActivity.getAuthor().getTime().getValue());
+		Assert.assertEquals("Procedures notesActivity author extValue comparison test case failed","0ede25f4-b431-44b0-8709-7212bcc995f3", notesActivity.getAuthor().getAuthorIds().get(0).getExtValue());
+		Assert.assertEquals("Procedures notesActivity author rootValue comparison test case failed","1.174", notesActivity.getAuthor().getAuthorIds().get(0).getRootValue());
+		Assert.assertEquals("Procedures notesActivity author repOrgIds rootValue comparison test case failed","1.3.6.1.4.1.21367.13.40.117", notesActivity.getAuthor().getRepOrgIds().get(0).getRootValue());
+		Assert.assertEquals("Procedures notesActivity author telecoms comparison test case failed","WP", notesActivity.getAuthor().getTelecoms().get(0).getUseAttribute());
+		Assert.assertEquals("Procedures notesActivity author telecoms comparison test case failed","tel:+1-5555551002", notesActivity.getAuthor().getTelecoms().get(0).getValueAttribute());
+		Assert.assertEquals("Procedures notesActivity author organization name comparison test case failed","Neighborhood Physicians Practice", notesActivity.getAuthor().getOrgName().getValue());
+	}
+
+	@Test
+	public void testProceduresAuthor(){
+		CCDAAuthor author = procedures.getAuthor();
+		Assert.assertEquals("Procedures Author time value comparison test case failed","199805011145-0800", author.getTime().getValue());
+		Assert.assertEquals("Procedures Author extValue comparison test case failed","555555555", author.getAuthorIds().get(0).getExtValue());
+		Assert.assertEquals("Procedures Author rootValue comparison test case failed","1.1.1.1.1.1.1.2", author.getAuthorIds().get(0).getRootValue());
+	}
 }

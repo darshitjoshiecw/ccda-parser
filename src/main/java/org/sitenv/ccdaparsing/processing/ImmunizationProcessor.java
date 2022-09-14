@@ -17,6 +17,7 @@ import org.sitenv.ccdaparsing.model.CCDAImmunizationActivity;
 import org.sitenv.ccdaparsing.model.CCDAOrganization;
 import org.sitenv.ccdaparsing.util.ApplicationConstants;
 import org.sitenv.ccdaparsing.util.ApplicationUtil;
+import org.sitenv.ccdaparsing.util.ParserUtilities;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
@@ -60,7 +61,8 @@ public class ImmunizationProcessor {
 			sectionElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
 			immunizations.setLineNumber(sectionElement.getUserData("lineNumber") + " - " + sectionElement.getUserData("endLineNumber") );
 			immunizations.setXmlString(ApplicationUtil.nodeToString((Node)sectionElement));
-			
+			immunizations.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(sectionElement, XPathConstants.NODE)));
 			Element textElement = (Element) xPath.compile("./text[not(@nullFlavor)]").evaluate(sectionElement, XPathConstants.NODE);
 			
 			if(textElement!=null)
@@ -147,6 +149,10 @@ public class ImmunizationProcessor {
 					
 					immunizationActivity.setOrganization(representedOrg);
 				}
+
+				immunizationActivity.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+						evaluate(immunizationActivityElement, XPathConstants.NODE)));
+
 				immunizationActivityList.add(immunizationActivity);
 			}
 		}

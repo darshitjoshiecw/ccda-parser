@@ -11,11 +11,28 @@ public class CCDALabResult extends CCDAXmlSnippet{
 	private Boolean						isLabTestInsteadOfResult;
 	private ArrayList<String> referenceLinks;
 	private boolean isSectionNullFlavourWithNI;
+	private ArrayList<CCDANotesActivity> notesActivity;
 	private List<CCDAID> idList = new ArrayList<>();
+	private CCDAAuthor	author;
 	
 	public CCDALabResult()
 	{
-		
+		notesActivity = new ArrayList<CCDANotesActivity>();
+	}
+	public CCDAAuthor getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(CCDAAuthor author) {
+		this.author = author;
+	}
+
+	public ArrayList<CCDANotesActivity> getNotesActivity() {
+		return notesActivity;
+	}
+
+	public void setNotesActivity(ArrayList<CCDANotesActivity> notesActivity) {
+		this.notesActivity = notesActivity;
 	}
 
 	public Boolean getIsLabTestInsteadOfResult() {

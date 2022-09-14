@@ -13,7 +13,9 @@ public class CCDASocialHistory extends CCDAXmlSnippet{
 	private CCDASocialHistoryGenderObs          socialHistoryGenderObs;
 	private ArrayList<String> referenceLinks;
 	private List<CCDAID> idList;
-	
+	private CCDABirthSexObs	birthSex;
+	private CCDAAuthor author;
+
 	public boolean isSectionNullFlavourWithNI() {
 		return isSectionNullFlavourWithNI;
 	}
@@ -85,6 +87,22 @@ public class CCDASocialHistory extends CCDAXmlSnippet{
 
 	public void setIdList(List<CCDAID> idList) {
 		this.idList = idList;
+	}
+
+	public CCDABirthSexObs getBirthSex() {
+		return birthSex;
+	}
+
+	public void setBirthSex(CCDABirthSexObs birthSex) {
+		this.birthSex = birthSex;
+	}
+
+	public CCDAAuthor getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(CCDAAuthor author) {
+		this.author = author;
 	}
 
 	@Override

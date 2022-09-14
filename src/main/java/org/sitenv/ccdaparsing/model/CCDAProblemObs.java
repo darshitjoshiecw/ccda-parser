@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class CCDAProblemObs extends CCDAXmlSnippet{
 
+
 	private ArrayList<CCDAII>    templateId;
 	private CCDACode             problemType;
 	private ArrayList<CCDACode>  translationProblemType;
@@ -153,7 +154,6 @@ public class CCDAProblemObs extends CCDAXmlSnippet{
 		return true;
 	}
 
-	
-
-	
+	public void log() {
+	}
 }

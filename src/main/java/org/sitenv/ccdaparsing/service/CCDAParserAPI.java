@@ -1,29 +1,20 @@
 package org.sitenv.ccdaparsing.service;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-
-
-import javax.xml.transform.TransformerException;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.sitenv.ccdaparsing.model.CCDAAdmissionDiagnosis;
 import org.sitenv.ccdaparsing.model.CCDAAdvanceDirective;
 import org.sitenv.ccdaparsing.model.CCDAAllergy;
+import org.sitenv.ccdaparsing.model.CCDAAuthor;
+import org.sitenv.ccdaparsing.model.CCDACarePlanSections;
 import org.sitenv.ccdaparsing.model.CCDACareTeamMember;
+import org.sitenv.ccdaparsing.model.CCDADischargeDiagnosis;
+import org.sitenv.ccdaparsing.model.CCDADischargeMedication;
 import org.sitenv.ccdaparsing.model.CCDAEncounter;
 import org.sitenv.ccdaparsing.model.CCDAFamilyHistory;
 import org.sitenv.ccdaparsing.model.CCDAFunctionalStatus;
 import org.sitenv.ccdaparsing.model.CCDAGoals;
+import org.sitenv.ccdaparsing.model.CCDAHeaderElements;
 import org.sitenv.ccdaparsing.model.CCDAHealthConcerns;
 import org.sitenv.ccdaparsing.model.CCDAID;
 import org.sitenv.ccdaparsing.model.CCDAImmunization;
@@ -31,6 +22,8 @@ import org.sitenv.ccdaparsing.model.CCDALabResult;
 import org.sitenv.ccdaparsing.model.CCDAMedicalEquipment;
 import org.sitenv.ccdaparsing.model.CCDAMedication;
 import org.sitenv.ccdaparsing.model.CCDAMentalStatus;
+import org.sitenv.ccdaparsing.model.CCDANotes;
+import org.sitenv.ccdaparsing.model.CCDANotesActivity;
 import org.sitenv.ccdaparsing.model.CCDAPOT;
 import org.sitenv.ccdaparsing.model.CCDAPatient;
 import org.sitenv.ccdaparsing.model.CCDAProblem;
@@ -40,6 +33,9 @@ import org.sitenv.ccdaparsing.model.CCDASocialHistory;
 import org.sitenv.ccdaparsing.model.CCDAVitalSigns;
 import org.sitenv.ccdaparsing.model.UsrhSubType;
 import org.sitenv.ccdaparsing.processing.AdvanceDirectiveProcesser;
+import org.sitenv.ccdaparsing.processing.AuthorParser;
+import org.sitenv.ccdaparsing.processing.CCDAHeaderParser;
+import org.sitenv.ccdaparsing.processing.CarePlanSectionsParser;
 import org.sitenv.ccdaparsing.processing.CareTeamMemberProcessor;
 import org.sitenv.ccdaparsing.processing.EncounterDiagnosesProcessor;
 import org.sitenv.ccdaparsing.processing.FamilyHistoryProcessor;
@@ -53,6 +49,7 @@ import org.sitenv.ccdaparsing.processing.MediactionAllergiesProcessor;
 import org.sitenv.ccdaparsing.processing.MedicalEquipmentProcessor;
 import org.sitenv.ccdaparsing.processing.MedicationProcessor;
 import org.sitenv.ccdaparsing.processing.MentalStatusProcessor;
+import org.sitenv.ccdaparsing.processing.NotesParser;
 import org.sitenv.ccdaparsing.processing.POTProcessor;
 import org.sitenv.ccdaparsing.processing.PatientProcessor;
 import org.sitenv.ccdaparsing.processing.ProblemProcessor;
@@ -66,6 +63,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
+
+import javax.xml.transform.TransformerException;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 @Service
 public class CCDAParserAPI {
@@ -142,6 +152,18 @@ public class CCDAParserAPI {
 	@Autowired
 	MentalStatusProcessor mentalStatusProcessor;
 
+	@Autowired
+	CarePlanSectionsParser carePlanSectionsParser;
+
+	@Autowired
+	CCDAHeaderParser ccdaHeaderParser;
+
+	@Autowired
+	AuthorParser authorParser;
+
+	@Autowired
+	NotesParser notesParser;
+
 	public CCDARefModel parseCCDA2_1(InputStream inputStream) {
 		return parseCCDA2_1(inputStream,false);
 	}
@@ -169,6 +191,15 @@ public class CCDAParserAPI {
 		Future<CCDAFunctionalStatus> functionalStatus=null;
 		Future<CCDAMentalStatus> mentalStatus=null;
 		Future<UsrhSubType> usrhSubType=null;
+		Future<CCDAAdmissionDiagnosis> admissionDiagnosisFuture=null;
+		Future<CCDADischargeDiagnosis> dischargeDiagnosisFuture = null;
+		Future<CCDACarePlanSections> carePlanSectionsFuture = null;
+		Future<CCDADischargeMedication> dischargeMedicationFuture = null;
+		Future<CCDAHeaderElements> headerElementsFuture = null;
+		Future<ArrayList<CCDAAuthor>> authorFromHeaderFuture = null;
+		Future<ArrayList<CCDAAuthor>> authorWithLinkedRefFuture = null;
+		Future<ArrayList<CCDANotes>> noteDetailListFuture = null;
+		Future<ArrayList<CCDANotesActivity>> notesActivityListFuture = null;
 		ArrayList<CCDAID> idList = new ArrayList<>();
 		logger.info("Parsing CCDA document");
     	long startTime = System.currentTimeMillis();
@@ -183,6 +214,8 @@ public class CCDAParserAPI {
 			{
 				refModel.setDocTemplateId(patientProcessor.retrieveDocTemplateId(xPath, doc));
 				refModel.setEncompassingEncounter(patientProcessor.retrieveEncompassingEncounter(xPath, doc));
+				admissionDiagnosisFuture = encounterDiagnosesProcessor.retrieveAdmissionDiagnosisDetails(doc);
+				dischargeDiagnosisFuture = encounterDiagnosesProcessor.retrieveDischargeDiagnosisDetails(doc);
 				patient=patientProcessor.retrievePatientDetails(xPath, doc);
 				encounters = encounterDiagnosesProcessor.retrieveEncounterDetails(xPath, doc);
 				problems = problemProcessor.retrieveProblemDetails(xPath, doc);
@@ -194,6 +227,14 @@ public class CCDAParserAPI {
 				vitals = vitalSignProcessor.retrieveVitalSigns(xPath, doc);
 				procedures = procedureProcessor.retrievePrcedureDetails(xPath, doc);
 				careTeamMembers = careTeamMemberProcessor.retrieveCTMDetails(xPath, doc);
+				carePlanSectionsFuture = carePlanSectionsParser.getSuggestedSections(doc);
+				dischargeMedicationFuture = medicationProcessor.retrieveDischargeMedicationDetails(xPath, doc);
+				headerElementsFuture = ccdaHeaderParser.getHeaderElements(doc, false);
+				authorFromHeaderFuture = authorParser.retrieveAuthorsFromHeader(doc);
+				authorWithLinkedRefFuture = authorParser.retrieveAuthorsWithLinkedReferenceData(doc);
+				noteDetailListFuture = notesParser.retrieveNotesDetails(doc);
+				notesActivityListFuture = notesParser.retrieveNotesActivities(doc);
+
 				immunizations = immunizationProcessor.retrieveImmunizationDetails(xPath, doc);
 				pot = pOTProcessor.retrievePOTDetails(xPath, doc);
 				goals = goalsProcessor.retrieveGoalsDetails(xPath, doc);
@@ -227,6 +268,105 @@ public class CCDAParserAPI {
 							isTimeOut = true;
 						logger.error("Parsing encounters section failed",e);
 						refModel.addToErrorSections("Encounters");
+					}
+				}
+
+				if (admissionDiagnosisFuture != null) {
+					try {
+						refModel.setAdmissionDiagnosis(admissionDiagnosisFuture.get(isTimeOut?minWaitTime:maxWaitTime, TimeUnit.MILLISECONDS));
+					} catch (ExecutionException | InterruptedException | TimeoutException e) {
+						if(!partialParsingSupported)
+							isTimeOut = true;
+						logger.error("Parsing Admission Diagnosis section failed",e);
+						refModel.addToErrorSections("Admission Diagnosis");
+					}
+				}
+
+				if (dischargeDiagnosisFuture != null) {
+					try {
+						refModel.setDischargeDiagnosis(dischargeDiagnosisFuture.get(isTimeOut?minWaitTime:maxWaitTime, TimeUnit.MILLISECONDS));
+					} catch (ExecutionException | InterruptedException | TimeoutException e) {
+						if(!partialParsingSupported)
+							isTimeOut = true;
+						logger.error("Parsing Discharge Diagnosis section failed",e);
+						refModel.addToErrorSections("Discharge Diagnosis");
+					}
+				}
+
+				if (carePlanSectionsFuture != null) {
+					try {
+						refModel.setCarePlanSections(carePlanSectionsFuture.get(isTimeOut?minWaitTime:maxWaitTime, TimeUnit.MILLISECONDS));
+					} catch (ExecutionException | InterruptedException | TimeoutException e) {
+						if(!partialParsingSupported)
+							isTimeOut = true;
+						logger.error("Parsing Care Team Sections section failed",e);
+						refModel.addToErrorSections("Care Team Sections");
+					}
+				}
+
+				if (dischargeMedicationFuture != null) {
+					try {
+						refModel.setDischargeMedication(dischargeMedicationFuture.get(isTimeOut?minWaitTime:maxWaitTime, TimeUnit.MILLISECONDS));
+					} catch (ExecutionException | InterruptedException | TimeoutException e) {
+						if(!partialParsingSupported)
+							isTimeOut = true;
+						logger.error("Parsing Discharge Medication section failed",e);
+						refModel.addToErrorSections("Discharge Medication");
+					}
+				}
+
+				if (headerElementsFuture != null) {
+					try {
+						refModel.setHeader(headerElementsFuture.get(isTimeOut?minWaitTime:maxWaitTime, TimeUnit.MILLISECONDS));
+					} catch (ExecutionException | InterruptedException | TimeoutException e) {
+						if(!partialParsingSupported)
+							isTimeOut = true;
+						logger.error("Parsing Header section failed",e);
+						refModel.addToErrorSections("Header");
+					}
+				}
+
+				if (authorFromHeaderFuture != null) {
+					try {
+						refModel.setAuthorsFromHeader(authorFromHeaderFuture.get(isTimeOut?minWaitTime:maxWaitTime, TimeUnit.MILLISECONDS));
+					} catch (ExecutionException | InterruptedException | TimeoutException e) {
+						if(!partialParsingSupported)
+							isTimeOut = true;
+						logger.error("Parsing Author From Header section failed",e);
+						refModel.addToErrorSections("Author from Header");
+					}
+				}
+
+				if (authorWithLinkedRefFuture != null) {
+					try {
+						refModel.setAuthorsWithLinkedReferenceData(authorWithLinkedRefFuture.get(isTimeOut?minWaitTime:maxWaitTime, TimeUnit.MILLISECONDS));
+					} catch (ExecutionException | InterruptedException | TimeoutException e) {
+						if(!partialParsingSupported)
+							isTimeOut = true;
+						logger.error("Parsing with Linked Reference section failed",e);
+						refModel.addToErrorSections("Author with Linked Reference");
+					}
+				}
+
+				if (noteDetailListFuture != null) {
+					try {
+						refModel.setNotes(noteDetailListFuture.get(isTimeOut?minWaitTime:maxWaitTime, TimeUnit.MILLISECONDS));
+					} catch (ExecutionException | InterruptedException | TimeoutException e) {
+						if(!partialParsingSupported)
+							isTimeOut = true;
+						logger.error("Parsing Note details section failed",e);
+						refModel.addToErrorSections("Note details");
+					}
+				}
+
+				if (notesActivityListFuture != null) {
+					try {
+						refModel.setNotesEntries(notesActivityListFuture.get(isTimeOut?minWaitTime:maxWaitTime, TimeUnit.MILLISECONDS));
+					}  catch (ExecutionException | InterruptedException | TimeoutException e) {
+						if(!partialParsingSupported)
+							isTimeOut = true;
+						logger.error("Parsing Notes Activity section failed",e);
+						refModel.addToErrorSections("Notes Activity");
 					}
 				}
 				

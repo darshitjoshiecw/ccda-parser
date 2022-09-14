@@ -1,18 +1,10 @@
 package org.sitenv.ccdaparsing.processing;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Future;
-
-import javax.xml.transform.TransformerException;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpressionException;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.sitenv.ccdaparsing.model.CCDAAuthor;
 import org.sitenv.ccdaparsing.model.CCDAConsumable;
+import org.sitenv.ccdaparsing.model.CCDADischargeMedication;
 import org.sitenv.ccdaparsing.model.CCDAEffTime;
 import org.sitenv.ccdaparsing.model.CCDAID;
 import org.sitenv.ccdaparsing.model.CCDAMedication;
@@ -20,6 +12,7 @@ import org.sitenv.ccdaparsing.model.CCDAMedicationActivity;
 import org.sitenv.ccdaparsing.model.CCDAMedicationSubstanceAdminstration;
 import org.sitenv.ccdaparsing.util.ApplicationConstants;
 import org.sitenv.ccdaparsing.util.ApplicationUtil;
+import org.sitenv.ccdaparsing.util.ParserUtilities;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
@@ -27,6 +20,15 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import javax.xml.transform.TransformerException;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Future;
 
 @Service
 public class MedicationProcessor {
@@ -56,6 +58,8 @@ public class MedicationProcessor {
 					evaluate(sectionElement, XPathConstants.NODE)));
 			medications.setMedActivities(readMedication((NodeList) xPath.compile("./entry/substanceAdministration[not(@nullFlavor)]").
 					evaluate(sectionElement, XPathConstants.NODESET), xPath,idList));
+			medications.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(sectionElement, XPathConstants.NODE)));
 			
 			sectionElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
 			medications.setLineNumber(sectionElement.getUserData("lineNumber") + " - " + sectionElement.getUserData("endLineNumber") );
@@ -73,6 +77,98 @@ public class MedicationProcessor {
 		}
 		logger.info("Medications parsing End time:"+ (System.currentTimeMillis() - startTime));
 		return new AsyncResult<CCDAMedication>(medications);
+	}
+
+	@Async()
+	public Future<CCDADischargeMedication> retrieveDischargeMedicationDetails(XPath xPath, Document doc) throws XPathExpressionException, TransformerException {
+		CCDADischargeMedication medications = null;
+		Element sectionElement = (Element) CCDAConstants.DM_MEDICATION_EXPRESSION.evaluate(doc, XPathConstants.NODE);
+		List<CCDAID> idList = new ArrayList<>();
+
+		if(sectionElement != null)
+		{
+			logger.info("Creating Discharge Medication ");
+			medications = new CCDADischargeMedication();
+			medications.setTemplateIds(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
+					evaluate(sectionElement, XPathConstants.NODESET)));
+
+			medications.setSectionCode(ParserUtilities.readCode((Element) CCDAConstants.REL_CODE_EXP.
+					evaluate(sectionElement, XPathConstants.NODE)));
+
+			medications.setMedActivities(readDischargeMedication((NodeList) CCDAConstants.DM_ENTRY_EXP.
+					evaluate(sectionElement, XPathConstants.NODESET), xPath, idList));
+
+			medications.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(sectionElement, XPathConstants.NODE)));
+		}
+		return new AsyncResult<>(medications);
+	}
+
+	public ArrayList<CCDAMedicationActivity> readDischargeMedication(NodeList entryNodeList,XPath xPath, List<CCDAID> idList) throws XPathExpressionException, TransformerException {
+		ArrayList<CCDAMedicationActivity> medicationList = new ArrayList<>();
+		CCDAMedicationActivity medicationActivity;
+
+		for (int i = 0; i < entryNodeList.getLength(); i++) {
+
+			Element entryElementDM = (Element) entryNodeList.item(i);
+
+			Element medAct = (Element) (CCDAConstants.REL_CONSUM_EXP.
+					evaluate(entryElementDM, XPathConstants.NODE));
+
+			if(medAct != null) {
+
+				logger.info("Creating Medication Activity ");
+
+				medicationActivity = new CCDAMedicationActivity();
+
+				medicationActivity.setTemplateIds(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
+						evaluate(entryElementDM, XPathConstants.NODESET)));
+
+				NodeList effectiveTime = (NodeList) CCDAConstants.REL_EFF_TIME_EXP.evaluate(entryElementDM, XPathConstants.NODESET);
+
+				for (int j = 0; j < effectiveTime.getLength(); j++) {
+
+					Element effectiveTimeElement = (Element) effectiveTime.item(j);
+					if(effectiveTimeElement.getAttribute("xsi:type").equalsIgnoreCase("IVL_TS"))
+					{
+						medicationActivity.setDuration(readDuration(effectiveTimeElement, XPathFactory.newInstance().newXPath()));
+					} else if(effectiveTimeElement.getAttribute("xsi:type").equalsIgnoreCase("PIVL_TS") &&
+							effectiveTimeElement.hasAttribute("institutionSpecified") &&
+							effectiveTimeElement.getAttribute("institutionSpecified").equalsIgnoreCase("true") &&
+							effectiveTimeElement.hasAttribute("operator") &&
+							effectiveTimeElement.getAttribute("operator").equalsIgnoreCase("A") )
+					{
+						medicationActivity.setFrequency(ParserUtilities.readFrequency(effectiveTimeElement));
+					}
+				}
+
+				medicationActivity.setRouteCode(ParserUtilities.readCode((Element) CCDAConstants.REL_ROUTE_CODE_EXP.
+						evaluate(entryElementDM, XPathConstants.NODE)));
+
+				medicationActivity.setDoseQuantity(ParserUtilities.readQuantity((Element) CCDAConstants.REL_DOSE_EXP.
+						evaluate(entryElementDM, XPathConstants.NODE)));
+
+				medicationActivity.setRateQuantity(ParserUtilities.readQuantity((Element) CCDAConstants.REL_RATE_EXP.
+						evaluate(entryElementDM, XPathConstants.NODE)));
+
+				medicationActivity.setApproachSiteCode(ParserUtilities.readCode((Element) CCDAConstants.REL_APP_SITE_CODE_EXP.
+						evaluate(entryElementDM, XPathConstants.NODE)));
+
+				medicationActivity.setAdminUnitCode(ParserUtilities.readCode((Element) CCDAConstants.REL_ADMIN_UNIT_CODE_EXP.
+						evaluate(entryElementDM, XPathConstants.NODE)));
+
+				medicationActivity.setConsumable(readMedicationInformation((Element) CCDAConstants.REL_CONSUM_EXP.
+						evaluate(entryElementDM, XPathConstants.NODE), xPath, idList));
+
+				medicationActivity.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+						evaluate(entryElementDM, XPathConstants.NODE)));
+
+				medicationList.add(medicationActivity);
+			}
+
+
+		} // for
+		return medicationList;
 	}
 	
 	public ArrayList<CCDAMedicationActivity> readMedication(NodeList entryNodeList, XPath xPath, List<CCDAID> idList) throws XPathExpressionException,TransformerException
@@ -174,6 +270,7 @@ public class MedicationProcessor {
 		{
 			medicationDuration.setSingleAdministration(duration.getAttribute("value"));
 			medicationDuration.setSingleAdministrationValuePresent(true);
+			medicationDuration.setValue(ParserUtilities.readDataElement(duration).getValue());
 		}else
 		{
 			medicationDuration = ApplicationUtil.readEffectivetime(duration,xPath);

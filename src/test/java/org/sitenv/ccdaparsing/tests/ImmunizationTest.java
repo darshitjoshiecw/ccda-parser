@@ -326,4 +326,17 @@ public class ImmunizationTest {
 									immunizations.getImmActivity().get(0).getOrganization().getTelecom());
 	}
 
+	@Test
+	public void testImmunizationAuthors(){
+		Assert.assertEquals("CCDAImmunization Author time comparison test case failed", "199805011145-0800",immunizations.getAuthor().getTime().getValue());
+		Assert.assertEquals("CCDAImmunization Author ext value comparison test case failed", "555555555",immunizations.getAuthor().getAuthorIds().get(0).getExtValue());
+		Assert.assertEquals("CCDAImmunization Author root value comparison test case failed", "1.1.1.1.1.1.1.2",immunizations.getAuthor().getAuthorIds().get(0).getRootValue());
+	}
+
+	@Test
+	public void testImmunizationActivityAuthors(){
+		Assert.assertEquals("CCDAImmunizationActivity Author time comparison test case failed", "199805011145-0800",immunizations.getImmActivity().get(0).getAuthor().getTime().getValue());
+		Assert.assertEquals("CCDAImmunizationActivity Author ext value comparison test case failed", "555555555",immunizations.getImmActivity().get(0).getAuthor().getAuthorIds().get(0).getExtValue());
+		Assert.assertEquals("CCDAImmunizationActivity Author root value comparison test case failed", "1.1.1.1.1.1.1.2",immunizations.getImmActivity().get(0).getAuthor().getAuthorIds().get(0).getRootValue());
+	}
 }

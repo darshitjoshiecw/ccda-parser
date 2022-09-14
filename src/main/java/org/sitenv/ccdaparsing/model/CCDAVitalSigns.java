@@ -11,6 +11,7 @@ public class CCDAVitalSigns extends CCDAXmlSnippet{
 	private ArrayList<CCDAVitalOrg>		vitalsOrg;
 	private ArrayList<String> referenceLinks;
 	List<CCDAID> idList;
+	private CCDAAuthor author;
 	
 	public boolean isSectionNullFlavourWithNI() {
 		return isSectionNullFlavourWithNI;
@@ -62,6 +63,14 @@ public class CCDAVitalSigns extends CCDAXmlSnippet{
 
 	public void setIdList(List<CCDAID> idList) {
 		this.idList = idList;
+	}
+
+	public CCDAAuthor getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(CCDAAuthor author) {
+		this.author = author;
 	}
 
 	public CCDAVitalSigns()

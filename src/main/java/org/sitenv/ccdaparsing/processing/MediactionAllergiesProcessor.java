@@ -20,6 +20,7 @@ import org.sitenv.ccdaparsing.model.CCDAAuthor;
 import org.sitenv.ccdaparsing.model.CCDAID;
 import org.sitenv.ccdaparsing.util.ApplicationConstants;
 import org.sitenv.ccdaparsing.util.ApplicationUtil;
+import org.sitenv.ccdaparsing.util.ParserUtilities;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
@@ -56,6 +57,8 @@ public class MediactionAllergiesProcessor {
 					evaluate(sectionElement, XPathConstants.NODE)));
 			allergies.setAllergyConcern(readAllergyConcern((NodeList) xPath.compile("./entry/act[not(@nullFlavor) and templateId[@root!='2.16.840.1.113883.10.20.22.4.64']]").
 					evaluate(sectionElement, XPathConstants.NODESET), xPath,idList));
+			allergies.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(sectionElement, XPathConstants.NODE)));
 			sectionElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
 			allergies.setLineNumber(sectionElement.getUserData("lineNumber") + " - " + sectionElement.getUserData("endLineNumber") );
 			allergies.setXmlString(ApplicationUtil.nodeToString((Node)sectionElement));
@@ -242,9 +245,12 @@ public class MediactionAllergiesProcessor {
 							idList.add(ApplicationUtil.readID((Element) xPath.compile("./id[not(@nullFlavor)]").
 								evaluate(allergySeverityElement, XPathConstants.NODE),"allergySeverity"));
 						}
-						
+						allergySeverity.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+								evaluate(allergySeverityElement, XPathConstants.NODE)));
 						allergyReaction.setSeverity(allergySeverity);
 					}
+					allergyReaction.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+							evaluate(allergyReactionElement, XPathConstants.NODE)));
 				}
 				allergyReactionList.add(allergyReaction);
 			}

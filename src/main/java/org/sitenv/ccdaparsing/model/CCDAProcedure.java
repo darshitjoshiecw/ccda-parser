@@ -11,7 +11,8 @@ public class CCDAProcedure extends CCDAXmlSnippet{
 	private ArrayList<CCDAProcActProc>		procActsProcs;
 	private ArrayList<String> referenceLinks;
 	private List<CCDAID> idList;
-	
+	private ArrayList<CCDANotesActivity>	notesActivity;
+	private CCDAAuthor author;
 	
 	
 	public CCDAProcedure()
@@ -69,6 +70,22 @@ public class CCDAProcedure extends CCDAXmlSnippet{
 
 	public void setIdList(List<CCDAID> idList) {
 		this.idList = idList;
+	}
+
+	public ArrayList<CCDANotesActivity> getNotesActivity() {
+		return notesActivity;
+	}
+
+	public void setNotesActivity(ArrayList<CCDANotesActivity> notesActivity) {
+		this.notesActivity = notesActivity;
+	}
+
+	public CCDAAuthor getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(CCDAAuthor author) {
+		this.author = author;
 	}
 
 	@Override

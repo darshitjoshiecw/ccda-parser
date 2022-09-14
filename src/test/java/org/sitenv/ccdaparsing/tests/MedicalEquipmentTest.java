@@ -7,11 +7,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.sitenv.ccdaparsing.configuration.CCDAParsingAPIConfiguration;
 import org.sitenv.ccdaparsing.model.CCDAAssignedEntity;
+import org.sitenv.ccdaparsing.model.CCDAAuthor;
 import org.sitenv.ccdaparsing.model.CCDACode;
 import org.sitenv.ccdaparsing.model.CCDAEffTime;
 import org.sitenv.ccdaparsing.model.CCDAID;
 import org.sitenv.ccdaparsing.model.CCDAII;
 import org.sitenv.ccdaparsing.model.CCDAMedicalEquipment;
+import org.sitenv.ccdaparsing.model.CCDANotesActivity;
 import org.sitenv.ccdaparsing.processing.MedicalEquipmentProcessor;
 import org.sitenv.ccdaparsing.util.PositionalXMLReader;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -291,4 +293,31 @@ public class MedicalEquipmentTest {
         Assert.assertNull(templateIds.get(1).getExtValue());
     }
 
+    @Test
+    public void returnsValidProcedureNotesActivity() {
+        CCDANotesActivity notesActivity = medicalEquipment.getProcedureActs().get(0).getNotesActivity().get(0);
+        Assert.assertEquals("2.16.840.1.113883.10.20.22.4.202", notesActivity.getTemplateId().get(0).getRootValue());
+        Assert.assertEquals("2016-11-01", notesActivity.getTemplateId().get(0).getExtValue());
+        Assert.assertEquals("34109-9", notesActivity.getActivityCode().getCode());
+        Assert.assertEquals("LOINC", notesActivity.getActivityCode().getCodeSystemName());
+        Assert.assertEquals("28570-0", notesActivity.getActivityCode().getTranslations().get(0).getCode());
+        Assert.assertEquals("Procedure note", notesActivity.getActivityCode().getTranslations().get(0).getDisplayName());
+        Assert.assertEquals("20140203", notesActivity.getEffTime().getValue());
+        Assert.assertEquals("20140204083215-0500", notesActivity.getAuthor().getTime().getValue());
+        Assert.assertEquals("20cf14fb-b65c-4c8c-a54d-b0cca834c18c", notesActivity.getAuthor().getAuthorIds().get(0).getRootValue());
+    }
+
+    @Test
+    public void returnsValidProcedureAuthor() {
+        CCDAAuthor author = medicalEquipment.getProcedureActs().get(0).getAuthor();
+        Assert.assertEquals("2.16.840.1.113883.10.20.22.4.119", author.getTemplateIds().get(0).getRootValue());
+        Assert.assertEquals("202006221100-0500", author.getTime().getValue());
+        Assert.assertEquals("2.16.840.1.113883.4.6", author.getAuthorIds().get(0).getRootValue());
+        Assert.assertEquals("111111", author.getAuthorIds().get(0).getExtValue());
+        Assert.assertEquals("2.16.840.1.113883.19.5", author.getRepOrgIds().get(0).getRootValue());
+        Assert.assertEquals("Neighborhood Physicians Practice", author.getOrgName().getValue());
+        /** Telecom Obj Validation **/
+        Assert.assertEquals("WP1", author.getTelecoms().get(0).getUseAttribute());
+        Assert.assertEquals("tel:+1(555)-555-5005", author.getTelecoms().get(0).getValueAttribute());
+    }
 }

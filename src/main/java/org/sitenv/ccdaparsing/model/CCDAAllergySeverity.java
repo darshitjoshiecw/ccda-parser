@@ -7,6 +7,7 @@ public class CCDAAllergySeverity extends CCDAXmlSnippet{
 	private ArrayList<CCDAII>				templateIds;
 	private CCDACode						severity;
 	private CCDADataElement referenceText;
+	private CCDAAuthor		author;
 	
 	public ArrayList<CCDAII> getTemplateIds() {
 		return templateIds;
@@ -30,6 +31,14 @@ public class CCDAAllergySeverity extends CCDAXmlSnippet{
 
 	public void setReferenceText(CCDADataElement referenceText) {
 		this.referenceText = referenceText;
+	}
+
+	public CCDAAuthor getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(CCDAAuthor author) {
+		this.author = author;
 	}
 
 	public CCDAAllergySeverity()

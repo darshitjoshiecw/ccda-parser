@@ -1,5 +1,9 @@
 package org.sitenv.ccdaparsing.model;
 
+import org.sitenv.ccdaparsing.dto.ContentValidationResult;
+
+import java.util.ArrayList;
+
 public class CCDADataElement {
 
 	private String value;
@@ -16,6 +20,28 @@ public class CCDADataElement {
 	public CCDADataElement()
 	{
 	}
+
+	public Boolean matches(CCDADataElement cd, ArrayList<ContentValidationResult> results, String elementName) {
+
+		if( (value != null) && (cd.getValue() != null) &&
+				(value.equalsIgnoreCase(cd.getValue())) ) {
+
+			return true;
+		}
+		else if((value == null) && (cd.getValue() == null))
+		{
+			return true;
+		}
+		else {
+			return false;
+		}
+
+	}
+
+	public void removeSpecialCharacters(String regex, String repl) {
+		value = value.replaceAll(regex, repl);
+	}
+
 
 	public String getValue() {
 		return value;

@@ -8,7 +8,8 @@ public class CCDASmokingStatus extends CCDAXmlSnippet{
 	private CCDACode							smokingStatusCode;
 	private CCDAEffTime						observationTime;
 	private CCDADataElement referenceText;
-	
+	private CCDAAuthor author;
+
 	public CCDASmokingStatus()
 	{
 		
@@ -44,6 +45,14 @@ public class CCDASmokingStatus extends CCDAXmlSnippet{
 
 	public void setReferenceText(CCDADataElement referenceText) {
 		this.referenceText = referenceText;
+	}
+
+	public CCDAAuthor getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(CCDAAuthor author) {
+		this.author = author;
 	}
 
 	@Override

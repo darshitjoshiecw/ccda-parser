@@ -20,6 +20,7 @@ import org.sitenv.ccdaparsing.model.CCDAServiceDeliveryLoc;
 import org.sitenv.ccdaparsing.model.CCDAUDI;
 import org.sitenv.ccdaparsing.util.ApplicationConstants;
 import org.sitenv.ccdaparsing.util.ApplicationUtil;
+import org.sitenv.ccdaparsing.util.ParserUtilities;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
@@ -55,7 +56,14 @@ public class ProcedureProcessor {
 					evaluate(sectionElement, XPathConstants.NODE)));
 			procedures.setProcActsProcs(readProcedures((NodeList) xPath.compile("./entry/procedure[not(@nullFlavor)]").
 					evaluate(sectionElement, XPathConstants.NODESET), xPath,idList));
-			
+
+			procedures.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(sectionElement, XPathConstants.NODE)));
+
+			// Add Notes Activity if present in Results entry
+			procedures.setNotesActivity(ParserUtilities.readNotesActivity((NodeList) CCDAConstants.REL_NOTES_ACTIVITY_EXPRESSION.
+					evaluate(sectionElement, XPathConstants.NODESET), null));
+
 			sectionElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
 			procedures.setLineNumber(sectionElement.getUserData("lineNumber") + " - " + sectionElement.getUserData("endLineNumber") );
 			procedures.setXmlString(ApplicationUtil.nodeToString((Node)sectionElement));
@@ -125,8 +133,15 @@ public class ProcedureProcessor {
 			NodeList serviceDeliveryNodeList = (NodeList) xPath.compile(ApplicationConstants.PROCEDURE_SDL_EXPRESSION).
 						evaluate(procedureElement, XPathConstants.NODESET);
 			procedure.setSdLocs(readServiceDeliveryLocators(serviceDeliveryNodeList, xPath,idList));
-			
-			
+
+			// Add Notes Activity if present in Procedures Procedure Activity Procedure entryRelationship
+			procedure.setNotesActivity(
+					ParserUtilities.readNotesActivity((NodeList) CCDAConstants.REL_ENTRY_REL_NOTES_ACTIVITY_EXPRESSION
+							.evaluate(procedureElement, XPathConstants.NODESET), null));
+
+			procedure.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(procedureElement, XPathConstants.NODE)));
+
 			proceduresList.add(procedure);
 		}
 		return proceduresList;
@@ -214,7 +229,8 @@ public class ProcedureProcessor {
 					evaluate(deviceElement, XPathConstants.NODE)));
 			device.setScopingEntityId(ApplicationUtil.readTemplateIdList((NodeList) xPath.compile("./scopingEntity/id[not(@nullFlavor)]").
 					evaluate(deviceElement, XPathConstants.NODESET)));
-			
+			device.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(deviceElement, XPathConstants.NODE)));
 			
 			deviceList.add(device);
 			

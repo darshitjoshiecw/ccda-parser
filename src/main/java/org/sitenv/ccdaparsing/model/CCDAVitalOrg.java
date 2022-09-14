@@ -11,6 +11,7 @@ public class CCDAVitalOrg extends CCDAXmlSnippet{
 	private CCDAEffTime						effTime;
 	private ArrayList<CCDAVitalObs>			vitalObs;
 	private CCDADataElement referenceText;
+	private CCDAAuthor author;
 	
 	public CCDAVitalOrg()
 	{
@@ -71,6 +72,14 @@ public class CCDAVitalOrg extends CCDAXmlSnippet{
 
 	public void setReferenceText(CCDADataElement referenceText) {
 		this.referenceText = referenceText;
+	}
+
+	public CCDAAuthor getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(CCDAAuthor author) {
+		this.author = author;
 	}
 
 	@Override

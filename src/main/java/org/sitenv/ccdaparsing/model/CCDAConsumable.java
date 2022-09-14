@@ -1,15 +1,53 @@
 package org.sitenv.ccdaparsing.model;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.util.ArrayList;
 
 public class CCDAConsumable extends CCDAXmlSnippet {
+
+	private static Logger log = LogManager.getLogger(CCDAConsumable.class.getName());
 
 	ArrayList<CCDAII> 			templateIds;
 	CCDACode					medcode;
 	ArrayList<CCDACode>			translations;
 	CCDADataElement				lotNumberText;
 	CCDADataElement				manufacturingOrg;
-	
+
+	public Boolean hasSameMedCode(CCDAConsumable refConsumable) {
+
+		if(medcode != null &&
+				refConsumable.getMedcode() != null )
+			return medcode.codeEquals(refConsumable.getMedcode());
+
+		return false;
+	}
+
+	public void log() {
+
+		if(medcode != null)
+			log.info("Consumable Code = " + medcode.getCode());
+
+		for(int l = 0; l < translations.size(); l++) {
+			log.info("Consumable Translation Code = " + translations.get(l).getCode());
+		}
+
+		for(int j = 0; j < templateIds.size(); j++) {
+			log.info(" Tempalte Id [" + j + "] = " + templateIds.get(j).getRootValue());
+			log.info(" Tempalte Id Ext [" + j + "] = " + templateIds.get(j).getExtValue());
+		}
+
+		if(lotNumberText != null) {
+			log.info(" Lot Number = " + lotNumberText.getValue());
+		}
+
+		if(manufacturingOrg != null) {
+			log.info(" Manufacturing Org Name = " + manufacturingOrg.getValue());
+		}
+
+	}
+
 	public ArrayList<CCDACode> getTranslations() {
 		return translations;
 	}

@@ -16,7 +16,9 @@ public class CCDAProcActProc extends CCDAXmlSnippet{
 	private CCDAII								scopingEntityId;
 	private ArrayList<CCDAUDI>                 patientUDI;
 	private CCDADataElement referenceText;
-	
+	private ArrayList<CCDANotesActivity>		notesActivity;
+	private CCDAAuthor author;
+
 	public CCDAProcActProc()
 	{
 		
@@ -116,6 +118,22 @@ public class CCDAProcActProc extends CCDAXmlSnippet{
 
 	public void setReferenceText(CCDADataElement referenceText) {
 		this.referenceText = referenceText;
+	}
+
+	public ArrayList<CCDANotesActivity> getNotesActivity() {
+		return notesActivity;
+	}
+
+	public void setNotesActivity(ArrayList<CCDANotesActivity> notesActivity) {
+		this.notesActivity = notesActivity;
+	}
+
+	public CCDAAuthor getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(CCDAAuthor author) {
+		this.author = author;
 	}
 
 	@Override
