@@ -49,7 +49,7 @@ public class CareTeamMemberProcessor {
 		for (int i = 0; i < performerNodeList.getLength(); i++) {
 			
 			participant = new CCDAParticipant();
-			Element performerElement = (Element) performerNodeList.item(i);
+			Element performerElement = ApplicationUtil.getCloneNode((Element) performerNodeList.item(i));
 			
 			participant.setAddress(ApplicationUtil.readAddress((Element) xPath.compile("./assignedEntity/addr[not(@nullFlavor)]").
 					evaluate(performerElement, XPathConstants.NODE), xPath));
@@ -70,7 +70,7 @@ public class CareTeamMemberProcessor {
 
 	public CCDACareTeamMember retrieveCareTeamSectionDetails(Document doc, CCDACareTeamMember careTeamMember) throws XPathExpressionException, TransformerException 
 	{
-		Element sectionElement = (Element) CCDAConstants.CARE_TEAM_SECTION_EXPRESSION.evaluate(doc, XPathConstants.NODE);
+		Element sectionElement = ApplicationUtil.getCloneNode((Element) CCDAConstants.CARE_TEAM_SECTION_EXPRESSION.evaluate(doc, XPathConstants.NODE));
 
 		if(sectionElement != null)
 		{
@@ -107,7 +107,7 @@ public class CareTeamMemberProcessor {
 
 				logger.info("Found Organizer ");
 
-				Element orgElement = (Element) orgList.item(i);
+				Element orgElement = ApplicationUtil.getCloneNode((Element) orgList.item(i));
 
 				// Parse the Members
 				retrieveMembers((NodeList) CCDAConstants.REL_CARE_TEAM_MEMBER_ACT_EXPRESSION.
@@ -143,7 +143,7 @@ public class CareTeamMemberProcessor {
 				logger.info(" Found Member Act Node ");
 				CCDACareTeamMemberAct mact = new CCDACareTeamMemberAct();
 
-				Element memberActElement = (Element) memberActNodes.item(i);
+				Element memberActElement = ApplicationUtil.getCloneNode((Element) memberActNodes.item(i));
 
 				mact.setTemplateIds(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
 						evaluate(memberActElement, XPathConstants.NODESET)));
@@ -189,7 +189,7 @@ public class CareTeamMemberProcessor {
 						logger.info(" Found Participants ");
 						CCDAParticipant opp = new CCDAParticipant();
 						readName((Element) CCDAConstants.REL_ASSN_ENTITY_PERSON_NAME.
-								evaluate(participantNodeList.item(j), XPathConstants.NODE), opp, XPathFactory.newInstance().newXPath());
+								evaluate( ApplicationUtil.getCloneNode(participantNodeList.item(j)), XPathConstants.NODE), opp, XPathFactory.newInstance().newXPath());
 
 						mact.addParticipant(opp);
 					}
@@ -208,7 +208,7 @@ public class CareTeamMemberProcessor {
 			NodeList giveNameNodeList = (NodeList) xPath.compile("./given[not(@nullFlavor)]").
 					evaluate(nameElement, XPathConstants.NODESET);
 			for (int i = 0; i < giveNameNodeList.getLength(); i++) {
-				Element givenNameElement = (Element) giveNameNodeList.item(i);
+				Element givenNameElement = ApplicationUtil.getCloneNode((Element) giveNameNodeList.item(i));
 				if(!ApplicationUtil.isEmpty(givenNameElement.getAttribute("qualifier")))
 				{
 					participant.setPreviousName(ApplicationUtil.readTextContent(givenNameElement));

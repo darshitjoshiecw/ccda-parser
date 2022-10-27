@@ -40,7 +40,8 @@ public class LaboratoryResultsProcessor {
     	logger.info("lab results parsing Start time:"+ startTime);
     	
 		CCDALabResult labResults = null;
-		Element sectionElement = (Element) xPath.compile(ApplicationConstants.RESULTS_EXPRESSION).evaluate(doc, XPathConstants.NODE);
+		Element sectionElement = ApplicationUtil.getCloneNode((Element) xPath.compile(ApplicationConstants.RESULTS_EXPRESSION).evaluate(doc, XPathConstants.NODE));
+
 		List<CCDAID> idList = new ArrayList<>();
 		if(sectionElement != null)
 		{
@@ -93,7 +94,7 @@ public class LaboratoryResultsProcessor {
 		for (int i = 0; i < resultOrganizerNodeList.getLength(); i++) {
 			labResultOrg = new CCDALabResultOrg();
 			
-			Element labResultOrgElement = (Element) resultOrganizerNodeList.item(i);
+			Element labResultOrgElement =  ApplicationUtil.getCloneNode((Element) resultOrganizerNodeList.item(i));
 			
 			labResultOrgElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
 			labResultOrg.setLineNumber(labResultOrgElement.getUserData("lineNumber") + " - " + labResultOrgElement.getUserData("endLineNumber") );
@@ -150,7 +151,7 @@ public class LaboratoryResultsProcessor {
 			
 			resultObservation = new CCDALabResultObs();
 			
-			Element resultObservationElement = (Element) resultObservationNodeList.item(i);
+			Element resultObservationElement =  ApplicationUtil.getCloneNode((Element) resultObservationNodeList.item(i));
 			
 			resultObservationElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
 			resultObservation.setLineNumber(resultObservationElement.getUserData("lineNumber") + " - " + resultObservationElement.getUserData("endLineNumber") );

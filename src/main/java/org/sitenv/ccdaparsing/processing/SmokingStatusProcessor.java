@@ -40,7 +40,7 @@ public class SmokingStatusProcessor {
     	logger.info("Smoking status parsing Start time:"+ startTime);
     	
 		CCDASocialHistory socailHistory = null;
-		Element sectionElement = (Element) xPath.compile(ApplicationConstants.SMOKING_EXPRESSION).evaluate(doc, XPathConstants.NODE);
+		Element sectionElement = ApplicationUtil.getCloneNode((Element) xPath.compile(ApplicationConstants.SMOKING_EXPRESSION).evaluate(doc, XPathConstants.NODE));
 		List<CCDAID> idList = new ArrayList<>();
 		if(sectionElement != null)
 		{
@@ -107,8 +107,8 @@ public class SmokingStatusProcessor {
 		CCDASmokingStatus smokingStatus;
 		for (int i = 0; i < smokingStatusNodeList.getLength(); i++) {
 			smokingStatus = new CCDASmokingStatus();
-			
-			Element smokingStatusElement = (Element) smokingStatusNodeList.item(i);
+
+			Element smokingStatusElement = ApplicationUtil.getCloneNode((Element) smokingStatusNodeList.item(i));
 			
 			smokingStatusElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
 			smokingStatus.setLineNumber(smokingStatusElement.getUserData("lineNumber") + " - " + smokingStatusElement.getUserData("endLineNumber") );
@@ -151,8 +151,8 @@ public class SmokingStatusProcessor {
 		CCDATobaccoUse tobaccoUse;
 		for (int i = 0; i < tobaccoUseNodeList.getLength(); i++) {
 			tobaccoUse = new CCDATobaccoUse();
-			
-			Element tobaccoUseElement = (Element) tobaccoUseNodeList.item(i);
+
+			Element tobaccoUseElement = ApplicationUtil.getCloneNode((Element) tobaccoUseNodeList.item(i));
 			
 			tobaccoUseElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
 			tobaccoUse.setLineNumber(tobaccoUseElement.getUserData("lineNumber") + " - " + tobaccoUseElement.getUserData("endLineNumber") );
@@ -227,7 +227,7 @@ public class SmokingStatusProcessor {
 
 			birthSex = new CCDABirthSexObs();
 
-			Element bsElement = (Element) bsList.item(i);
+			Element bsElement = ApplicationUtil.getCloneNode((Element) bsList.item(i));
 
 			birthSex.setTemplateIds(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
 					evaluate(bsElement, XPathConstants.NODESET)));

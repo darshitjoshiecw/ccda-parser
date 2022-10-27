@@ -39,7 +39,7 @@ public class LaboratoryTestProcessor {
     	
 		CCDALabResult labTests = null;
 		List<CCDAID> idList = new ArrayList<>();
-		Element sectionElement = (Element) xPath.compile(ApplicationConstants.RESULTS_EXPRESSION).evaluate(doc, XPathConstants.NODE);
+		Element sectionElement = ApplicationUtil.getCloneNode((Element) xPath.compile(ApplicationConstants.RESULTS_EXPRESSION).evaluate(doc, XPathConstants.NODE));
 		if(sectionElement != null)
 		{
 			labTests = new CCDALabResult();

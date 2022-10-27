@@ -31,7 +31,7 @@ public class HealthConcernsProcessor {
 		long startTime = System.currentTimeMillis();
     	logger.info("Health concern parsing Start time:"+ startTime);
 		CCDAHealthConcerns healthConcern = null;
-		Element sectionElement = (Element) xPath.compile(ApplicationConstants.HEALTHCONCERN_EXPRESSION).evaluate(doc, XPathConstants.NODE);
+		Element sectionElement = ApplicationUtil.getCloneNode((Element) xPath.compile(ApplicationConstants.HEALTHCONCERN_EXPRESSION).evaluate(doc, XPathConstants.NODE));
 		if (sectionElement != null)
 		{
 			healthConcern = new CCDAHealthConcerns();

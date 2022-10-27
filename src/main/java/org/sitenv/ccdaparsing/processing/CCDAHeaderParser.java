@@ -8,6 +8,7 @@ import org.sitenv.ccdaparsing.model.CCDAHeaderElements;
 import org.sitenv.ccdaparsing.model.CCDAPL;
 import org.sitenv.ccdaparsing.model.CCDAPatient;
 import org.sitenv.ccdaparsing.model.CCDATelecom;
+import org.sitenv.ccdaparsing.util.ApplicationUtil;
 import org.sitenv.ccdaparsing.util.ParserUtilities;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
@@ -50,7 +51,7 @@ public class CCDAHeaderParser {
 			log.info("Found Patient");
 			
 			// Retrieve the elements for population
-			Element patientRoleElement = (Element) nodeList.item(i);
+			Element patientRoleElement = ApplicationUtil.getCloneNode((Element) nodeList.item(i));
 		    
 	        patient= new CCDAPatient();
 	        
@@ -117,8 +118,8 @@ public class CCDAHeaderParser {
 		CCDACode translation = null;
 		Boolean foundTrans = false;
 		for (int i = 0; i < raceCodeList.getLength(); i++) {
-			
-			raceCodeElement = (Element) raceCodeList.item(i);
+
+			raceCodeElement = ApplicationUtil.getCloneNode((Element) raceCodeList.item(i));
 			if(raceCodeElement.getTagName().equals(CCDAConstants.RACE_EL_NAME))
 			{
 				
@@ -189,7 +190,7 @@ public class CCDAHeaderParser {
 		ArrayList<CCDAPL> preferredLanguageList = new ArrayList<>();
 		CCDAPL preferredLanguage = null;
 		for (int i = 0; i < languageCommElementList.getLength(); i++) {
-			Element languageCommElement = (Element) languageCommElementList.item(i);
+			Element languageCommElement = ApplicationUtil.getCloneNode((Element) languageCommElementList.item(i));
 			if(languageCommElement != null)
 			{
 				preferredLanguage = new CCDAPL();

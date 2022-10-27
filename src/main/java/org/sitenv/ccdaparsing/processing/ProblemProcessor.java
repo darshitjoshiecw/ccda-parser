@@ -39,7 +39,7 @@ public class ProblemProcessor {
 		long startTime = System.currentTimeMillis();
     	logger.info("Problems parsing Start time:"+ startTime);
 		CCDAProblem problems = null;
-		Element sectionElement = (Element) xPath.compile(ApplicationConstants.PROBLEM_EXPRESSION).evaluate(doc, XPathConstants.NODE);
+		Element sectionElement = ApplicationUtil.getCloneNode((Element) xPath.compile(ApplicationConstants.PROBLEM_EXPRESSION).evaluate(doc, XPathConstants.NODE));
 		List<CCDAID> idList = new ArrayList<>();
 		if(sectionElement != null)
 		{
@@ -80,7 +80,7 @@ public class ProblemProcessor {
 	public ArrayList<CCDAProblemObs> readPastIllnessProblems(Document doc, XPath xPath) throws XPathExpressionException, TransformerException {
 		ArrayList<CCDAProblemObs> probs = new ArrayList<CCDAProblemObs>();
 
-		Element sectionElement = (Element) CCDAConstants.PAST_ILLNESS_EXP.evaluate(doc, XPathConstants.NODE);
+		Element sectionElement = ApplicationUtil.getCloneNode((Element) CCDAConstants.PAST_ILLNESS_EXP.evaluate(doc, XPathConstants.NODE));
 
 		if(sectionElement != null)
 		{
@@ -99,7 +99,7 @@ public class ProblemProcessor {
 		CCDAProblemConcern problemConcern;
 		for (int i = 0; i < problemConcernNodeList.getLength(); i++) {
 			problemConcern = new CCDAProblemConcern();
-			Element problemConcernElement = (Element) problemConcernNodeList.item(i);
+			Element problemConcernElement = ApplicationUtil.getCloneNode((Element) problemConcernNodeList.item(i));
 			
 			problemConcernElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
 			problemConcern.setLineNumber(problemConcernElement.getUserData("lineNumber") + " - " + problemConcernElement.getUserData("endLineNumber") );
@@ -159,8 +159,8 @@ public class ProblemProcessor {
 		for (int i = 0; i < problemObservationNodeList.getLength(); i++) {
 			
 			problemObservation = new CCDAProblemObs();
-			
-			Element problemObservationElement = (Element) problemObservationNodeList.item(i);
+
+			Element problemObservationElement = ApplicationUtil.getCloneNode((Element) problemObservationNodeList.item(i));
 			
 			problemObservation.setNegationInd(Boolean.parseBoolean(problemObservationElement.getAttribute("negationInd")));
 			

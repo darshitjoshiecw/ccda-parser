@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.sitenv.ccdaparsing.model.CCDANotes;
 import org.sitenv.ccdaparsing.model.CCDANotesActivity;
 import org.sitenv.ccdaparsing.model.CCDARefModel;
+import org.sitenv.ccdaparsing.util.ApplicationUtil;
 import org.sitenv.ccdaparsing.util.ParserUtilities;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
@@ -64,8 +65,8 @@ private static Logger log = LogManager.getLogger(NotesParser.class.getName());
 			log.info(" Found Notes sections ");
 			
 			for(int i = 0; i < sectionNodes.getLength(); i++) {
-				
-				Element elem = (Element)sectionNodes.item(i);
+
+				Element elem = ApplicationUtil.getCloneNode((Element) sectionNodes.item(i));
 				
 				CCDANotes note = new CCDANotes();
 				

@@ -41,7 +41,7 @@ public class MediactionAllergiesProcessor {
     	logger.info("Allergies parsing Start time:"+ startTime);
 		
 		CCDAAllergy allergies = null;
-		Element sectionElement = (Element) xPath.compile(ApplicationConstants.ALLERGIES_EXPRESSION).evaluate(doc, XPathConstants.NODE);
+		Element sectionElement = ApplicationUtil.getCloneNode((Element) xPath.compile(ApplicationConstants.ALLERGIES_EXPRESSION).evaluate(doc, XPathConstants.NODE));
 		List<CCDAID> idList = new ArrayList<>();
 		if(sectionElement != null)
 		{
@@ -88,7 +88,7 @@ public class MediactionAllergiesProcessor {
 		for (int i = 0; i < allergyConcernNodeList.getLength(); i++) {
 			
 			allergyConcern = new CCDAAllergyConcern();
-			Element allergyConcernElement = (Element) allergyConcernNodeList.item(i);
+			Element allergyConcernElement = ApplicationUtil.getCloneNode((Element) allergyConcernNodeList.item(i));
 			
 			allergyConcernElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
 			allergyConcern.setLineNumber(allergyConcernElement.getUserData("lineNumber") + " - " + allergyConcernElement.getUserData("endLineNumber") );
@@ -149,7 +149,7 @@ public class MediactionAllergiesProcessor {
 		for (int i = 0; i < allergyObservationNodeList.getLength(); i++) {
 			
 			allergyObservation = new CCDAAllergyObs();
-			Element allergyObservationElement = (Element) allergyObservationNodeList.item(i);
+			Element allergyObservationElement = ApplicationUtil.getCloneNode((Element) allergyObservationNodeList.item(i));
 			allergyObservationElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
 			allergyObservation.setLineNumber(allergyObservationElement.getUserData("lineNumber") + " - " + allergyObservationElement.getUserData("endLineNumber") );
 			allergyObservation.setXmlString(ApplicationUtil.nodeToString((Node)allergyObservationElement));
@@ -204,7 +204,7 @@ public class MediactionAllergiesProcessor {
 			}
 			for (int j = 0; j < allergyReactionsNodeList.getLength(); j++) {
 				allergyReaction = new CCDAAllergyReaction();
-				allergyReactionElement = (Element) allergyReactionsNodeList.item(j);
+				allergyReactionElement = ApplicationUtil.getCloneNode((Element) allergyReactionsNodeList.item(j));
 				if(ApplicationUtil.checkForNullFlavourNI(allergyReactionElement))
 				{
 					allergyReaction.setSectionNullFlavourWithNI(true);

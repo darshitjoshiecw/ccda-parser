@@ -686,8 +686,8 @@ public class ParserUtilities {
 				for (int i = 0; i < transList.getLength(); i++) {
 					
 					log.info("Reading Translation Code ");
-					
-					Element node = (Element) transList.item(i);
+
+					Element node = ApplicationUtil.getCloneNode((Element) transList.item(i));
 					
 					CCDACode transCode = readCode(node);
 					
@@ -735,7 +735,7 @@ public class ParserUtilities {
 		}
 		Element templateElement;
 		for (int i = 0; i < templateIDNodeList.getLength(); i++) {
-			templateElement = (Element) templateIDNodeList.item(i);
+			templateElement = ApplicationUtil.getCloneNode((Element) templateIDNodeList.item(i));
 			templateList.add(readTemplateID(templateElement));
 		}
 		return templateList;
@@ -823,7 +823,7 @@ public class ParserUtilities {
 		}
 		Element dataElement;
 		for (int i = 0; i < dataElementNodeList.getLength(); i++) {
-			dataElement = (Element) dataElementNodeList.item(i);
+			dataElement = ApplicationUtil.getCloneNode((Element) dataElementNodeList.item(i));
 			dataElementList.add(readDataElement(dataElement));
 		}
 		return dataElementList;
@@ -857,7 +857,7 @@ public class ParserUtilities {
 		}
 		Element codeElement;
 		for (int i = 0; i < codeNodeList.getLength(); i++) {
-			codeElement = (Element) codeNodeList.item(i);
+			codeElement = ApplicationUtil.getCloneNode((Element) codeNodeList.item(i));
 			codeList.add(readCode(codeElement));
 		}
 		return codeList;
@@ -917,7 +917,7 @@ public class ParserUtilities {
 		for (int i = 0; i < addressNodeList.getLength(); i++) {
 			
 			log.info("Address found");
-			addrElement = (Element) addressNodeList.item(i);
+			addrElement = ApplicationUtil.getCloneNode((Element) addressNodeList.item(i));
 			addressList.add(readAddress(addrElement));
 		}
 		return addressList;
@@ -931,7 +931,7 @@ public class ParserUtilities {
 			dataList = new ArrayList<CCDADataElement>();
 		}
 		for (int i = 0; i < inputNodeList.getLength(); i++) {
-			Element value = (Element) inputNodeList.item(i);
+			Element value = ApplicationUtil.getCloneNode((Element) inputNodeList.item(i));
 			dataList.add(readTextContext(value));
 		}
 		return dataList;
@@ -999,7 +999,7 @@ public class ParserUtilities {
 		}
 		Element telecomElement;
 		for(int i = 0; i < telecomNodeList.getLength(); i++) {
-			telecomElement = (Element) telecomNodeList.item(i);
+			telecomElement = ApplicationUtil.getCloneNode((Element) telecomNodeList.item(i));
 			telecoms.add(readTelecom(telecomElement));
 		}
 		return telecoms;
@@ -1020,8 +1020,8 @@ public class ParserUtilities {
 				CCDANotesActivity notesActivity = new CCDANotesActivity();
 				
 				notesActivity.setParent(parent);
-				
-				Element notesActElem = (Element) notesActivityList.item(i);
+
+				Element notesActElem = ApplicationUtil.getCloneNode((Element) notesActivityList.item(i));
 				
 				notesActivity.setTemplateId(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
 											evaluate(notesActElem, XPathConstants.NODESET)));

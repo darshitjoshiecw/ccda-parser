@@ -39,8 +39,8 @@ public class EncounterDiagnosesProcessor {
 	{
 		long startTime = System.currentTimeMillis();
     	logger.info("encounter parsing Start time:"+ startTime);
-    	
-		Element sectionElement = (Element) xPath.compile(ApplicationConstants.ENCOUNTER_EXPRESSION).evaluate(doc, XPathConstants.NODE);
+
+		Element sectionElement = ApplicationUtil.getCloneNode((Element) xPath.compile(ApplicationConstants.ENCOUNTER_EXPRESSION).evaluate(doc, XPathConstants.NODE));
 		CCDAEncounter encounters = null;
 		List<CCDAID> idLIst = new ArrayList<>();
 		if(sectionElement != null)
@@ -85,8 +85,8 @@ public class EncounterDiagnosesProcessor {
 		ArrayList<CCDAEncounterActivity> encounterActivityList = new ArrayList<>();
 		CCDAEncounterActivity encounterActivity;
 		for (int i = 0; i < encounterActivityNodeList.getLength(); i++) {
-			
-			Element encounterActivityElement = (Element) encounterActivityNodeList.item(i);
+
+			Element encounterActivityElement = ApplicationUtil.getCloneNode((Element) encounterActivityNodeList.item(i));
 			
 			if(encounterActivityElement != null)
 			{
@@ -150,8 +150,8 @@ public class EncounterDiagnosesProcessor {
 		}
 		CCDAEncounterDiagnosis encounterDiagnosis;
 		for (int i = 0; i < encounterDiagnosisNodeList.getLength(); i++) {
-			
-			Element encounterDiagnosisElement = (Element) encounterDiagnosisNodeList.item(i);
+
+			Element encounterDiagnosisElement = ApplicationUtil.getCloneNode((Element) encounterDiagnosisNodeList.item(i));
 			encounterDiagnosis = new CCDAEncounterDiagnosis();
 			encounterDiagnosisElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
 			encounterDiagnosis.setLineNumber(encounterDiagnosisElement.getUserData("lineNumber") + " - " + encounterDiagnosisElement.getUserData("endLineNumber") );
@@ -197,8 +197,8 @@ public class EncounterDiagnosesProcessor {
 		for (int i = 0; i < serviceDeliveryLocNodeList.getLength(); i++) {
 			
 			serviceDeliveryLoc = new CCDAServiceDeliveryLoc();
-			
-			Element serviceDeliveryLocElement = (Element) serviceDeliveryLocNodeList.item(i);
+
+			Element serviceDeliveryLocElement = ApplicationUtil.getCloneNode((Element) serviceDeliveryLocNodeList.item(i));
 			serviceDeliveryLoc.setTemplateId(ApplicationUtil.readTemplateIdList((NodeList) xPath.compile("./templateId[not(@nullFlavor)]").
 											evaluate(serviceDeliveryLocElement, XPathConstants.NODESET)));
 			
@@ -239,7 +239,7 @@ public class EncounterDiagnosesProcessor {
 			logger.info(" Adding Problem Observation as part of encounter ");
 			problemObservation = new CCDAProblemObs();
 
-			Element problemObservationElement = (Element) problemObservationNodeList.item(i);
+			Element problemObservationElement = ApplicationUtil.getCloneNode((Element) problemObservationNodeList.item(i));
 			problemObservation.setTemplateId(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
 					evaluate(problemObservationElement, XPathConstants.NODESET)));
 
@@ -275,8 +275,8 @@ public class EncounterDiagnosesProcessor {
 		for (int i = 0; i < problemObservationNodeList.getLength(); i++) {
 			
 			problemObservation = new CCDAProblemObs();
-			
-			Element problemObservationElement = (Element) problemObservationNodeList.item(i);
+
+			Element problemObservationElement = ApplicationUtil.getCloneNode((Element) problemObservationNodeList.item(i));
 			problemObservationElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
 			problemObservation.setLineNumber(problemObservationElement.getUserData("lineNumber") + " - " + problemObservationElement.getUserData("endLineNumber") );
 			problemObservation.setXmlString(ApplicationUtil.nodeToString((Node)problemObservationElement));
@@ -313,7 +313,7 @@ public class EncounterDiagnosesProcessor {
 
 	@Async()
 	public Future<CCDAAdmissionDiagnosis> retrieveAdmissionDiagnosisDetails(Document doc) throws XPathExpressionException, TransformerException {
-		Element sectionElement = (Element) CCDAConstants.ADMISSION_DIAG_EXP.evaluate(doc, XPathConstants.NODE);
+		Element sectionElement = ApplicationUtil.getCloneNode((Element) CCDAConstants.ADMISSION_DIAG_EXP.evaluate(doc, XPathConstants.NODE));
 		CCDAAdmissionDiagnosis admDiag = null;
 
 		if(sectionElement != null)
@@ -346,7 +346,7 @@ public class EncounterDiagnosesProcessor {
 		for (int i = 0; i < hospitalAdmDiag.getLength(); i++) {
 
 			logger.info("Found Hospital Admission Diagnosis");
-			Element hosAdmDiag = (Element) hospitalAdmDiag.item(i);
+			Element hosAdmDiag = ApplicationUtil.getCloneNode((Element) hospitalAdmDiag.item(i));
 
 			NodeList problemObservationNodeList = (NodeList) CCDAConstants.REL_ENTRY_RELSHIP_OBS_EXP.
 					evaluate(hosAdmDiag, XPathConstants.NODESET);
@@ -362,7 +362,7 @@ public class EncounterDiagnosesProcessor {
 
 	@Async()
 	public Future<CCDADischargeDiagnosis> retrieveDischargeDiagnosisDetails(Document doc) throws XPathExpressionException, TransformerException {
-		Element sectionElement = (Element) CCDAConstants.DISCHARGE_DIAG_EXP.evaluate(doc, XPathConstants.NODE);
+		Element sectionElement = ApplicationUtil.getCloneNode((Element) CCDAConstants.DISCHARGE_DIAG_EXP.evaluate(doc, XPathConstants.NODE));
 		CCDADischargeDiagnosis dischargeDiag = null;
 
 		if(sectionElement != null)
@@ -395,7 +395,7 @@ public class EncounterDiagnosesProcessor {
 		for (int i = 0; i < hospitalDischargeDiag.getLength(); i++) {
 
 			logger.info("Found Hospital Discharge Diagnosis");
-			Element hosAdmDiag = (Element) hospitalDischargeDiag.item(i);
+			Element hosAdmDiag = ApplicationUtil.getCloneNode((Element) hospitalDischargeDiag.item(i));
 
 			NodeList problemObservationNodeList = (NodeList) CCDAConstants.REL_ENTRY_RELSHIP_OBS_EXP.
 					evaluate(hosAdmDiag, XPathConstants.NODESET);

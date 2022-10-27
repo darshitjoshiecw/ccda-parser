@@ -40,7 +40,7 @@ public class MedicalEquipmentProcessor {
         long startTime = System.currentTimeMillis();
         logger.info("medical equipment parsing Start time:"+ startTime);
         CCDAMedicalEquipment medicalEquipments = null;
-        Element sectionElement = (Element) xPath.compile(ApplicationConstants.MEDICAL_EQUIPMENT_EXPRESSION).evaluate(doc, XPathConstants.NODE);
+        Element sectionElement = ApplicationUtil.getCloneNode((Element) xPath.compile(ApplicationConstants.MEDICAL_EQUIPMENT_EXPRESSION).evaluate(doc, XPathConstants.NODE));
         List<CCDAID> ids = new ArrayList<>();
         if(sectionElement != null){
             medicalEquipments = new CCDAMedicalEquipment();
@@ -92,7 +92,7 @@ public class MedicalEquipmentProcessor {
         for (int i = 0; i < orgNodeList.getLength(); i++) {
 
             logger.info(" Reading UDIs from Organizer ");
-            Element orgElement = (Element) orgNodeList.item(i);
+            Element orgElement = ApplicationUtil.getCloneNode((Element) orgNodeList.item(i));
 
             readUDIsFromProcedures((NodeList)CCDAConstants.MEDICAL_EQUIPMENT_ORG_PAP_EXPRESSION.
                     evaluate(orgElement, XPathConstants.NODESET));
@@ -108,7 +108,7 @@ public class MedicalEquipmentProcessor {
 
             logger.info("Adding UDIs from procs ");
 
-            Element procedureElement = (Element) proceduresNodeList.item(i);
+            Element procedureElement = ApplicationUtil.getCloneNode((Element) proceduresNodeList.item(i));
 
             if(procedureElement != null) {
 
@@ -141,7 +141,7 @@ public class MedicalEquipmentProcessor {
             logger.info("Adding UDIs");
             device = new CCDAUDI();
 
-            Element deviceElement = (Element) deviceNodeList.item(i);
+            Element deviceElement = ApplicationUtil.getCloneNode((Element) deviceNodeList.item(i));
             device.setTemplateIds(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
                     evaluate(deviceElement, XPathConstants.NODESET)));
 
@@ -172,7 +172,7 @@ public class MedicalEquipmentProcessor {
         CCDAMedicalEquipmentOrg medicalEquipmentOrg;
         for (int i = 0; i < orgNodes.getLength(); i++) {
             medicalEquipmentOrg = new CCDAMedicalEquipmentOrg();
-            Element orgElement = (Element) orgNodes.item(i);
+            Element orgElement = ApplicationUtil.getCloneNode((Element) orgNodes.item(i));
         orgElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
             medicalEquipmentOrg.setLineNumber(orgElement.getUserData("lineNumber") + " - " + orgElement.getUserData("endLineNumber") );
             medicalEquipmentOrg.setXmlString(ApplicationUtil.nodeToString((Node)orgElement));
@@ -206,7 +206,7 @@ public class MedicalEquipmentProcessor {
         CCDANonMedicalSupplyAct supplyAct;
         for (int i = 0; i < supplyNodes.getLength(); i++) {
             supplyAct = new CCDANonMedicalSupplyAct();
-            Element supplyElement = (Element) supplyNodes.item(i);
+            Element supplyElement = ApplicationUtil.getCloneNode((Element) supplyNodes.item(i));
             supplyElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
             supplyAct.setLineNumber(supplyElement.getUserData(ApplicationConstants.LINE_NUMBER_KEY_NAME) + " - " + supplyElement.getUserData(ApplicationConstants.END_LINE_NUMBER_KEY_NAME) );
             supplyAct.setXmlString(ApplicationUtil.nodeToString((Node)supplyElement));

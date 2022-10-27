@@ -39,7 +39,7 @@ public class VitalSignProcessor {
 		logger.info("Vitals parsing Start time:"+ startTime);
 		
 		CCDAVitalSigns vitalSigns = null;
-		Element sectionElement = (Element) xPath.compile(ApplicationConstants.VITALSIGNS_EXPRESSION).evaluate(doc, XPathConstants.NODE);
+		Element sectionElement = ApplicationUtil.getCloneNode((Element) xPath.compile(ApplicationConstants.VITALSIGNS_EXPRESSION).evaluate(doc, XPathConstants.NODE));
 		List<CCDAID> idList = new ArrayList<>();
 		if(sectionElement != null)
 		{
@@ -82,8 +82,8 @@ public class VitalSignProcessor {
 		CCDAVitalOrg vitalOrganizer;
 		for (int i = 0; i < vitalOrganizerNodeList.getLength(); i++) {
 			vitalOrganizer = new CCDAVitalOrg();
-			
-			Element vitalOrganizerElement = (Element) vitalOrganizerNodeList.item(i);
+
+			Element vitalOrganizerElement = ApplicationUtil.getCloneNode((Element) vitalOrganizerNodeList.item(i));
 			
 			vitalOrganizerElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
 			vitalOrganizer.setLineNumber(vitalOrganizerElement.getUserData("lineNumber") + " - " + vitalOrganizerElement.getUserData("endLineNumber") );
@@ -133,8 +133,8 @@ public class VitalSignProcessor {
 		for (int i = 0; i < vitalObservationNodeList.getLength(); i++) {
 			
 			vitalObservation = new CCDAVitalObs();
-			
-			Element resultObservationElement = (Element) vitalObservationNodeList.item(i);
+
+			Element resultObservationElement = ApplicationUtil.getCloneNode((Element) vitalObservationNodeList.item(i));
 			
 			resultObservationElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
 			vitalObservation.setLineNumber(resultObservationElement.getUserData("lineNumber") + " - " + resultObservationElement.getUserData("endLineNumber") );
@@ -197,9 +197,9 @@ public class VitalSignProcessor {
 					evaluate(resultObservationElement, XPathConstants.NODESET);
 			
 			ArrayList<CCDAPQ> referenceValueList = new ArrayList<>();
-			for (int j = 0; j < referenceRangeNodeList.getLength(); j++) { 
-				
-				Element referenceRangeElement = (Element) referenceRangeNodeList.item(j);
+			for (int j = 0; j < referenceRangeNodeList.getLength(); j++) {
+
+				Element referenceRangeElement = ApplicationUtil.getCloneNode((Element) referenceRangeNodeList.item(j));
 				
 				if(referenceRangeElement != null)
 				{

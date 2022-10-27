@@ -32,7 +32,7 @@ public class GoalsProcessor {
     	logger.info("Goals parsing Start time:"+ startTime);
 		
 		CCDAGoals goals = null;
-		Element sectionElement = (Element) xPath.compile(ApplicationConstants.GOALS_EXPRESSION).evaluate(doc, XPathConstants.NODE);
+		Element sectionElement = ApplicationUtil.getCloneNode((Element) xPath.compile(ApplicationConstants.GOALS_EXPRESSION).evaluate(doc, XPathConstants.NODE));
 		
 		if(sectionElement != null)
 		{

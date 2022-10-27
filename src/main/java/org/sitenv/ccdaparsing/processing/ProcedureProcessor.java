@@ -40,7 +40,7 @@ public class ProcedureProcessor {
 		long startTime = System.currentTimeMillis();
     	logger.info("Procedure parsing Start time:"+ startTime);
 		CCDAProcedure procedures = null;
-		Element sectionElement = (Element) xPath.compile(ApplicationConstants.PROCEDURE_EXPRESSION).evaluate(doc, XPathConstants.NODE);
+		Element sectionElement = ApplicationUtil.getCloneNode((Element) xPath.compile(ApplicationConstants.PROCEDURE_EXPRESSION).evaluate(doc, XPathConstants.NODE));
 		List<CCDAID> idList = new ArrayList<>();
 		if(sectionElement !=null)
 		{
@@ -93,7 +93,7 @@ public class ProcedureProcessor {
 		for (int i = 0; i < proceduresNodeList.getLength(); i++) {
 			
 			procedure = new CCDAProcActProc();
-			Element procedureElement = (Element) proceduresNodeList.item(i);
+			Element procedureElement = ApplicationUtil.getCloneNode((Element) proceduresNodeList.item(i));
 			
 			procedureElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
 			procedure.setLineNumber(procedureElement.getUserData("lineNumber") + " - " + procedureElement.getUserData("endLineNumber") );
@@ -157,8 +157,8 @@ public class ProcedureProcessor {
 		CCDAAssignedEntity assignedEntity;
 		
 		for (int i = 0; i < performerEntityNodeList.getLength(); i++) {
-			
-			Element performerEntityElement = (Element) performerEntityNodeList.item(i);
+
+			Element performerEntityElement = ApplicationUtil.getCloneNode((Element) performerEntityNodeList.item(i));
 			assignedEntity = new CCDAAssignedEntity();
 			
 			if(performerEntityElement != null)
@@ -212,8 +212,8 @@ public class ProcedureProcessor {
 		for (int i = 0; i < deviceNodeList.getLength(); i++) {
 			
 			device = new CCDAUDI();
-			
-			Element deviceElement = (Element) deviceNodeList.item(i);
+
+			Element deviceElement = ApplicationUtil.getCloneNode((Element) deviceNodeList.item(i));
 			device.setTemplateIds(ApplicationUtil.readTemplateIdList((NodeList) xPath.compile("./templateId[not(@nullFlavor)]").
 											evaluate(deviceElement, XPathConstants.NODESET)));
 			
@@ -251,8 +251,8 @@ public class ProcedureProcessor {
 		for (int i = 0; i < serviceDeliveryLocNodeList.getLength(); i++) {
 			
 			serviceDeliveryLoc = new CCDAServiceDeliveryLoc();
-			
-			Element serviceDeliveryLocElement = (Element) serviceDeliveryLocNodeList.item(i);
+
+			Element serviceDeliveryLocElement = ApplicationUtil.getCloneNode((Element) serviceDeliveryLocNodeList.item(i));
 			serviceDeliveryLoc.setTemplateId(ApplicationUtil.readTemplateIdList((NodeList) xPath.compile("./templateId[not(@nullFlavor)]").
 											evaluate(serviceDeliveryLocElement, XPathConstants.NODESET)));
 			

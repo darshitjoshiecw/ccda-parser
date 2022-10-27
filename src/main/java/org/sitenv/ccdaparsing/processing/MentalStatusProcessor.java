@@ -33,7 +33,7 @@ public class MentalStatusProcessor {
 		logger.info("Advance Directive parsing Start time:" + startTime);
 
 		CCDAMentalStatus mentalStatus = null;
-		Element sectionElement = (Element) xPath.compile(ApplicationConstants.MENTAL_STS_EXPRESSION).evaluate(doc, XPathConstants.NODE);
+		Element sectionElement = ApplicationUtil.getCloneNode((Element) xPath.compile(ApplicationConstants.MENTAL_STS_EXPRESSION).evaluate(doc, XPathConstants.NODE));
 		List<CCDAID> idList = new ArrayList<>();
 		if (sectionElement != null) {
 			mentalStatus = new CCDAMentalStatus();

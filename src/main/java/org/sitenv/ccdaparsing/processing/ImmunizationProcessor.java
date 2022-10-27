@@ -41,7 +41,7 @@ public class ImmunizationProcessor {
 		long startTime = System.currentTimeMillis();
     	logger.info("Immunization parsing Start time:"+ startTime);
 		CCDAImmunization immunizations = null;
-		Element sectionElement = (Element) xPath.compile(ApplicationConstants.IMMUNIZATION_EXPRESSION).evaluate(doc, XPathConstants.NODE);
+		Element sectionElement = ApplicationUtil.getCloneNode((Element) xPath.compile(ApplicationConstants.IMMUNIZATION_EXPRESSION).evaluate(doc, XPathConstants.NODE));
 		List<CCDAID> idList = new ArrayList<>();
 		if(sectionElement != null)
 		{
@@ -84,7 +84,7 @@ public class ImmunizationProcessor {
 		for (int i = 0; i < entryNodeList.getLength(); i++) {
 			
 			immunizationActivity = new CCDAImmunizationActivity();
-			Element entryElement = (Element) entryNodeList.item(i);
+			Element entryElement = ApplicationUtil.getCloneNode((Element) entryNodeList.item(i));
 			
 			Element immunizationActivityElement = (Element) xPath.compile("./substanceAdministration[not(@nullFlavor)]").
 					evaluate(entryElement, XPathConstants.NODE);

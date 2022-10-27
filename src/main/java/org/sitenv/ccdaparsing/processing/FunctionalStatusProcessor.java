@@ -33,7 +33,8 @@ public class FunctionalStatusProcessor {
 		logger.info("Advance Directive parsing Start time:" + startTime);
 
 		CCDAFunctionalStatus functionalStatus = null;
-		Element sectionElement = (Element) xPath.compile(ApplicationConstants.FUNCTIONAL_STS_EXPRESSION).evaluate(doc, XPathConstants.NODE);
+		Element sectionElement = ApplicationUtil.getCloneNode((Element) xPath.compile(ApplicationConstants.FUNCTIONAL_STS_EXPRESSION).evaluate(doc, XPathConstants.NODE));
+
 		List<CCDAID> idList = new ArrayList<>();
 		if (sectionElement != null) {
 			functionalStatus = new CCDAFunctionalStatus();

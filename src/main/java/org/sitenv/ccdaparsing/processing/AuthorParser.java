@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.sitenv.ccdaparsing.model.CCDAAuthor;
 import org.sitenv.ccdaparsing.model.CCDARefModel;
+import org.sitenv.ccdaparsing.util.ApplicationUtil;
 import org.sitenv.ccdaparsing.util.ParserUtilities;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
@@ -41,7 +42,7 @@ public class AuthorParser {
 		for (int i = 0; i < docAuths.getLength(); i++) {
 			
 			log.info("Parsing Author at document level ");
-			Element authElement = (Element) docAuths.item(i);
+			Element authElement = ApplicationUtil.getCloneNode((Element) docAuths.item(i));
 			
 			auth = ParserUtilities.readAuthor(authElement);
 			
@@ -66,7 +67,7 @@ public class AuthorParser {
 			log.info(
 					"Parsing Authors with linked reference data from the entire document "
 					+ "(header, sections, entries, and statements)");
-			Element authElement = (Element) bodyAuths.item(i);
+			Element authElement = ApplicationUtil.getCloneNode((Element) bodyAuths.item(i));
 			auth = ParserUtilities.readAuthor(authElement);
 			if (auth != null) {
 				log.info(" Adding author with linked reference data ");

@@ -80,8 +80,8 @@ public class PatientProcessor {
 		NodeList nodeList = (NodeList) xPath.compile(ApplicationConstants.PATIENT_EXPRESSION).evaluate(doc, XPathConstants.NODESET);
 		
 		for (int i = 0; i < nodeList.getLength(); i++) {
-	    	
-			Element patientRoleElement = (Element) nodeList.item(i);
+
+			Element patientRoleElement = ApplicationUtil.getCloneNode((Element) nodeList.item(i));
 		    //patientRoleElement.setAttribute("xmlns:sdtc", "urn:hl7-org:sdtc");
 	        	
 	        	patient = new CCDAPatient();
@@ -154,8 +154,8 @@ public class PatientProcessor {
 	{
 		Element raceCodeElement= null;
 		for (int i = 0; i < raceCodeList.getLength(); i++) {
-			
-			raceCodeElement = (Element) raceCodeList.item(i);
+
+			raceCodeElement = ApplicationUtil.getCloneNode((Element) raceCodeList.item(i));
 			if(raceCodeElement.getTagName().equals("raceCode"))
 			{
 				patient.setRaceCodes(ApplicationUtil.readCode(raceCodeElement));
@@ -176,7 +176,7 @@ public class PatientProcessor {
 		{
 			for (int i = 0; i < nameElements.getLength(); i++) {
 				patientName = new CCDAPatientName();
-				patientNameElement = (Element) nameElements.item(i);
+				patientNameElement = ApplicationUtil.getCloneNode((Element) nameElements.item(i));
 				
 				NodeList givenNameNodeList = (NodeList) xPath.compile("./given[not(@nullFlavor)]").
 						evaluate(patientNameElement, XPathConstants.NODESET);
@@ -185,7 +185,7 @@ public class PatientProcessor {
 					List<CCDAPatientNameElement> givenNames = new ArrayList<>();
 					
 					for (int j = 0; j < givenNameNodeList.getLength(); j++) {
-						Element givenNameElement = (Element) givenNameNodeList.item(j);
+						Element givenNameElement = ApplicationUtil.getCloneNode((Element) givenNameNodeList.item(j));
 						givenNames.add(ApplicationUtil.readPatientNameElement(givenNameElement));
 					}
 					patientName.setGivenName(givenNames);
@@ -197,7 +197,7 @@ public class PatientProcessor {
 				if(familyNameNodeList != null) {
 					List<CCDAPatientNameElement> familyNames = new ArrayList<>();
 					for (int k = 0; k < familyNameNodeList.getLength(); k++) {
-						Element familyNameElement = (Element) familyNameNodeList.item(k);
+						Element familyNameElement = ApplicationUtil.getCloneNode((Element) familyNameNodeList.item(k));
 						familyNames.add(ApplicationUtil.readPatientNameElement(familyNameElement));
 					}
 					patientName.setFamilyName(familyNames);
@@ -241,7 +241,7 @@ public class PatientProcessor {
 					evaluate(nameElement, XPathConstants.NODESET);
 			
 			for (int i = 0; i < givenNameNodeList.getLength(); i++) {
-				Element givenNameElement = (Element) givenNameNodeList.item(i);
+				Element givenNameElement = ApplicationUtil.getCloneNode((Element) givenNameNodeList.item(i));
 				if(!ApplicationUtil.isEmpty(givenNameElement.getAttribute("qualifier")))
 				{
 					patient.setPreviousName(ApplicationUtil.readTextContent(givenNameElement));
@@ -269,7 +269,7 @@ public class PatientProcessor {
 		ArrayList<CCDAPL> preferredLanguageList = new ArrayList<>();
 		CCDAPL preferredLanguage = null;
 		for (int i = 0; i < languageCommElementList.getLength(); i++) {
-			Element languageCommElement = (Element) languageCommElementList.item(i);
+			Element languageCommElement = ApplicationUtil.getCloneNode((Element) languageCommElementList.item(i));
 			if(languageCommElement != null)
 			{
 				preferredLanguage = new CCDAPL();

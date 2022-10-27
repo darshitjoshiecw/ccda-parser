@@ -44,7 +44,7 @@ public class POTProcessor {
 		long startTime = System.currentTimeMillis();
     	logger.info("POT parsing Start time:"+ startTime);
 		CCDAPOT pot = null;
-		Element sectionElement = (Element) xPath.compile(ApplicationConstants.POT_EXPRESSION).evaluate(doc, XPathConstants.NODE);
+		Element sectionElement = ApplicationUtil.getCloneNode((Element) xPath.compile(ApplicationConstants.POT_EXPRESSION).evaluate(doc, XPathConstants.NODE));
 		List<CCDAID> idList = new ArrayList<>();
 		if(sectionElement != null)
 		{

@@ -131,7 +131,7 @@ public class ApplicationUtil {
 		}
 		Element templateElement;
 		for (int i = 0; i < templateIDNodeList.getLength(); i++) {
-			templateElement = (Element) templateIDNodeList.item(i);
+			templateElement = ApplicationUtil.getCloneNode((Element) templateIDNodeList.item(i));
 			if(setXmlAndLinNumber) {
 				templateList.add(readTemplateID(templateElement));
 			} else {
@@ -236,7 +236,7 @@ public class ApplicationUtil {
 		{
 			for (int i = 0; i < referenceList.getLength(); i++) 
 			{
-				referenceElement = (Element) referenceList.item(i);
+				referenceElement = ApplicationUtil.getCloneNode((Element) referenceList.item(i));
 				if(referenceElement!=null)
 				{
 					if(!isEmpty(referenceElement.getAttribute("ID")))
@@ -260,7 +260,7 @@ public class ApplicationUtil {
 		{
 			for (int i = 0; i < referenceList.getLength(); i++) 
 			{
-				referenceElement = (Element) referenceList.item(i);
+				referenceElement = ApplicationUtil.getCloneNode((Element) referenceList.item(i));
 				if(referenceElement!=null)
 				{
 					if(!isEmpty(referenceElement.getAttribute("value")))
@@ -332,7 +332,7 @@ public class ApplicationUtil {
 		}
 		Element dataElement;
 		for (int i = 0; i < dataElementNodeList.getLength(); i++) {
-			dataElement = (Element) dataElementNodeList.item(i);
+			dataElement = ApplicationUtil.getCloneNode((Element) dataElementNodeList.item(i));
 			dataElementList.add(readDataElement(dataElement));
 		}
 		return dataElementList;
@@ -368,7 +368,7 @@ public class ApplicationUtil {
 		}
 		Element codeElement;
 		for (int i = 0; i < codeNodeList.getLength(); i++) {
-			codeElement = (Element) codeNodeList.item(i);
+			codeElement = ApplicationUtil.getCloneNode((Element) codeNodeList.item(i));
 			codeList.add(readCode(codeElement));
 		}
 		return codeList;
@@ -429,7 +429,7 @@ public class ApplicationUtil {
 		}
 		Element addrElement;
 		for (int i = 0; i < addressNodeList.getLength(); i++) {
-			addrElement = (Element) addressNodeList.item(i);
+			addrElement = ApplicationUtil.getCloneNode((Element) addressNodeList.item(i));
 			addressList.add(readAddress(addrElement, xpath));
 		}
 		return addressList;
@@ -443,7 +443,7 @@ public class ApplicationUtil {
 			dataList = new ArrayList<CCDADataElement>();
 		}
 		for (int i = 0; i < inputNodeList.getLength(); i++) {
-			Element value = (Element) inputNodeList.item(i);
+			Element value = ApplicationUtil.getCloneNode((Element) inputNodeList.item(i));
 			dataList.add(readTextContent(value));
 		}
 		return dataList;
@@ -512,7 +512,7 @@ public class ApplicationUtil {
 			throws TransformerException
 	{
 		StringWriter buf = new StringWriter();
-		Transformer xform = TransformerFactory.newInstance().newTransformer();
+		Transformer xform = TransformerFactory.newInstance("com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl", null).newTransformer();
 	    xform.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
 	    xform.transform(new DOMSource(node), new StreamResult(buf));
 	    return(buf.toString());
@@ -522,7 +522,7 @@ public class ApplicationUtil {
 			throws TransformerException
 	{
 		StringWriter buf = new StringWriter();
-		Transformer xform = TransformerFactory.newInstance().newTransformer();
+		Transformer xform = TransformerFactory.newInstance("com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl", null).newTransformer();
 	    xform.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
 	    xform.transform(new DOMSource(node), new StreamResult(buf));
 	    return(buf.toString());
@@ -536,5 +536,25 @@ public class ApplicationUtil {
 	public static String getTextByElementId(String id, Document document) throws XPathExpressionException {
 			return (String) CCDAConstants.CCDAXPATH.compile("//*[@ID='" + id + "' or @id='" + id + "']")
 					.evaluate(document, XPathConstants.STRING);
+	}
+
+	public static Element getCloneNode(Element evaluate) {
+		if (evaluate == null) {
+			return null;
+		}
+		Element clonedElement = (Element) evaluate.cloneNode(true);
+		clonedElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+		evaluate = null;
+		return clonedElement;
+	}
+
+	public static Element getCloneNode(Node node) {
+		if (node == null) {
+			return null;
+		}
+		Element clonedElement = (Element) node.cloneNode(true);
+		clonedElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+		node = null;
+		return clonedElement;
 	}
 }

@@ -42,7 +42,7 @@ public class MedicationProcessor {
     	logger.info("Medications parsing Start time:"+ startTime);
 		
 		CCDAMedication medications = null;
-		Element sectionElement = (Element) xPath.compile(ApplicationConstants.MEDICATION_EXPRESSION).evaluate(doc, XPathConstants.NODE);
+		Element sectionElement = ApplicationUtil.getCloneNode((Element) xPath.compile(ApplicationConstants.MEDICATION_EXPRESSION).evaluate(doc, XPathConstants.NODE));
 		List<CCDAID> idList = new ArrayList<>();
 		if(sectionElement != null)
 		{
@@ -82,7 +82,7 @@ public class MedicationProcessor {
 	@Async()
 	public Future<CCDADischargeMedication> retrieveDischargeMedicationDetails(XPath xPath, Document doc) throws XPathExpressionException, TransformerException {
 		CCDADischargeMedication medications = null;
-		Element sectionElement = (Element) CCDAConstants.DM_MEDICATION_EXPRESSION.evaluate(doc, XPathConstants.NODE);
+		Element sectionElement = ApplicationUtil.getCloneNode((Element) CCDAConstants.DM_MEDICATION_EXPRESSION.evaluate(doc, XPathConstants.NODE));
 		List<CCDAID> idList = new ArrayList<>();
 
 		if(sectionElement != null)
@@ -110,7 +110,7 @@ public class MedicationProcessor {
 
 		for (int i = 0; i < entryNodeList.getLength(); i++) {
 
-			Element entryElementDM = (Element) entryNodeList.item(i);
+			Element entryElementDM = ApplicationUtil.getCloneNode((Element) entryNodeList.item(i));
 
 			Element medAct = (Element) (CCDAConstants.REL_CONSUM_EXP.
 					evaluate(entryElementDM, XPathConstants.NODE));
@@ -128,7 +128,7 @@ public class MedicationProcessor {
 
 				for (int j = 0; j < effectiveTime.getLength(); j++) {
 
-					Element effectiveTimeElement = (Element) effectiveTime.item(j);
+					Element effectiveTimeElement = ApplicationUtil.getCloneNode((Element) effectiveTime.item(j));
 					if(effectiveTimeElement.getAttribute("xsi:type").equalsIgnoreCase("IVL_TS"))
 					{
 						medicationActivity.setDuration(readDuration(effectiveTimeElement, XPathFactory.newInstance().newXPath()));
@@ -181,7 +181,7 @@ public class MedicationProcessor {
 		CCDAMedicationActivity medicationActivity;
 		for (int i = 0; i < entryNodeList.getLength(); i++) {
 			medicationActivity = new CCDAMedicationActivity();
-			Element entryElement = (Element) entryNodeList.item(i);
+			Element entryElement = ApplicationUtil.getCloneNode((Element) entryNodeList.item(i));
 			
 			entryElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
 			medicationActivity.setLineNumber(entryElement.getUserData("lineNumber") + " - " + entryElement.getUserData("endLineNumber") );
@@ -205,7 +205,7 @@ public class MedicationProcessor {
 			NodeList effectiveTime = (NodeList) xPath.compile("./effectiveTime[not(@nullFlavor)]").evaluate(entryElement, XPathConstants.NODESET);
 			
 			for (int j = 0; j < effectiveTime.getLength(); j++) {
-				Element effectiveTimeElement = (Element) effectiveTime.item(j);
+				Element effectiveTimeElement = ApplicationUtil.getCloneNode((Element) effectiveTime.item(j));
 				if(effectiveTimeElement.getAttribute("xsi:type").equalsIgnoreCase("IVL_TS"))
 				{
 					medicationActivity.setDuration(readDuration(effectiveTimeElement, xPath));

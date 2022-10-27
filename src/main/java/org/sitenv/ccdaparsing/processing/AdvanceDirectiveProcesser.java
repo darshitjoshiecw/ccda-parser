@@ -36,8 +36,8 @@ public class AdvanceDirectiveProcesser {
 		logger.info("Advance Directive parsing Start time:" + startTime);
 
 		CCDAAdvanceDirective advanceDirective = null;
-		Element sectionElement = (Element) xPath.compile(ApplicationConstants.ADV_DIRECTIVE_EXPRESSION)
-				.evaluate(doc, XPathConstants.NODE);
+		Element sectionElement = ApplicationUtil.getCloneNode((Element) xPath.compile(ApplicationConstants.ADV_DIRECTIVE_EXPRESSION)
+				.evaluate(doc, XPathConstants.NODE));
 		List<CCDAID> idList = new ArrayList<>();
 		if (sectionElement != null) {
 			advanceDirective = new CCDAAdvanceDirective();
@@ -81,7 +81,7 @@ public class AdvanceDirectiveProcesser {
 		for (int i = 0; i < advDirectiveOrgNodeList.getLength(); i++) {
 			advDirectiveOrg = new CCDAAdvanceDirectiveOrg();
 
-			Element advDirectiveOrgElement = (Element) advDirectiveOrgNodeList.item(i);
+			Element advDirectiveOrgElement = ApplicationUtil.getCloneNode((Element) advDirectiveOrgNodeList.item(i));
 
 			if (advDirectiveOrgElement.getTagName().equalsIgnoreCase("organizer")) {
 				setAdvDirectiveOrg(advDirectiveOrg, advDirectiveOrgElement, xPath, idList);
@@ -133,7 +133,7 @@ public class AdvanceDirectiveProcesser {
 				evaluate(advDirectiveOrgElement, XPathConstants.NODESET);
 		ArrayList<CCDAAdvanceDirectiveObs> obsList = new ArrayList<>();
 		for (int i = 0; i < obsNodeList.getLength(); i++) {
-			Element advDirectiveObsElement = (Element) obsNodeList.item(i);
+			Element advDirectiveObsElement = ApplicationUtil.getCloneNode((Element) obsNodeList.item(i));
 			CCDAAdvanceDirectiveObs advanceDirectiveObs = readObservations(advDirectiveObsElement, xPath, idList);
 			obsList.add(advanceDirectiveObs);
 		}
@@ -214,7 +214,7 @@ public class AdvanceDirectiveProcesser {
 			NodeList giveNameNodeList = (NodeList) xPath.compile("./given[not(@nullFlavor)]").
 					evaluate(nameElement, XPathConstants.NODESET);
 			for (int i = 0; i < giveNameNodeList.getLength(); i++) {
-				Element givenNameElement = (Element) giveNameNodeList.item(i);
+				Element givenNameElement = ApplicationUtil.getCloneNode((Element) giveNameNodeList.item(i));
 				if(!ApplicationUtil.isEmpty(givenNameElement.getAttribute("qualifier")))
 				{
 					participant.setPreviousName(ApplicationUtil.readTextContent(givenNameElement));
