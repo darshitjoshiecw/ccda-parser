@@ -511,6 +511,9 @@ public class ApplicationUtil {
 	public static String nodeToString(Node node)
 			throws TransformerException
 	{
+		if (node == null) {
+			return "";
+		}
 		StringWriter buf = new StringWriter();
 		Transformer xform = TransformerFactory.newInstance("com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl", null).newTransformer();
 	    xform.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
