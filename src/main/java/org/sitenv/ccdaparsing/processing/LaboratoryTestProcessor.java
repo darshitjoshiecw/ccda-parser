@@ -30,9 +30,8 @@ public class LaboratoryTestProcessor {
 
 	@Autowired
 	LaboratoryResultsProcessor laboratoryResultsProcessor;
-	
-	@Async()
-	public Future<CCDALabResult> retrieveLabTests(XPath xPath , Document doc ) throws XPathExpressionException,TransformerException
+
+	public CCDALabResult retrieveLabTests(XPath xPath , Document doc ) throws XPathExpressionException,TransformerException
 	{
 		long startTime = System.currentTimeMillis();
     	logger.info("Lab tests parsing Start time:"+ startTime);
@@ -46,7 +45,7 @@ public class LaboratoryTestProcessor {
 			if(ApplicationUtil.checkForNullFlavourNI(sectionElement))
 			{
 				labTests.setSectionNullFlavourWithNI(true);
-				return new AsyncResult<CCDALabResult>(labTests);
+				return labTests;
 			}
 			labTests.setResultSectionTempalteIds(ApplicationUtil.readTemplateIdList((NodeList) xPath.compile("./templateId[not(@nullFlavor)]").
 								evaluate(sectionElement, XPathConstants.NODESET)));
@@ -60,7 +59,7 @@ public class LaboratoryTestProcessor {
 			labTests.setIdList(idList);
 		}
 		logger.info("Lab tests parsing End time:"+ (System.currentTimeMillis() - startTime));
-		return new AsyncResult<CCDALabResult>(labTests);
+		return labTests;
 	}
 
 }

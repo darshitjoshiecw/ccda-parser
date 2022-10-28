@@ -25,8 +25,7 @@ public class GoalsProcessor {
 
 	private static final Logger logger = LogManager.getLogger(GoalsProcessor.class);
 
-	@Async()
-	public Future<CCDAGoals> retrieveGoalsDetails(XPath xPath , Document doc) throws XPathExpressionException,TransformerException
+	public CCDAGoals retrieveGoalsDetails(XPath xPath , Document doc) throws XPathExpressionException,TransformerException
 	{
 		long startTime = System.currentTimeMillis();
     	logger.info("Goals parsing Start time:"+ startTime);
@@ -40,7 +39,7 @@ public class GoalsProcessor {
 			if(ApplicationUtil.checkForNullFlavourNI(sectionElement))
 			{
 				goals.setSectionNullFlavourWithNI(true);
-				return new AsyncResult<CCDAGoals>(goals);
+				return goals;
 			}
 			goals.setTemplateId(ApplicationUtil.readTemplateIdList((NodeList) xPath.compile("./templateId[not(@nullFlavor)]").
 										evaluate(sectionElement, XPathConstants.NODESET)));
@@ -58,7 +57,7 @@ public class GoalsProcessor {
 		
 		logger.info("Goals parsing End time:"+ (System.currentTimeMillis() - startTime));
 		
-		return new AsyncResult<CCDAGoals>(goals);
+		return goals;
 	}
 
 }

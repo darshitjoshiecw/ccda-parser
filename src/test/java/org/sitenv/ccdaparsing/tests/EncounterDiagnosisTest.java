@@ -46,7 +46,7 @@ public class EncounterDiagnosisTest {
 		Document doc = builder.parse(new File(CCDA_DOC));
 		XPath xPath =  XPathFactory.newInstance().newXPath();
 		admissionDiagnosis = encounterDiagnosesProcessor.retrieveAdmissionDiagnosisDetails(doc).get();
-		encounter = encounterDiagnosesProcessor.retrieveEncounterDetails(xPath, doc).get();
+		encounter = encounterDiagnosesProcessor.retrieveEncounterDetails(xPath, doc);
 		encounter.getSectionCode().setXmlString(null);
 		ArrayList<CCDAII>   templateId =  new ArrayList<CCDAII>();
 		  for (CCDAII ccdaii : encounter.getTemplateId()) { 		      

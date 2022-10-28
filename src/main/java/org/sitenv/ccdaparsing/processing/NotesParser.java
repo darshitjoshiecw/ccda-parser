@@ -34,8 +34,7 @@ private static Logger log = LogManager.getLogger(NotesParser.class.getName());
     	
 	}
 
-	@Async()
-	public Future<ArrayList<CCDANotesActivity>> retrieveNotesActivities(Document doc) throws XPathExpressionException {
+	public ArrayList<CCDANotesActivity> retrieveNotesActivities(Document doc) throws XPathExpressionException {
 		
 		ArrayList<CCDANotesActivity> notesActivities = null;
 		NodeList notesActivityNodes = (NodeList) CCDAConstants.NOTES_ACTIVITY_EXPRESSION.evaluate(doc, XPathConstants.NODESET);
@@ -50,11 +49,11 @@ private static Logger log = LogManager.getLogger(NotesParser.class.getName());
 				
 		}
 		
-		return new AsyncResult<>(notesActivities);
+		return notesActivities;
 	}
 
-	@Async()
-	public Future<ArrayList<CCDANotes>> retrieveNotesDetails(Document doc) throws XPathExpressionException {
+
+	public ArrayList<CCDANotes> retrieveNotesDetails(Document doc) throws XPathExpressionException {
 		
 		ArrayList<CCDANotes> notes = null;
 		NodeList sectionNodes = (NodeList) CCDAConstants.NOTES_EXPRESSION.evaluate(doc, XPathConstants.NODESET);
@@ -88,7 +87,7 @@ private static Logger log = LogManager.getLogger(NotesParser.class.getName());
 			
 		}
 		
-		return new AsyncResult<>(notes);
+		return notes;
 	}
 	
 	

@@ -36,8 +36,7 @@ public class CareTeamMemberProcessor {
 
 	private static final Logger logger = LogManager.getLogger(CareTeamMemberProcessor.class);
 
-	@Async()
-	public Future<CCDACareTeamMember> retrieveCTMDetails(XPath xPath , Document doc) throws XPathExpressionException,TransformerException
+	public CCDACareTeamMember retrieveCTMDetails(XPath xPath , Document doc) throws XPathExpressionException,TransformerException
 	{
 		long startTime = System.currentTimeMillis();
     	logger.info("care team members parsing Start time:"+ startTime);
@@ -65,7 +64,7 @@ public class CareTeamMemberProcessor {
 		CCDACareTeamMember ctMember = retrieveCareTeamSectionDetails(doc, careTeamMember);
 		logger.info("care team members parsing End time:"+ (System.currentTimeMillis() - startTime));
 		
-		return new AsyncResult<CCDACareTeamMember>(ctMember);
+		return ctMember;
 	}
 
 	public CCDACareTeamMember retrieveCareTeamSectionDetails(Document doc, CCDACareTeamMember careTeamMember) throws XPathExpressionException, TransformerException 

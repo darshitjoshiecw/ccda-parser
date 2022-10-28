@@ -30,8 +30,7 @@ public class AdvanceDirectiveProcesser {
 	
 	private static final Logger logger = LogManager.getLogger(AdvanceDirectiveProcesser.class);
 
-	@Async()
-	public Future<CCDAAdvanceDirective> retrieveAdvanceDirectiveDetails(XPath xPath, Document doc) throws XPathExpressionException, TransformerException {
+	public CCDAAdvanceDirective retrieveAdvanceDirectiveDetails(XPath xPath, Document doc) throws XPathExpressionException, TransformerException {
 		long startTime = System.currentTimeMillis();
 		logger.info("Advance Directive parsing Start time:" + startTime);
 
@@ -43,7 +42,7 @@ public class AdvanceDirectiveProcesser {
 			advanceDirective = new CCDAAdvanceDirective();
 			if (ApplicationUtil.checkForNullFlavourNI(sectionElement)) {
 				advanceDirective.setSectionNullFlavourWithNI(true);
-				return new AsyncResult<CCDAAdvanceDirective>(advanceDirective);
+				return advanceDirective;
 			}
 			advanceDirective.setTemplateIds(ApplicationUtil
 					.readTemplateIdList((NodeList) xPath
@@ -72,7 +71,7 @@ public class AdvanceDirectiveProcesser {
 			advanceDirective.setIdList(idList);
 		}
 		logger.info("Advance Directive parsing End time:" + (System.currentTimeMillis() - startTime));
-		return new AsyncResult<CCDAAdvanceDirective>(advanceDirective);
+		return advanceDirective;
 	}
 
 	private ArrayList<CCDAAdvanceDirectiveOrg> readAdvanceDirectiveOrganizers(NodeList advDirectiveOrgNodeList, XPath xPath, List<CCDAID> idList) throws XPathExpressionException, TransformerException {

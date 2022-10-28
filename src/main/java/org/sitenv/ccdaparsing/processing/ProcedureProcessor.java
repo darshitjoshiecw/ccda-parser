@@ -33,9 +33,8 @@ import org.w3c.dom.NodeList;
 public class ProcedureProcessor {
 
 	private static final Logger logger = LogManager.getLogger(ProcedureProcessor.class);
-	
-	@Async()
-	public Future<CCDAProcedure> retrievePrcedureDetails(XPath xPath , Document doc) throws XPathExpressionException,TransformerException
+
+	public CCDAProcedure retrievePrcedureDetails(XPath xPath , Document doc) throws XPathExpressionException,TransformerException
 	{
 		long startTime = System.currentTimeMillis();
     	logger.info("Procedure parsing Start time:"+ startTime);
@@ -48,7 +47,7 @@ public class ProcedureProcessor {
 			if(ApplicationUtil.checkForNullFlavourNI(sectionElement))
 			{
 				procedures.setSectionNullFlavourWithNI(true);
-				return new AsyncResult<CCDAProcedure>(procedures);
+				return procedures;
 			}
 			procedures.setSectionTemplateId(ApplicationUtil.readTemplateIdList((NodeList) xPath.
 							compile("./templateId[not(@nullFlavor)]").evaluate(sectionElement, XPathConstants.NODESET)));
@@ -79,7 +78,7 @@ public class ProcedureProcessor {
 
 		}
 		logger.info("Procedure parsing End time:"+ (System.currentTimeMillis() - startTime));
-		return new AsyncResult<CCDAProcedure>(procedures);
+		return procedures;
 	}
 	
 	public ArrayList<CCDAProcActProc> readProcedures(NodeList proceduresNodeList , XPath xPath , List<CCDAID> idList) throws XPathExpressionException,TransformerException

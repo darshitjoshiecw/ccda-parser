@@ -35,8 +35,7 @@ public class MedicalEquipmentProcessor {
     @Autowired
     ProcedureProcessor procedureProcessor;
 
-    @Async()
-    public Future<CCDAMedicalEquipment> retrieveMedicalEquipment(XPath xPath , Document doc) throws XPathExpressionException, TransformerException {
+    public CCDAMedicalEquipment retrieveMedicalEquipment(XPath xPath , Document doc) throws XPathExpressionException, TransformerException {
         long startTime = System.currentTimeMillis();
         logger.info("medical equipment parsing Start time:"+ startTime);
         CCDAMedicalEquipment medicalEquipments = null;
@@ -46,7 +45,7 @@ public class MedicalEquipmentProcessor {
             medicalEquipments = new CCDAMedicalEquipment();
             if(ApplicationUtil.checkForNullFlavourNI(sectionElement)) {
                 medicalEquipments.setSectionNullFlavourWithNI(true);
-                return new AsyncResult<>(medicalEquipments);
+                return medicalEquipments;
             }
             medicalEquipments.setSectionTemplateId(ApplicationUtil.readTemplateIdList((NodeList) xPath.compile(ApplicationConstants.TEMPLATE_ID_EXPRESSION).
                     evaluate(sectionElement, XPathConstants.NODESET)));
@@ -82,7 +81,7 @@ public class MedicalEquipmentProcessor {
             medicalEquipments.setIds(ids);
         }
         logger.info("medical equipment parsing End time:"+ (System.currentTimeMillis() - startTime));
-        return new AsyncResult<>(medicalEquipments);
+        return medicalEquipments;
     }
 
     public ArrayList<CCDAUDI> readUDIsFromOrganizer(NodeList orgNodeList) throws XPathExpressionException

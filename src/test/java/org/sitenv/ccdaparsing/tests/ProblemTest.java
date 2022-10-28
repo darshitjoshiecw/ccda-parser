@@ -39,7 +39,7 @@ public class ProblemTest {
 		DocumentBuilder builder = factory.newDocumentBuilder();
 		Document doc = builder.parse(new File(CCDA_DOC));
 		XPath xPath =  XPathFactory.newInstance().newXPath();
-		problems = problemProcessor.retrieveProblemDetails(xPath, doc).get();
+		problems = problemProcessor.retrieveProblemDetails(xPath, doc);
 		
 		problemConcernList = new ArrayList<>();
 		

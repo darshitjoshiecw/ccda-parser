@@ -49,7 +49,7 @@ public class PatientProcessorTest {
 		DocumentBuilder builder = factory.newDocumentBuilder();
 		final Document doc = builder.parse(new File(CCDA_DOC));
 		XPath xPath = XPathFactory.newInstance().newXPath();
-		patient = patientProcessor.retrievePatientDetails(xPath, doc).get();
+		patient = patientProcessor.retrievePatientDetails(xPath, doc);
 	}
 
 	private void setNames() {

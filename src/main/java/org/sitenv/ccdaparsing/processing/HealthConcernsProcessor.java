@@ -25,8 +25,7 @@ public class HealthConcernsProcessor {
 
 	private static final Logger logger = LogManager.getLogger(CareTeamMemberProcessor.class);
 
-	@Async()
-	public Future<CCDAHealthConcerns> retrieveHealthConcernDetails(XPath xPath , Document doc) throws XPathExpressionException,TransformerException
+	public CCDAHealthConcerns retrieveHealthConcernDetails(XPath xPath , Document doc) throws XPathExpressionException,TransformerException
 	{
 		long startTime = System.currentTimeMillis();
     	logger.info("Health concern parsing Start time:"+ startTime);
@@ -38,7 +37,7 @@ public class HealthConcernsProcessor {
 			if(ApplicationUtil.checkForNullFlavourNI(sectionElement))
 			{
 				healthConcern.setSectionNullFlavourWithNI(true);
-				return new AsyncResult<CCDAHealthConcerns>(healthConcern);
+				return healthConcern;
 			}
 			healthConcern.setTemplateId(ApplicationUtil.readTemplateIdList((NodeList) xPath.compile("./templateId[not(@nullFlavor)]").
 					evaluate(sectionElement, XPathConstants.NODESET)));
@@ -55,7 +54,7 @@ public class HealthConcernsProcessor {
 		}
 		
 		logger.info("Health concern parsing End time:"+ (System.currentTimeMillis() - startTime));
-		return new AsyncResult<CCDAHealthConcerns>(healthConcern);
+		return healthConcern;
 	}
 
 }

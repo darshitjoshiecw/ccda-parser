@@ -24,7 +24,7 @@ public class NotesTest {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
         Document doc = builder.parse(new File(CCDA_DOC));
-        notes = notesParser.retrieveNotesDetails(doc).get();
+        notes = notesParser.retrieveNotesDetails(doc);
     }
 
     @Test

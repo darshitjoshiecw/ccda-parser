@@ -41,7 +41,7 @@ public class MedicationTest {
 		DocumentBuilder builder = factory.newDocumentBuilder();
 		Document doc = builder.parse(new File(CCDA_DOC));
 		XPath xPath =  XPathFactory.newInstance().newXPath();
-		medication = medicationProcessor.retrieveMedicationDetails(xPath, doc).get();
+		medication = medicationProcessor.retrieveMedicationDetails(xPath, doc);
 		
 		medActivities = new ArrayList<>();
 		

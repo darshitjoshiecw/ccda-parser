@@ -25,7 +25,7 @@ public class EncounterDiagnosisTest2 {
 		DocumentBuilder builder = factory.newDocumentBuilder();
 		Document doc = builder.parse(new File(CCDA_DOC));
 		XPath xPath =  XPathFactory.newInstance().newXPath();
-		encounter = encounterDiagnosesProcessor.retrieveEncounterDetails(xPath, doc).get();
+		encounter = encounterDiagnosesProcessor.retrieveEncounterDetails(xPath, doc);
 	}
 
 	@Test

@@ -27,8 +27,7 @@ public class MentalStatusProcessor {
 
 	private static final Logger logger = LogManager.getLogger(MentalStatusProcessor.class);
 
-	@Async()
-	public Future<CCDAMentalStatus> retrieveMentalStatusDetails(XPath xPath, Document doc) throws XPathExpressionException, TransformerException {
+	public CCDAMentalStatus retrieveMentalStatusDetails(XPath xPath, Document doc) throws XPathExpressionException, TransformerException {
 		long startTime = System.currentTimeMillis();
 		logger.info("Advance Directive parsing Start time:" + startTime);
 
@@ -39,7 +38,7 @@ public class MentalStatusProcessor {
 			mentalStatus = new CCDAMentalStatus();
 			if (ApplicationUtil.checkForNullFlavourNI(sectionElement)) {
 				mentalStatus.setSectionNullFlavourWithNI(true);
-				return new AsyncResult<CCDAMentalStatus>(mentalStatus);
+				return mentalStatus;
 			}
 			mentalStatus.setTemplateIds(ApplicationUtil
 					.readTemplateIdList((NodeList) xPath.compile("./templateId[not(@nullFlavor)]").
@@ -52,6 +51,6 @@ public class MentalStatusProcessor {
 			mentalStatus.setXmlString(ApplicationUtil.nodeToString((Node) sectionElement));
 		}
 
-		return new AsyncResult<CCDAMentalStatus>(mentalStatus);
+		return mentalStatus;
 	}
 }

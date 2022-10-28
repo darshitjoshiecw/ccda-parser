@@ -37,7 +37,7 @@ public class AdvanceDirectiveTest {
 		DocumentBuilder builder = factory.newDocumentBuilder();
 		Document doc = builder.parse(new File(CCDA_DOC));
 		XPath xPath = XPathFactory.newInstance().newXPath();
-		advanceDirective = advanceDirectiveProcesser.retrieveAdvanceDirectiveDetails(xPath, doc).get();
+		advanceDirective = advanceDirectiveProcesser.retrieveAdvanceDirectiveDetails(xPath, doc);
 
 		advanceDirectiveOrgs = new ArrayList<CCDAAdvanceDirectiveOrg>();
 

@@ -26,8 +26,7 @@ public class CCDAHeaderParser {
 	
 	private static Logger log = LogManager.getLogger(CCDAHeaderParser.class.getName());
 
-	@Async
-	public Future<CCDAHeaderElements> getHeaderElements(Document doc, boolean curesUpdate) throws XPathExpressionException {
+	public CCDAHeaderElements getHeaderElements(Document doc, boolean curesUpdate) throws XPathExpressionException {
 		
 		CCDAHeaderElements header = new CCDAHeaderElements();
 		
@@ -36,7 +35,7 @@ public class CCDAHeaderParser {
 
 		header.setDocCode(ParserUtilities.readCode((Element) CCDAConstants.DOC_TYPE_EXP.evaluate(doc, XPathConstants.NODE)));
 		
-		return new AsyncResult<>(header);
+		return header;
 	}
 	
 	public CCDAPatient getPatient(Document doc, boolean curesUpdate) throws XPathExpressionException{

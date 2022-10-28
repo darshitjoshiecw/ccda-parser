@@ -28,8 +28,7 @@ import java.util.concurrent.Future;
 public class FamilyHistoryProcessor {
 	private static final Logger logger = LogManager.getLogger(FamilyHistoryProcessor.class);
 
-	@Async()
-	public Future<CCDAFamilyHistory> retrieveFamilyHistoryDetails(XPath xPath, Document doc) throws XPathExpressionException, TransformerException {
+	public CCDAFamilyHistory retrieveFamilyHistoryDetails(XPath xPath, Document doc) throws XPathExpressionException, TransformerException {
 		long startTime = System.currentTimeMillis();
 		logger.info("Family History parsing Start time:" + startTime);
 
@@ -41,7 +40,7 @@ public class FamilyHistoryProcessor {
 			familyHistory = new CCDAFamilyHistory();
 			if (ApplicationUtil.checkForNullFlavourNI(sectionElement)) {
 				familyHistory.setSectionNullFlavourWithNI(true);
-				return new AsyncResult<CCDAFamilyHistory>(familyHistory);
+				return familyHistory;
 			}
 			familyHistory.setTemplateIds(ApplicationUtil
 					.readTemplateIdList((NodeList) xPath.compile("./templateId[not(@nullFlavor)]").
@@ -64,7 +63,7 @@ public class FamilyHistoryProcessor {
 			familyHistory.setIdList(idList);
 		}
 		logger.info("Family History parsing End time:" + (System.currentTimeMillis() - startTime));
-		return new AsyncResult<CCDAFamilyHistory>(familyHistory);
+		return familyHistory;
 	}
 
 	private ArrayList<CCDAFamilyHxOrg> readFamilyHxOrganizer(NodeList familyHxOrgNodeList, XPath xPath, List<CCDAID> idList) throws TransformerException, XPathExpressionException {

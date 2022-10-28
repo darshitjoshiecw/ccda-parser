@@ -38,8 +38,7 @@ public class POTProcessor {
 	@Autowired
 	ProcedureProcessor procedureProcessor;
 	
-	@Async()
-	public Future<CCDAPOT> retrievePOTDetails(XPath xPath , Document doc) throws XPathExpressionException,TransformerException
+	public CCDAPOT retrievePOTDetails(XPath xPath , Document doc) throws XPathExpressionException,TransformerException
 	{
 		long startTime = System.currentTimeMillis();
     	logger.info("POT parsing Start time:"+ startTime);
@@ -52,7 +51,7 @@ public class POTProcessor {
 			if(ApplicationUtil.checkForNullFlavourNI(sectionElement))
 			{
 				pot.setSectionNullFlavourWithNI(true);
-				return new AsyncResult<CCDAPOT>(pot);
+				return pot;
 			}
 			pot.setTemplateId(ApplicationUtil.readTemplateIdList((NodeList) xPath.compile("./templateId[not(@nullFlavor)]").
 									evaluate(sectionElement, XPathConstants.NODESET)));
@@ -79,7 +78,7 @@ public class POTProcessor {
 			pot.setIdList(idList);
 		}
 		logger.info("POT parsing End time:"+ (System.currentTimeMillis() - startTime));
-		return new AsyncResult<CCDAPOT>(pot);
+		return pot;
 	}
 	
 	

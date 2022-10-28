@@ -25,7 +25,7 @@ public class HeaderElementsTest {
 		DocumentBuilder builder = factory.newDocumentBuilder();
 		Document doc = builder.parse(new File(CCDA_DOC));
 		XPath xPath =  XPathFactory.newInstance().newXPath();
-		headerElements = headerParser.getHeaderElements(doc,false).get();
+		headerElements = headerParser.getHeaderElements(doc,false);
 	}
 
 	@Test

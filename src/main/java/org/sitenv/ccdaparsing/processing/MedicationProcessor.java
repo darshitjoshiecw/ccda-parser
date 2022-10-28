@@ -35,8 +35,8 @@ public class MedicationProcessor {
 
 	private static final Logger logger = LogManager.getLogger(MedicationProcessor.class);
 	
-	@Async()
-	public Future<CCDAMedication> retrieveMedicationDetails(XPath xPath , Document doc) throws XPathExpressionException,TransformerException
+
+	public CCDAMedication retrieveMedicationDetails(XPath xPath , Document doc) throws XPathExpressionException,TransformerException
 	{
 		long startTime = System.currentTimeMillis();
     	logger.info("Medications parsing Start time:"+ startTime);
@@ -50,7 +50,7 @@ public class MedicationProcessor {
 			if(ApplicationUtil.checkForNullFlavourNI(sectionElement))
 			{
 				medications.setSectionNullFlavourWithNI(true);
-				return new AsyncResult<CCDAMedication>(medications);
+				return medications;
 			}
 			medications.setTemplateIds(ApplicationUtil.readTemplateIdList((NodeList) xPath.compile("./templateId[not(@nullFlavor)]").
 						evaluate(sectionElement, XPathConstants.NODESET)));
@@ -76,7 +76,7 @@ public class MedicationProcessor {
 			
 		}
 		logger.info("Medications parsing End time:"+ (System.currentTimeMillis() - startTime));
-		return new AsyncResult<CCDAMedication>(medications);
+		return medications;
 	}
 
 	@Async()

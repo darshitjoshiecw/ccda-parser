@@ -43,7 +43,7 @@ public class ImmunizationTest {
 		DocumentBuilder builder = factory.newDocumentBuilder();
 		Document doc = builder.parse(new File(CCDA_DOC));
 		XPath xPath =  XPathFactory.newInstance().newXPath();
-		immunizations = immunizationProcessor.retrieveImmunizationDetails(xPath, doc).get();
+		immunizations = immunizationProcessor.retrieveImmunizationDetails(xPath, doc);
 		
 		immuActivities = new ArrayList<>();
 		CCDAImmunizationActivity immuActivityOne = new CCDAImmunizationActivity();

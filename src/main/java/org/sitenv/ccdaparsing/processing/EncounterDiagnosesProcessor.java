@@ -33,9 +33,7 @@ import java.util.concurrent.Future;
 public class EncounterDiagnosesProcessor {
 	
 	private final Logger logger = LogManager.getLogger(EncounterDiagnosesProcessor.class);
-	
-	@Async()
-	public Future<CCDAEncounter> retrieveEncounterDetails(XPath xPath , Document doc) throws XPathExpressionException,TransformerException
+	public CCDAEncounter retrieveEncounterDetails(XPath xPath , Document doc) throws XPathExpressionException,TransformerException
 	{
 		long startTime = System.currentTimeMillis();
     	logger.info("encounter parsing Start time:"+ startTime);
@@ -49,7 +47,7 @@ public class EncounterDiagnosesProcessor {
 			if(ApplicationUtil.checkForNullFlavourNI(sectionElement))
 			{
 				encounters.setSectionNullFlavourWithNI(true);
-				return new AsyncResult<CCDAEncounter>(encounters);
+				return encounters;
 			}
 			encounters.setTemplateId(ApplicationUtil.readTemplateIdList((NodeList) xPath.compile("./templateId[not(@nullFlavor)]").
 					evaluate(sectionElement, XPathConstants.NODESET)));
@@ -76,7 +74,7 @@ public class EncounterDiagnosesProcessor {
 			encounters.setIdLIst(idLIst);
 		}
 		logger.info("encounter parsing End time:"+ (System.currentTimeMillis() - startTime));
-		return new AsyncResult<CCDAEncounter>(encounters);
+		return encounters;
 	}
 	
 	

@@ -33,8 +33,8 @@ public class LaboratoryResultsProcessor {
 
 	private static final Logger logger = LogManager.getLogger(LaboratoryResultsProcessor.class);
 	
-	@Async()
-	public Future<CCDALabResult> retrieveLabResults(XPath xPath , Document doc) throws XPathExpressionException,TransformerException
+
+	public CCDALabResult retrieveLabResults(XPath xPath , Document doc) throws XPathExpressionException,TransformerException
 	{
 		long startTime = System.currentTimeMillis();
     	logger.info("lab results parsing Start time:"+ startTime);
@@ -49,7 +49,7 @@ public class LaboratoryResultsProcessor {
 			if(ApplicationUtil.checkForNullFlavourNI(sectionElement))
 			{
 				labResults.setSectionNullFlavourWithNI(true);
-				return new AsyncResult<CCDALabResult>(labResults);
+				return labResults;
 			}
 			labResults.setResultSectionTempalteIds(ApplicationUtil.readTemplateIdList((NodeList) xPath.compile("./templateId[not(@nullFlavor)]").
 													evaluate(sectionElement, XPathConstants.NODESET)));
@@ -83,7 +83,7 @@ public class LaboratoryResultsProcessor {
 			labResults.setIdList(idList);
 		}
 		logger.info("lab results parsing End time:"+ (System.currentTimeMillis() - startTime));
-		return new AsyncResult<CCDALabResult>(labResults);
+		return labResults;
 	}
 	
 	

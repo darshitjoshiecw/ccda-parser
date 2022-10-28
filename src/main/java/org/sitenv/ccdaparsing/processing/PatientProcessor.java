@@ -69,9 +69,7 @@ public class PatientProcessor {
 		return encompassingEncounter;
 	}
 	
-	
-	@Async()
-	public Future<CCDAPatient> retrievePatientDetails(XPath xPath , Document doc) throws XPathExpressionException, TransformerException
+	public CCDAPatient retrievePatientDetails(XPath xPath , Document doc) throws XPathExpressionException, TransformerException
 	{
 		long startTime = System.currentTimeMillis();
     	logger.info("Patient parsing Start time:"+ startTime);
@@ -147,7 +145,7 @@ public class PatientProcessor {
 		
 		logger.info("Patient parsing End time:"+ (System.currentTimeMillis() - startTime));
 	    
-		return new AsyncResult<CCDAPatient>(patient);
+		return patient;
 	}
 	
 	public static void readRaceCodes(NodeList raceCodeList, CCDAPatient patient) throws TransformerException

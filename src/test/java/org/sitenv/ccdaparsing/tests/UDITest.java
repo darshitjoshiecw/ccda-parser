@@ -38,7 +38,7 @@ public class UDITest {
 		DocumentBuilder builder = factory.newDocumentBuilder();
 		Document doc = builder.parse(new File(CCDA_DOC));
 		XPath xPath =  XPathFactory.newInstance().newXPath();
-		procedures = procedureProcessor.retrievePrcedureDetails(xPath, doc).get();
+		procedures = procedureProcessor.retrievePrcedureDetails(xPath, doc);
 		patientUDIList = uDIProcessor.retrieveUDIDetails(procedures);
 		
 		udiList = new ArrayList<>();

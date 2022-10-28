@@ -32,8 +32,8 @@ public class VitalSignProcessor {
 
 	private static final Logger logger = LogManager.getLogger(VitalSignProcessor.class);
 
-	@Async()
-	public Future<CCDAVitalSigns> retrieveVitalSigns(XPath xPath , Document doc) throws XPathExpressionException,TransformerException
+
+	public CCDAVitalSigns retrieveVitalSigns(XPath xPath , Document doc) throws XPathExpressionException,TransformerException
 	{
 		long startTime = System.currentTimeMillis();
 		logger.info("Vitals parsing Start time:"+ startTime);
@@ -47,7 +47,7 @@ public class VitalSignProcessor {
 			if(ApplicationUtil.checkForNullFlavourNI(sectionElement))
 			{
 				vitalSigns.setSectionNullFlavourWithNI(true);
-				return new AsyncResult<CCDAVitalSigns>(vitalSigns);
+				return vitalSigns;
 			}
 			vitalSigns.setTemplateIds(ApplicationUtil.readTemplateIdList((NodeList) xPath.compile("./templateId[not(@nullFlavor)]").
 					evaluate(sectionElement, XPathConstants.NODESET)));
@@ -72,7 +72,7 @@ public class VitalSignProcessor {
 			vitalSigns.setIdList(idList);
 		}
 		logger.info("Vitals parsing End time:"+ (System.currentTimeMillis() - startTime));
-		return new AsyncResult<CCDAVitalSigns>(vitalSigns);
+		return vitalSigns;
 	}
 	
 	

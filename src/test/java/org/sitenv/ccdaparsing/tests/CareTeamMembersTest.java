@@ -31,7 +31,7 @@ public class CareTeamMembersTest {
 		DocumentBuilder builder = factory.newDocumentBuilder();
 		Document doc = builder.parse(new File(CCDA_DOC));
 		XPath xPath =  XPathFactory.newInstance().newXPath();
-		careTeamMember = careTeamMemberProcessor.retrieveCTMDetails(xPath, doc).get();
+		careTeamMember = careTeamMemberProcessor.retrieveCTMDetails(xPath, doc);
 		
 		members = new ArrayList<CCDAParticipant>();
 		CCDAParticipant memberOne = new CCDAParticipant();

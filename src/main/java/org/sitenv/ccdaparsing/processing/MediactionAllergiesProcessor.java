@@ -34,8 +34,8 @@ public class MediactionAllergiesProcessor {
 
 	private static final Logger logger = LogManager.getLogger(MediactionAllergiesProcessor.class);
 
-	@Async()
-	public Future<CCDAAllergy> retrieveAllergiesDetails(XPath xPath , Document doc) throws XPathExpressionException,TransformerException
+
+	public CCDAAllergy retrieveAllergiesDetails(XPath xPath , Document doc) throws XPathExpressionException,TransformerException
 	{
 		long startTime = System.currentTimeMillis();
     	logger.info("Allergies parsing Start time:"+ startTime);
@@ -49,7 +49,7 @@ public class MediactionAllergiesProcessor {
 			if(ApplicationUtil.checkForNullFlavourNI(sectionElement))
 			{
 				allergies.setSectionNullFlavourWithNI(true);
-				return new AsyncResult<CCDAAllergy>(allergies);
+				return allergies;
 			}
 			allergies.setSectionTemplateId(ApplicationUtil.readTemplateIdList((NodeList) xPath.compile("./templateId[not(@nullFlavor)]").
 							evaluate(sectionElement, XPathConstants.NODESET)));
@@ -74,7 +74,7 @@ public class MediactionAllergiesProcessor {
 			
 		}
 		logger.info("Allergies parsing End time:"+ (System.currentTimeMillis() - startTime));
-		return new AsyncResult<CCDAAllergy>(allergies);
+		return allergies;
 	}
 	
 	public ArrayList<CCDAAllergyConcern> readAllergyConcern(NodeList allergyConcernNodeList, XPath xPath, List<CCDAID> idList) throws XPathExpressionException,TransformerException

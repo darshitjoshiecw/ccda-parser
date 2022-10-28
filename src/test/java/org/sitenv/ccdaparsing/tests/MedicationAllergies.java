@@ -41,7 +41,7 @@ public class MedicationAllergies {
 		DocumentBuilder builder = factory.newDocumentBuilder();
 		Document doc = builder.parse(new File(CCDA_DOC));
 		XPath xPath =  XPathFactory.newInstance().newXPath();
-		allergies = mediactionAllergiesProcessor.retrieveAllergiesDetails(xPath, doc).get();
+		allergies = mediactionAllergiesProcessor.retrieveAllergiesDetails(xPath, doc);
 		
 		allergyConcernList = new ArrayList<>();
 		CCDAAllergyConcern allergyConcern = new CCDAAllergyConcern();

@@ -33,8 +33,7 @@ public class ProblemProcessor {
 	
 	private static final Logger logger = LogManager.getLogger(ProblemProcessor.class);
 
-	@Async()
-	public Future<CCDAProblem> retrieveProblemDetails(XPath xPath , Document doc) throws XPathExpressionException,TransformerException
+	public CCDAProblem retrieveProblemDetails(XPath xPath , Document doc) throws XPathExpressionException,TransformerException
 	{
 		long startTime = System.currentTimeMillis();
     	logger.info("Problems parsing Start time:"+ startTime);
@@ -47,7 +46,7 @@ public class ProblemProcessor {
 			if(ApplicationUtil.checkForNullFlavourNI(sectionElement))
 			{
 				problems.setSectionNullFlavourWithNI(true);
-				return new AsyncResult<CCDAProblem>(problems);
+				return problems;
 			}
 			problems.setSectionTemplateId(ApplicationUtil.readTemplateIdList((NodeList) xPath.compile("./templateId[not(@nullFlavor)]").
 											evaluate(sectionElement, XPathConstants.NODESET)));
@@ -74,7 +73,7 @@ public class ProblemProcessor {
 			problems.setPastIllnessProblems(readPastIllnessProblems(doc, xPath));
 		}
 		logger.info("Problems parsing End time:"+ (System.currentTimeMillis() - startTime));
-		return new AsyncResult<CCDAProblem>(problems);
+		return problems;
 	}
 
 	public ArrayList<CCDAProblemObs> readPastIllnessProblems(Document doc, XPath xPath) throws XPathExpressionException, TransformerException {

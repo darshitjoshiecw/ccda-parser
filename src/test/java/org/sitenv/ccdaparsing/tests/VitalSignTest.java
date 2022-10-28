@@ -40,7 +40,7 @@ public class VitalSignTest {
 		DocumentBuilder builder = factory.newDocumentBuilder();
 		Document doc = builder.parse(new File(CCDA_DOC));
 		XPath xPath =  XPathFactory.newInstance().newXPath();
-		vitalSigns = vitalSignProcessor.retrieveVitalSigns(xPath, doc).get();
+		vitalSigns = vitalSignProcessor.retrieveVitalSigns(xPath, doc);
 		
 		vitalsOrg = new ArrayList<CCDAVitalOrg>();
 		

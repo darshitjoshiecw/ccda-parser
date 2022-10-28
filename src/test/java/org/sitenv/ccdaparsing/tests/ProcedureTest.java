@@ -42,7 +42,7 @@ public class ProcedureTest {
 		DocumentBuilder builder = factory.newDocumentBuilder();
 		Document doc = builder.parse(new File(CCDA_DOC));
 		XPath xPath =  XPathFactory.newInstance().newXPath();
-		procedures = procedureProcessor.retrievePrcedureDetails(xPath, doc).get();
+		procedures = procedureProcessor.retrievePrcedureDetails(xPath, doc);
 		
 		procActsProcs = new ArrayList<>();
 		

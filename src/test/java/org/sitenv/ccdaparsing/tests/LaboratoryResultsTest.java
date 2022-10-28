@@ -40,7 +40,7 @@ public class LaboratoryResultsTest {
 		DocumentBuilder builder = factory.newDocumentBuilder();
 		Document doc = builder.parse(new File(CCDA_DOC));
 		XPath xPath =  XPathFactory.newInstance().newXPath();
-		labResults = laboratoryResultsProcessor.retrieveLabResults(xPath, doc).get();
+		labResults = laboratoryResultsProcessor.retrieveLabResults(xPath, doc);
 	}
 	
 	private void setLabResultsSectionCode()

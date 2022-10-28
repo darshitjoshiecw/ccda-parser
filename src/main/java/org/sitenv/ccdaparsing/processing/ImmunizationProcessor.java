@@ -35,8 +35,7 @@ public class ImmunizationProcessor {
 	@Autowired
 	MedicationProcessor medicationProcessor;
 	
-	@Async()
-	public Future<CCDAImmunization> retrieveImmunizationDetails(XPath xPath , Document doc) throws XPathExpressionException,TransformerException
+	public CCDAImmunization retrieveImmunizationDetails(XPath xPath , Document doc) throws XPathExpressionException,TransformerException
 	{
 		long startTime = System.currentTimeMillis();
     	logger.info("Immunization parsing Start time:"+ startTime);
@@ -49,7 +48,7 @@ public class ImmunizationProcessor {
 			if(ApplicationUtil.checkForNullFlavourNI(sectionElement))
 			{
 				immunizations.setSectionNullFlavourWithNI(true);
-				return new AsyncResult<CCDAImmunization>(immunizations);
+				return immunizations;
 			}
 			immunizations.setTemplateIds(ApplicationUtil.readTemplateIdList((NodeList) xPath.compile("./templateId[not(@nullFlavor)]").
 					evaluate(sectionElement, XPathConstants.NODESET)));
@@ -73,7 +72,7 @@ public class ImmunizationProcessor {
 			immunizations.setIdList(idList);
 		}
 		logger.info("Immunization parsing End time:"+ (System.currentTimeMillis() - startTime));
-		return new AsyncResult<CCDAImmunization>(immunizations);
+		return immunizations;
 	}
 	
 	public ArrayList<CCDAImmunizationActivity> readImmunization(NodeList entryNodeList, XPath xPath,List<CCDAID> idList) throws XPathExpressionException,TransformerException

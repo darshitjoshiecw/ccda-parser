@@ -27,8 +27,7 @@ import java.util.concurrent.Future;
 public class FunctionalStatusProcessor {
 	private static final Logger logger = LogManager.getLogger(FunctionalStatusProcessor.class);
 
-	@Async()
-	public Future<CCDAFunctionalStatus> retrieveFunctionalStatusDetails(XPath xPath, Document doc) throws XPathExpressionException, TransformerException {
+	public CCDAFunctionalStatus retrieveFunctionalStatusDetails(XPath xPath, Document doc) throws XPathExpressionException, TransformerException {
 		long startTime = System.currentTimeMillis();
 		logger.info("Advance Directive parsing Start time:" + startTime);
 
@@ -40,7 +39,7 @@ public class FunctionalStatusProcessor {
 			functionalStatus = new CCDAFunctionalStatus();
 			if (ApplicationUtil.checkForNullFlavourNI(sectionElement)) {
 				functionalStatus.setSectionNullFlavourWithNI(true);
-				return new AsyncResult<CCDAFunctionalStatus>(functionalStatus);
+				return functionalStatus;
 			}
 			functionalStatus.setTemplateIds(ApplicationUtil
 					.readTemplateIdList((NodeList) xPath.compile("./templateId[not(@nullFlavor)]").
@@ -53,6 +52,6 @@ public class FunctionalStatusProcessor {
 			functionalStatus.setXmlString(ApplicationUtil.nodeToString((Node) sectionElement));
 		}
 
-		return new AsyncResult<CCDAFunctionalStatus>(functionalStatus);
+		return functionalStatus;
 	}
 }

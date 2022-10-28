@@ -41,7 +41,7 @@ public class SmokingStatusTest {
 		DocumentBuilder builder = factory.newDocumentBuilder();
 		Document doc = builder.parse(new File(CCDA_DOC));
 		XPath xPath =  XPathFactory.newInstance().newXPath();
-		socialHistory = smokingStatusProcessor.retrieveSmokingStatusDetails(xPath, doc).get();
+		socialHistory = smokingStatusProcessor.retrieveSmokingStatusDetails(xPath, doc);
 		
 		smokingStatusList = new ArrayList<>();
 		CCDASmokingStatus  smokingStatus = new CCDASmokingStatus();

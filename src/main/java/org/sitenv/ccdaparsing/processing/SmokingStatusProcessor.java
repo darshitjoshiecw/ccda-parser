@@ -33,8 +33,8 @@ public class SmokingStatusProcessor {
 
 	private static final Logger logger = LogManager.getLogger(SmokingStatusProcessor.class);
 	
-	@Async()
-	public Future<CCDASocialHistory> retrieveSmokingStatusDetails(XPath xPath , Document doc) throws XPathExpressionException,TransformerException
+
+	public CCDASocialHistory retrieveSmokingStatusDetails(XPath xPath , Document doc) throws XPathExpressionException,TransformerException
 	{
 		long startTime = System.currentTimeMillis();
     	logger.info("Smoking status parsing Start time:"+ startTime);
@@ -48,7 +48,7 @@ public class SmokingStatusProcessor {
 			if(ApplicationUtil.checkForNullFlavourNI(sectionElement))
 			{
 				socailHistory.setSectionNullFlavourWithNI(true);
-				return new AsyncResult<CCDASocialHistory>(socailHistory);
+				return socailHistory;
 			}
 			socailHistory.setSectionTemplateIds(ApplicationUtil.readTemplateIdList((NodeList) xPath.compile("./templateId[not(@nullFlavor)]").
 						evaluate(sectionElement, XPathConstants.NODESET)));
@@ -94,7 +94,7 @@ public class SmokingStatusProcessor {
 			socailHistory.setIdList(idList);
 		}
 		logger.info("Smoking status parsing End time:"+ (System.currentTimeMillis() - startTime));
-		return new AsyncResult<CCDASocialHistory>(socailHistory);
+		return socailHistory;
 	}
 	
 	public ArrayList<CCDASmokingStatus> readSmokingStatus(NodeList smokingStatusNodeList, XPath xPath, List<CCDAID> idList) throws XPathExpressionException,TransformerException

@@ -26,8 +26,8 @@ public class CarePlanSectionsParser {
 			new CCDAII("2.16.840.1.113883.10.20.22.2.61"); 
 	
 
-	@Async()
-	public Future<CCDACarePlanSections> getSuggestedSections(Document doc) throws XPathExpressionException {
+
+	public CCDACarePlanSections getSuggestedSections(Document doc) throws XPathExpressionException {
 		CCDACarePlanSections carePlanSections = new CCDACarePlanSections();
 		
 		Element interventions = (Element) CCDAConstants.INTERVENTIONS_SECTION_V3_EXP.evaluate(doc, XPathConstants.NODE);				
@@ -55,7 +55,7 @@ public class CarePlanSectionsParser {
 			log.info("Document does NOT have Health Status Evaluations and Outcomes Section 2.16.840.1.113883.10.20.22.2.61");
 		}
 		
-		return new AsyncResult<>(carePlanSections);
+		return carePlanSections;
 	}
 	
 }
