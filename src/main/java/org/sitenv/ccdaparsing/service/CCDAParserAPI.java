@@ -88,8 +88,7 @@ public class CCDAParserAPI {
 	private static XPath xPath = XPathFactory.newInstance().newXPath();
 
 	private boolean isAnySectionPresent = false;
-	private String EMPTY = "empty";
-
+	private static String EMPTY = "empty";
 	@Autowired
 	PatientProcessor patientProcessor;
 	
@@ -182,21 +181,26 @@ public class CCDAParserAPI {
 		return parseCCDA2_1(false);
 	}
 	public CCDARefModel parseCCDA2_1(boolean partialParsingSupported) {
-		return parseCCDA2_1(partialParsingSupported,null);
+		return parseCCDA2_1(partialParsingSupported,null, true);
 	}
-	public CCDARefModel parseCCDA2_1(boolean partialParsingSupported, Set<String> sectionsList) {
+	public CCDARefModel parseCCDA2_1(boolean partialParsingSupported, Set<String> sectionsList, boolean parallelProcessingFlag) {
 
 		CCDARefModel refModel = new CCDARefModel();
 		Future<CCDAPatient> patient=null;
 		Future<CCDAEncounter> encounters=null;
 		Future<CCDAProblem> problems=null;
-		Future<CCDAMedication> medications=null;
+		CCDAProblem problemsSync = null;
+		Future <CCDAMedication> medications=null;
+		CCDAMedication medicationsSync = null;
 		Future<CCDAAllergy> allergies=null;
 		Future<CCDASocialHistory> smokingStatus=null;
 		Future<CCDALabResult> labTests=null;
 		Future<CCDALabResult> labResults=null;
+		CCDALabResult labResultsSync = null;
 		Future<CCDAVitalSigns> vitals=null;
+		CCDAVitalSigns vitalsSync = null;
 		Future<CCDAProcedure> procedures=null;
+		CCDAProcedure proceduresSync = null;
 		Future<CCDACareTeamMember> careTeamMembers=null;
 		Future<CCDAImmunization> immunizations=null;
 		Future<CCDAPOT> pot=null;
@@ -231,16 +235,66 @@ public class CCDAParserAPI {
 
 			//admissionDiagnosisFuture = encounterDiagnosesProcessor.retrieveAdmissionDiagnosisDetails(doc);
 			//dischargeDiagnosisFuture = encounterDiagnosesProcessor.retrieveDischargeDiagnosisDetails(doc);
+			if(isSectionEnabled(sectionsList, "CONDITION")) {
+				if(parallelProcessingFlag) {
+					//process parallel
+					problems = prepareProblemsAsync(new String[]{"2.16.840.1.113883.10.20.22.2.5", "2.16.840.1.113883.10.20.22.2.5.1"});
+				}
+				else {
+					//process sequentially
+					problemsSync = prepareProblemsSync(new String[]{"2.16.840.1.113883.10.20.22.2.5", "2.16.840.1.113883.10.20.22.2.5.1"});
+					refModel.setProblem(problemsSync);
+				}
+			}
+			if(isSectionEnabled(sectionsList, "MEDICATIONREQUEST")) {
+				if(parallelProcessingFlag) {
+					//process parallel
+					medications = prepareMedicationsAsync(new String[]{"2.16.840.1.113883.10.20.22.2.1", "2.16.840.1.113883.10.20.22.2.1.1"});
+				}
+				else {
+					//process sequentially
+					medicationsSync = prepareMedicationsSync(new String[]{"2.16.840.1.113883.10.20.22.2.1", "2.16.840.1.113883.10.20.22.2.1.1"});
+					refModel.setMedication(medicationsSync);
+				}
+			}
+			if(isSectionEnabled(sectionsList, "LABRESULTS")) {
+				if(parallelProcessingFlag) {
+					//process parallel
+					labResults = prepareLabResultsAsync(new String[]{"2.16.840.1.113883.10.20.22.2.3", "2.16.840.1.113883.10.20.22.2.3.1"});
+				}
+				else {
+					//process sequentially
+					labResultsSync = prepareLabResultsSync(new String[]{"2.16.840.1.113883.10.20.22.2.3", "2.16.840.1.113883.10.20.22.2.3.1"});
+					refModel.setLabResults(labResultsSync);
+				}
+			}
+			if(isSectionEnabled(sectionsList, "VITALS")) {
+				if(parallelProcessingFlag) {
+					//process parallel
+					vitals = prepareVitalsAsync(new String[]{"2.16.840.1.113883.10.20.22.2.4", "2.16.840.1.113883.10.20.22.2.4.1"});
+				}
+				else {
+					//process sequentially
+					vitalsSync = prepareVitalsSync(new String[]{"2.16.840.1.113883.10.20.22.2.4", "2.16.840.1.113883.10.20.22.2.4.1"});
+					refModel.setVitalSigns(vitalsSync);
+				}
+			}
+			if(isSectionEnabled(sectionsList, "PROCEDURE")) {
+				if(parallelProcessingFlag) {
+					//process parallel
+					procedures = prepareProceduresAsync(new String[]{"2.16.840.1.113883.10.20.22.2.7", "2.16.840.1.113883.10.20.22.2.7.1"});
+				}
+				else {
+					//process sequentially
+					proceduresSync = prepareProceduresSync(new String[]{"2.16.840.1.113883.10.20.22.2.7", "2.16.840.1.113883.10.20.22.2.7.1"});
+					refModel.setProcedure(proceduresSync);
+				}
+			}
 			patient = isSectionEnabled(sectionsList, "PATIENT DATA") ? preparePatient(refModel) : null;
 			encounters = isSectionEnabled(sectionsList, "ENCOUNTER") ? prepareEncounters(new String[]{"2.16.840.1.113883.10.20.22.2.22", "2.16.840.1.113883.10.20.22.2.22.1"}) : null;
-			problems = isSectionEnabled(sectionsList, "CONDITION") ? prepareProblems(new String[]{"2.16.840.1.113883.10.20.22.2.5", "2.16.840.1.113883.10.20.22.2.5.1"}) : null;
-			medications = isSectionEnabled(sectionsList, "MEDICATIONREQUEST") ? prepareMedications(new String[]{"2.16.840.1.113883.10.20.22.2.1", "2.16.840.1.113883.10.20.22.2.1.1"}) : null;
 			allergies = isSectionEnabled(sectionsList, "ALLERGYINTOLERANCE") ? prepareAllergies(new String[]{"2.16.840.1.113883.10.20.22.2.6", "2.16.840.1.113883.10.20.22.2.6.1"}) : null;
 			smokingStatus = isSectionEnabled(sectionsList, "SMOKINGSTATUS") ? prepareSmokingStatus(new String[]{"2.16.840.1.113883.10.20.22.2.17", EMPTY}) : null;
 			labTests = isSectionEnabled(sectionsList, "LAB TESTS") ? prepareLabTests(new String[]{"2.16.840.1.113883.10.20.22.2.3.1", EMPTY}) : null;
-			labResults = isSectionEnabled(sectionsList, "LABRESULTS") ? prepareLabResults(new String[]{"2.16.840.1.113883.10.20.22.2.3", "2.16.840.1.113883.10.20.22.2.3.1"}) : null;
-			vitals = isSectionEnabled(sectionsList, "VITALS") ? prepareVitals(new String[] {"2.16.840.1.113883.10.20.22.2.4", "2.16.840.1.113883.10.20.22.2.4.1"}) : null;
-			procedures = isSectionEnabled(sectionsList, "PROCEDURE") ? prepareProcedures(new String[] {"2.16.840.1.113883.10.20.22.2.7", "2.16.840.1.113883.10.20.22.2.7.1"}) : null;
 			careTeamMembers = isSectionEnabled(sectionsList, "CARETEAM") ? prepareCareTeamMembers(new String[] {"2.16.840.1.113883.10.20.22.2.500", EMPTY}) : null;
 			carePlanSectionsFuture = isSectionEnabled(sectionsList, "CAREPLAN") ? prepareCarePlan(new String[] {"2.16.840.1.113883.10.20.21.2.3", EMPTY}) : null;
 			//dischargeMedicationFuture = medicationProcessor.retrieveDischargeMedicationDetails(xPath, doc);
@@ -1076,7 +1130,7 @@ public class CCDAParserAPI {
 	}
 
 	@Async()
-	Future<CCDAProcedure> prepareProcedures(String[] templateIds) throws IOException, SAXException, XPathExpressionException, TransformerException {
+	Future<CCDAProcedure> prepareProceduresAsync(String[] templateIds) throws IOException, SAXException, XPathExpressionException, TransformerException {
 		CCDAProcedure procedures = null;
 		Document doc = CustomReadXml.readXML(xml, templateIds);
 		if(doc.getDocumentElement() != null && doc.getDocumentElement().getChildNodes().getLength() > 1) {
@@ -1087,8 +1141,19 @@ public class CCDAParserAPI {
 		return new AsyncResult<>(procedures);
 	}
 
+	CCDAProcedure prepareProceduresSync(String[] templateIds) throws IOException, SAXException, XPathExpressionException, TransformerException {
+		CCDAProcedure procedures = null;
+		Document doc = CustomReadXml.readXML(xml, templateIds);
+		if(doc.getDocumentElement() != null && doc.getDocumentElement().getChildNodes().getLength() > 1) {
+			isAnySectionPresent = true;
+			procedures = procedureProcessor.retrievePrcedureDetails(xPath, doc);
+		}
+		doc = null;
+		return procedures;
+	}
+
 	@Async()
-	Future<CCDAVitalSigns> prepareVitals(String[] templateIds) throws IOException, SAXException, XPathExpressionException, TransformerException {
+	Future<CCDAVitalSigns> prepareVitalsAsync(String[] templateIds) throws IOException, SAXException, XPathExpressionException, TransformerException {
 		CCDAVitalSigns vitals = null;
 		Document doc = CustomReadXml.readXML(xml, templateIds);
 		if(doc.getDocumentElement() != null && doc.getDocumentElement().getChildNodes().getLength() > 1) {
@@ -1097,6 +1162,17 @@ public class CCDAParserAPI {
 		}
 		doc = null;
 		return new AsyncResult<>(vitals);
+	}
+
+	CCDAVitalSigns prepareVitalsSync(String[] templateIds) throws IOException, SAXException, XPathExpressionException, TransformerException {
+		CCDAVitalSigns vitals = null;
+		Document doc = CustomReadXml.readXML(xml, templateIds);
+		if(doc.getDocumentElement() != null && doc.getDocumentElement().getChildNodes().getLength() > 1) {
+			isAnySectionPresent = true;
+			vitals = vitalSignProcessor.retrieveVitalSigns(xPath, doc);
+		}
+		doc = null;
+		return vitals;
 	}
 
 	@Async()
@@ -1124,7 +1200,7 @@ public class CCDAParserAPI {
 	}
 
 	@Async()
-	Future<CCDAProblem> prepareProblems(String[] templateIds) throws IOException, SAXException, XPathExpressionException, TransformerException {
+	Future<CCDAProblem> prepareProblemsAsync(String[] templateIds) throws IOException, SAXException, XPathExpressionException, TransformerException {
 		CCDAProblem problems = null;
 		Document doc = CustomReadXml.readXML(xml, templateIds);
 		if(doc.getDocumentElement() != null && doc.getDocumentElement().getChildNodes().getLength() > 1) {
@@ -1133,6 +1209,17 @@ public class CCDAParserAPI {
 		}
 		doc = null;
 		return new AsyncResult<>(problems);
+	}
+
+	CCDAProblem prepareProblemsSync(String[] templateIds) throws IOException, SAXException, XPathExpressionException, TransformerException {
+		CCDAProblem problems = null;
+		Document doc = CustomReadXml.readXML(xml, templateIds);
+		if(doc.getDocumentElement() != null && doc.getDocumentElement().getChildNodes().getLength() > 1) {
+			isAnySectionPresent = true;
+			problems = problemProcessor.retrieveProblemDetails(xPath, doc);
+		}
+		doc = null;
+		return problems;
 	}
 
 	@Async()
@@ -1162,7 +1249,7 @@ public class CCDAParserAPI {
 	}
 
 	@Async()
-	Future<CCDALabResult> prepareLabResults(String[] templateIds) throws XPathExpressionException, TransformerException, IOException, SAXException {
+	Future<CCDALabResult> prepareLabResultsAsync(String[] templateIds) throws XPathExpressionException, TransformerException, IOException, SAXException {
 		CCDALabResult labResults = null;
 		Document doc = CustomReadXml.readXML(xml, templateIds);
 		if(doc.getDocumentElement() != null && doc.getDocumentElement().getChildNodes().getLength() > 1) {
@@ -1173,8 +1260,19 @@ public class CCDAParserAPI {
 		return new AsyncResult<>(labResults);
 	}
 
+	CCDALabResult prepareLabResultsSync(String[] templateIds) throws XPathExpressionException, TransformerException, IOException, SAXException {
+		CCDALabResult labResults = null;
+		Document doc = CustomReadXml.readXML(xml, templateIds);
+		if(doc.getDocumentElement() != null && doc.getDocumentElement().getChildNodes().getLength() > 1) {
+			isAnySectionPresent = true;
+			labResults = laboratoryResultsProcessor.retrieveLabResults(xPath, doc);
+		}
+		doc = null;
+		return labResults;
+	}
+
 	@Async()
-	Future<CCDAMedication> prepareMedications(String[] templateIds) throws XPathExpressionException, TransformerException, IOException, SAXException {
+	Future<CCDAMedication> prepareMedicationsAsync(String[] templateIds) throws XPathExpressionException, TransformerException, IOException, SAXException {
 		CCDAMedication medications = null;
 		Document doc = CustomReadXml.readXML(xml, templateIds);
 		if(doc.getDocumentElement() != null && doc.getDocumentElement().getChildNodes().getLength() > 1) {
@@ -1183,5 +1281,16 @@ public class CCDAParserAPI {
 		}
 		doc = null;
 		return new AsyncResult<>(medications);
+	}
+
+	CCDAMedication prepareMedicationsSync(String[] templateIds) throws XPathExpressionException, TransformerException, IOException, SAXException {
+		CCDAMedication medications = null;
+		Document doc = CustomReadXml.readXML(xml, templateIds);
+		if(doc.getDocumentElement() != null && doc.getDocumentElement().getChildNodes().getLength() > 1) {
+			isAnySectionPresent = true;
+			medications = medicationProcessor.retrieveMedicationDetails(xPath, doc);
+		}
+		doc = null;
+		return medications;
 	}
 }

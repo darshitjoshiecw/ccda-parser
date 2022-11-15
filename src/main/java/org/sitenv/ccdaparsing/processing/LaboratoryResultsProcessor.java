@@ -220,7 +220,7 @@ public class LaboratoryResultsProcessor {
 					else if (xsiType.equalsIgnoreCase("ST"))
 					{
 						resultObservation.setResults(new CCDAPQ(resultValue.getTextContent(),"ST"));
-						String value = resultValue.getFirstChild().getNodeValue();
+						String value = resultValue.getFirstChild() != null ? resultValue.getFirstChild().getNodeValue() : "";
 						resultObservation.setResultString(value);
 					}
 					else if (xsiType.equalsIgnoreCase("ED"))
