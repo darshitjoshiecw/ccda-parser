@@ -911,37 +911,23 @@ public class CCDAParserAPI {
 
 			if (!isAnySectionPresent) {
 				refModel.setEmpty(true);
+				refModel.addToErrorSections("ALL");
 			}
 
 			logger.info("Parsing CCDA document completed");
-		}
-	    	catch (FileNotFoundException fnfException) 
-	    	{
-	    		logger.error(fnfException);
-			}
-	    	catch(XPathExpressionException xpeException)
-			{
-	    		logger.error(xpeException);
-			}
-	    	catch (IOException ioException) 
-	    	{
-	    		logger.error(ioException);
-			}
-	    	catch (SAXException saxException) 
+		} catch (XPathExpressionException | IOException | NullPointerException | TransformerException fnfException)
+		{
+			logger.error(fnfException);
+			refModel.setEmpty(true);
+			refModel.addToErrorSections("ALL");
+		} catch (SAXException saxException)
 	    	{
 	    		logger.info("Parsing CCDA document failed");
 	    		logger.error(saxException);
 	    		refModel.setEmpty(true);
+				refModel.addToErrorSections("ALL");
 			}
-	    	catch (NullPointerException npException) 
-	    	{
-	    		logger.error(npException);
-			}
-	        catch(TransformerException te)
-	    	{
-	            logger.error(te);
-	    	}
-	    logger.info("All Section End time:"+ (System.currentTimeMillis() - startTime));
+		logger.info("All Section End time:"+ (System.currentTimeMillis() - startTime));
 	    
 	    return refModel;
 	
