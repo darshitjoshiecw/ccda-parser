@@ -21,6 +21,7 @@ import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 @Service
@@ -42,6 +43,9 @@ public class LaboratoryTestProcessor {
 		if(sectionElement != null)
 		{
 			labTests = new CCDALabResult();
+			sectionElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+			labTests.setLineNumber(sectionElement.getUserData("lineNumber") + " - " + sectionElement.getUserData("endLineNumber"));
+			labTests.setXmlString(ApplicationUtil.nodeToString((Node) sectionElement));
 			if(ApplicationUtil.checkForNullFlavourNI(sectionElement))
 			{
 				labTests.setSectionNullFlavourWithNI(true);

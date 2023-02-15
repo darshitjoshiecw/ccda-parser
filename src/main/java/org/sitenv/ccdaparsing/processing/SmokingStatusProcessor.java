@@ -45,6 +45,9 @@ public class SmokingStatusProcessor {
 		if(sectionElement != null)
 		{
 			socailHistory = new CCDASocialHistory();
+			sectionElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+			socailHistory.setLineNumber(sectionElement.getUserData("lineNumber") + " - " + sectionElement.getUserData("endLineNumber") );
+			socailHistory.setXmlString(ApplicationUtil.nodeToString((Node)sectionElement));
 			if(ApplicationUtil.checkForNullFlavourNI(sectionElement))
 			{
 				socailHistory.setSectionNullFlavourWithNI(true);
@@ -66,10 +69,6 @@ public class SmokingStatusProcessor {
 			
 			Element genderObsElement = (Element) xPath.compile(ApplicationConstants.SOCIAL_HISTORY_GENDER_EXPRESSION).
 					evaluate(sectionElement, XPathConstants.NODE);
-			
-			sectionElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-			socailHistory.setLineNumber(sectionElement.getUserData("lineNumber") + " - " + sectionElement.getUserData("endLineNumber") );
-			socailHistory.setXmlString(ApplicationUtil.nodeToString((Node)sectionElement));
 			
 			Element textElement = (Element) xPath.compile("./text[not(@nullFlavor)]").evaluate(sectionElement, XPathConstants.NODE);
 			

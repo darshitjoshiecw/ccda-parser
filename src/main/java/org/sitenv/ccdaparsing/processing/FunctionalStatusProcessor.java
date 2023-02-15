@@ -37,6 +37,9 @@ public class FunctionalStatusProcessor {
 		List<CCDAID> idList = new ArrayList<>();
 		if (sectionElement != null) {
 			functionalStatus = new CCDAFunctionalStatus();
+			sectionElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+			functionalStatus.setLineNumber(sectionElement.getUserData("lineNumber") + " - " + sectionElement.getUserData("endLineNumber"));
+			functionalStatus.setXmlString(ApplicationUtil.nodeToString((Node) sectionElement));
 			if (ApplicationUtil.checkForNullFlavourNI(sectionElement)) {
 				functionalStatus.setSectionNullFlavourWithNI(true);
 				return functionalStatus;
@@ -47,9 +50,6 @@ public class FunctionalStatusProcessor {
 			functionalStatus.setSectionCode(ApplicationUtil.readCode((Element) xPath.compile("./code[not(@nullFlavor)]").
 					evaluate(sectionElement, XPathConstants.NODE)));
 
-			sectionElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-			functionalStatus.setLineNumber(sectionElement.getUserData("lineNumber") + " - " + sectionElement.getUserData("endLineNumber"));
-			functionalStatus.setXmlString(ApplicationUtil.nodeToString((Node) sectionElement));
 		}
 
 		return functionalStatus;

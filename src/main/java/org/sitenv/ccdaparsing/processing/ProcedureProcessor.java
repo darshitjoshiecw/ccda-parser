@@ -44,6 +44,9 @@ public class ProcedureProcessor {
 		if(sectionElement !=null)
 		{
 			procedures = new CCDAProcedure();
+			sectionElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+			procedures.setLineNumber(sectionElement.getUserData("lineNumber") + " - " + sectionElement.getUserData("endLineNumber") );
+			procedures.setXmlString(ApplicationUtil.nodeToString((Node)sectionElement));
 			if(ApplicationUtil.checkForNullFlavourNI(sectionElement))
 			{
 				procedures.setSectionNullFlavourWithNI(true);
@@ -63,10 +66,6 @@ public class ProcedureProcessor {
 			procedures.setNotesActivity(ParserUtilities.readNotesActivity((NodeList) CCDAConstants.REL_NOTES_ACTIVITY_EXPRESSION.
 					evaluate(sectionElement, XPathConstants.NODESET), null));
 
-			sectionElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-			procedures.setLineNumber(sectionElement.getUserData("lineNumber") + " - " + sectionElement.getUserData("endLineNumber") );
-			procedures.setXmlString(ApplicationUtil.nodeToString((Node)sectionElement));
-			
 			Element textElement = (Element) xPath.compile("./text[not(@nullFlavor)]").evaluate(sectionElement, XPathConstants.NODE);
 			
 			if(textElement!=null)

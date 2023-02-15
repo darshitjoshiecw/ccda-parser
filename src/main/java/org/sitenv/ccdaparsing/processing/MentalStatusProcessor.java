@@ -36,6 +36,9 @@ public class MentalStatusProcessor {
 		List<CCDAID> idList = new ArrayList<>();
 		if (sectionElement != null) {
 			mentalStatus = new CCDAMentalStatus();
+			sectionElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+			mentalStatus.setLineNumber(sectionElement.getUserData("lineNumber") + " - " + sectionElement.getUserData("endLineNumber"));
+			mentalStatus.setXmlString(ApplicationUtil.nodeToString((Node) sectionElement));
 			if (ApplicationUtil.checkForNullFlavourNI(sectionElement)) {
 				mentalStatus.setSectionNullFlavourWithNI(true);
 				return mentalStatus;
@@ -45,10 +48,6 @@ public class MentalStatusProcessor {
 							evaluate(sectionElement, XPathConstants.NODESET)));
 			mentalStatus.setSectionCode(ApplicationUtil.readCode((Element) xPath.compile("./code[not(@nullFlavor)]").
 					evaluate(sectionElement, XPathConstants.NODE)));
-
-			sectionElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-			mentalStatus.setLineNumber(sectionElement.getUserData("lineNumber") + " - " + sectionElement.getUserData("endLineNumber"));
-			mentalStatus.setXmlString(ApplicationUtil.nodeToString((Node) sectionElement));
 		}
 
 		return mentalStatus;

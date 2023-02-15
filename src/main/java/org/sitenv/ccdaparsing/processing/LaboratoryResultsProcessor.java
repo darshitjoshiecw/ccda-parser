@@ -46,6 +46,9 @@ public class LaboratoryResultsProcessor {
 		if(sectionElement != null)
 		{
 			labResults = new CCDALabResult();
+			sectionElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+			labResults.setLineNumber(sectionElement.getUserData("lineNumber") + " - " + sectionElement.getUserData("endLineNumber") );
+			labResults.setXmlString(ApplicationUtil.nodeToString((Node)sectionElement));
 			if(ApplicationUtil.checkForNullFlavourNI(sectionElement))
 			{
 				labResults.setSectionNullFlavourWithNI(true);
@@ -59,9 +62,7 @@ public class LaboratoryResultsProcessor {
 			
 			labResults.setResultOrg(readResultOrganizer((NodeList) xPath.compile(ApplicationConstants.LAB_RESULTS_EXPRESSION).
 									evaluate(sectionElement, XPathConstants.NODESET),xPath, idList));
-			sectionElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-			labResults.setLineNumber(sectionElement.getUserData("lineNumber") + " - " + sectionElement.getUserData("endLineNumber") );
-			labResults.setXmlString(ApplicationUtil.nodeToString((Node)sectionElement));
+
 			
 			Element textElement = (Element) xPath.compile("./text[not(@nullFlavor)]").evaluate(sectionElement, XPathConstants.NODE);
 			

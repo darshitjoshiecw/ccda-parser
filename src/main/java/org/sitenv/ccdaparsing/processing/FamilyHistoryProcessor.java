@@ -38,6 +38,9 @@ public class FamilyHistoryProcessor {
 		List<CCDAID> idList = new ArrayList<>();
 		if (sectionElement != null) {
 			familyHistory = new CCDAFamilyHistory();
+			sectionElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+			familyHistory.setLineNumber(sectionElement.getUserData("lineNumber") + " - " + sectionElement.getUserData("endLineNumber"));
+			familyHistory.setXmlString(ApplicationUtil.nodeToString((Node) sectionElement));
 			if (ApplicationUtil.checkForNullFlavourNI(sectionElement)) {
 				familyHistory.setSectionNullFlavourWithNI(true);
 				return familyHistory;
@@ -49,10 +52,6 @@ public class FamilyHistoryProcessor {
 					evaluate(sectionElement, XPathConstants.NODE)));
 			familyHistory.setFamilyHxOrg(readFamilyHxOrganizer((NodeList) xPath.compile("./entry/organizer[not(@nullFlavor)]").
 					evaluate(sectionElement, XPathConstants.NODESET), xPath, idList));
-
-			sectionElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-			familyHistory.setLineNumber(sectionElement.getUserData("lineNumber") + " - " + sectionElement.getUserData("endLineNumber"));
-			familyHistory.setXmlString(ApplicationUtil.nodeToString((Node) sectionElement));
 
 			Element textElement = (Element) xPath.compile("./text[not(@nullFlavor)]").evaluate(sectionElement, XPathConstants.NODE);
 

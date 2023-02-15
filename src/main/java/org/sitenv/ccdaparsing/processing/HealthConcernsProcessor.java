@@ -34,6 +34,9 @@ public class HealthConcernsProcessor {
 		if (sectionElement != null)
 		{
 			healthConcern = new CCDAHealthConcerns();
+			sectionElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+			healthConcern.setLineNumber(sectionElement.getUserData("lineNumber") + " - " + sectionElement.getUserData("endLineNumber"));
+			healthConcern.setXmlString(ApplicationUtil.nodeToString((Node) sectionElement));
 			if(ApplicationUtil.checkForNullFlavourNI(sectionElement))
 			{
 				healthConcern.setSectionNullFlavourWithNI(true);
@@ -48,9 +51,6 @@ public class HealthConcernsProcessor {
 			healthConcern.setNarrativeText(ApplicationUtil.readTextContent((Element) xPath.compile("./text[not(@nullFlavor)]").
 					evaluate(sectionElement, XPathConstants.NODE)));
 
-			sectionElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-			healthConcern.setLineNumber(sectionElement.getUserData("lineNumber") + " - " + sectionElement.getUserData("endLineNumber"));
-			healthConcern.setXmlString(ApplicationUtil.nodeToString((Node) sectionElement));
 		}
 		
 		logger.info("Health concern parsing End time:"+ (System.currentTimeMillis() - startTime));

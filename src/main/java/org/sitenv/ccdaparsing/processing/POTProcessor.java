@@ -48,6 +48,9 @@ public class POTProcessor {
 		if(sectionElement != null)
 		{
 			pot = new CCDAPOT();
+			sectionElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+			pot.setLineNumber(sectionElement.getUserData("lineNumber") + " - " + sectionElement.getUserData("endLineNumber"));
+			pot.setXmlString(ApplicationUtil.nodeToString((Node) sectionElement));
 			if(ApplicationUtil.checkForNullFlavourNI(sectionElement))
 			{
 				pot.setSectionNullFlavourWithNI(true);
@@ -70,11 +73,7 @@ public class POTProcessor {
 			
 			NodeList plannedProcedureNodeList = (NodeList) xPath.compile(ApplicationConstants.POT_PROCEDURE_EXPRESSION).evaluate(sectionElement, XPathConstants.NODESET);
 			pot.setPlannedProcedure(procedureProcessor.readProcedures(plannedProcedureNodeList,xPath,idList));
-			
-			sectionElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-			pot.setLineNumber(sectionElement.getUserData("lineNumber") + " - " + sectionElement.getUserData("endLineNumber"));
-			pot.setXmlString(ApplicationUtil.nodeToString((Node) sectionElement));
-			
+
 			pot.setIdList(idList);
 		}
 		logger.info("POT parsing End time:"+ (System.currentTimeMillis() - startTime));

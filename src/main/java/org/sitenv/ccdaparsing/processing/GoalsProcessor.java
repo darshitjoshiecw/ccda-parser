@@ -36,6 +36,9 @@ public class GoalsProcessor {
 		if(sectionElement != null)
 		{
 			goals = new CCDAGoals();
+			sectionElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+			goals.setLineNumber(sectionElement.getUserData("lineNumber") + " - " + sectionElement.getUserData("endLineNumber"));
+			goals.setXmlString(ApplicationUtil.nodeToString((Node) sectionElement));
 			if(ApplicationUtil.checkForNullFlavourNI(sectionElement))
 			{
 				goals.setSectionNullFlavourWithNI(true);
@@ -50,9 +53,6 @@ public class GoalsProcessor {
 			goals.setNarrativeText(ApplicationUtil.readTextContent((Element) xPath.compile("./text[not(@nullFlavor)]").
 					evaluate(sectionElement, XPathConstants.NODE)));
 
-			sectionElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-			goals.setLineNumber(sectionElement.getUserData("lineNumber") + " - " + sectionElement.getUserData("endLineNumber"));
-			goals.setXmlString(ApplicationUtil.nodeToString((Node) sectionElement));
 		}
 		
 		logger.info("Goals parsing End time:"+ (System.currentTimeMillis() - startTime));

@@ -44,6 +44,9 @@ public class EncounterDiagnosesProcessor {
 		if(sectionElement != null)
 		{
 			encounters = new CCDAEncounter();
+			sectionElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+			encounters.setLineNumber(sectionElement.getUserData("lineNumber") + " - " + sectionElement.getUserData("endLineNumber") );
+			encounters.setXmlString(ApplicationUtil.nodeToString((Node)sectionElement));
 			if(ApplicationUtil.checkForNullFlavourNI(sectionElement))
 			{
 				encounters.setSectionNullFlavourWithNI(true);
@@ -59,9 +62,6 @@ public class EncounterDiagnosesProcessor {
 					evaluate(sectionElement, XPathConstants.NODE)));
 			encounters.setNotesActivity(ParserUtilities.readNotesActivity((NodeList) CCDAConstants.REL_NOTES_ACTIVITY_EXPRESSION.
 					evaluate(sectionElement, XPathConstants.NODESET), null));
-			sectionElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-			encounters.setLineNumber(sectionElement.getUserData("lineNumber") + " - " + sectionElement.getUserData("endLineNumber") );
-			encounters.setXmlString(ApplicationUtil.nodeToString((Node)sectionElement));
 			
 			Element textElement = (Element) xPath.compile("./text[not(@nullFlavor)]").evaluate(sectionElement, XPathConstants.NODE);
 			

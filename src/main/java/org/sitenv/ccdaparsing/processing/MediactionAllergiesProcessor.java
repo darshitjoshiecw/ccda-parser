@@ -46,6 +46,9 @@ public class MediactionAllergiesProcessor {
 		if(sectionElement != null)
 		{
 			allergies = new CCDAAllergy();
+			sectionElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+			allergies.setLineNumber(sectionElement.getUserData("lineNumber") + " - " + sectionElement.getUserData("endLineNumber") );
+			allergies.setXmlString(ApplicationUtil.nodeToString((Node)sectionElement));
 			if(ApplicationUtil.checkForNullFlavourNI(sectionElement))
 			{
 				allergies.setSectionNullFlavourWithNI(true);
@@ -59,9 +62,6 @@ public class MediactionAllergiesProcessor {
 					evaluate(sectionElement, XPathConstants.NODESET), xPath,idList));
 			allergies.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
 					evaluate(sectionElement, XPathConstants.NODE)));
-			sectionElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-			allergies.setLineNumber(sectionElement.getUserData("lineNumber") + " - " + sectionElement.getUserData("endLineNumber") );
-			allergies.setXmlString(ApplicationUtil.nodeToString((Node)sectionElement));
 			
 			Element textElement = (Element) xPath.compile("./text[not(@nullFlavor)]").evaluate(sectionElement, XPathConstants.NODE);
 			

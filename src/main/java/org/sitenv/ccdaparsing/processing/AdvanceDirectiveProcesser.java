@@ -40,6 +40,9 @@ public class AdvanceDirectiveProcesser {
 		List<CCDAID> idList = new ArrayList<>();
 		if (sectionElement != null) {
 			advanceDirective = new CCDAAdvanceDirective();
+			sectionElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+			advanceDirective.setLineNumber(sectionElement.getUserData("lineNumber") + " - " + sectionElement.getUserData("endLineNumber"));
+			advanceDirective.setXmlString(ApplicationUtil.nodeToString((Node) sectionElement));
 			if (ApplicationUtil.checkForNullFlavourNI(sectionElement)) {
 				advanceDirective.setSectionNullFlavourWithNI(true);
 				return advanceDirective;
@@ -55,10 +58,6 @@ public class AdvanceDirectiveProcesser {
 			advanceDirective.setAdvanceDirectiveOrgs(readAdvanceDirectiveOrganizers((NodeList) xPath
 					.compile("./entry/organizer[not(@nullFlavor)] | ./entry/observation[not(@nullFlavor)]").
 					evaluate(sectionElement, XPathConstants.NODESET), xPath, idList));
-
-			sectionElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-			advanceDirective.setLineNumber(sectionElement.getUserData("lineNumber") + " - " + sectionElement.getUserData("endLineNumber"));
-			advanceDirective.setXmlString(ApplicationUtil.nodeToString((Node) sectionElement));
 
 			Element textElement = (Element) xPath.compile("./text[not(@nullFlavor)]")
 					.evaluate(sectionElement, XPathConstants.NODE);
