@@ -40,7 +40,8 @@ public class CustomReadXml {
         final StringBuilder textBuffer = new StringBuilder();
         DefaultHandler handler = new DefaultHandler() {
             private Locator locator;
-            boolean processSection = true;
+            boolean processXml = true;
+            boolean processSection = false;
 
             @Override
             public void setDocumentLocator(Locator locator) {
@@ -76,7 +77,8 @@ public class CustomReadXml {
                     closedEl.setUserData("endLineNumber", String.valueOf(this.locator.getLineNumber()), null);
 
                 } else if("section".equalsIgnoreCase(qName)) {
-                    processSection = true;
+                    processXml = true;
+                    processSection = false;
                     textBuffer.delete(0, textBuffer.length());
                     Element closedEl = elementStack.pop();
                     Element parentEl = elementStack.peek();
@@ -86,16 +88,18 @@ public class CustomReadXml {
 
             private boolean processSectionBasedOnTemplateId(Stack<Element> elementStack) {
                 int elementSize = elementStack.size()-1;
-                if (!elementStack.isEmpty() &&
+                if (!elementStack.isEmpty() && !processSection &&
                         "templateId".equalsIgnoreCase(elementStack.get(elementSize).getTagName()) &&
                         "section".equalsIgnoreCase(elementStack.get(elementSize-1).getTagName())) {
-                    processSection = (templateIds[0].equalsIgnoreCase(elementStack.get(elementSize).getAttribute("root")) ||
+                    processXml = (templateIds[0].equalsIgnoreCase(elementStack.get(elementSize).getAttribute("root")) ||
                             templateIds[1].equalsIgnoreCase(elementStack.get(elementSize).getAttribute("root")));
-                    if(!processSection) {
+                    if(!processXml) {
                         elementStack.pop();
+                    } else {
+                        processSection = true;
                     }
                 }
-                return processSection;
+                return processXml;
             }
 
             @Override

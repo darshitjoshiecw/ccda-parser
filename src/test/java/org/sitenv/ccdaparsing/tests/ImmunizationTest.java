@@ -202,6 +202,10 @@ public class ImmunizationTest {
 		CCDAII templateIdTwo = new CCDAII();
 		templateIdTwo.setRootValue("2.16.840.1.113883.10.20.22.2.2.1");
 		templateIds.add(templateIdTwo);
+		 CCDAII templateIdThree = new CCDAII();
+		 templateIdThree.setRootValue("2.16.840.1.113883.10.20.22.4.52");
+		 templateIdThree.setExtValue("2015-08-01");
+		 templateIds.add(templateIdThree);
 	 }
 	
 
