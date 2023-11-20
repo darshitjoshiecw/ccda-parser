@@ -1,5 +1,6 @@
 package org.sitenv.ccdaparsing.util;
 
+import org.sitenv.ccdaparsing.exception.CustomReadXmlException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -40,8 +41,12 @@ public class CustomReadXml {
         final StringBuilder textBuffer = new StringBuilder();
         DefaultHandler handler = new DefaultHandler() {
             private Locator locator;
-            boolean processXml = true;
-            boolean processSection = false;
+            private boolean processXml = true;
+            private boolean processSection = false;
+            private int sectionTagCountInSection = 0;
+            private static final String SECTION = "section";
+            private static final String TEMPLATE_ID = "templateId";
+            private static final String ROOT = "root";
 
             @Override
             public void setDocumentLocator(Locator locator) {
@@ -50,14 +55,15 @@ public class CustomReadXml {
 
             @Override
             public void startElement(String uri, String localName, String qName, Attributes attributes) {
-                if (processSectionBasedOnTemplateId(elementStack)) {
+                if(SECTION.equalsIgnoreCase(qName)) {
+                    sectionTagCountInSection++;
+                }
+                if (processSectionBasedOnTemplateId()) {
                     this.addTextIfNeeded();
                     Element el = doc.createElement(qName);
-
                     for (int i = 0; i < attributes.getLength(); ++i) {
                         el.setAttribute(attributes.getQName(i), attributes.getValue(i));
                     }
-
                     el.setUserData("lineNumber", String.valueOf(this.locator.getLineNumber()), null);
                     elementStack.push(el);
                 }
@@ -65,7 +71,14 @@ public class CustomReadXml {
 
             @Override
             public void endElement(String uri, String localName, String qName) {
-                if(processSectionBasedOnTemplateId(elementStack)){
+                if(SECTION.equalsIgnoreCase(qName)) {
+                    sectionTagCountInSection--;
+                }
+                if(processSectionBasedOnTemplateId()){
+                    if(SECTION.equalsIgnoreCase(qName)) {
+                        processXml = true;
+                        processSection = false;
+                    }
                     this.addTextIfNeeded();
                     Element closedEl = elementStack.pop();
                     if (elementStack.isEmpty()) {
@@ -75,8 +88,7 @@ public class CustomReadXml {
                         parentEl.appendChild(closedEl);
                     }
                     closedEl.setUserData("endLineNumber", String.valueOf(this.locator.getLineNumber()), null);
-
-                } else if("section".equalsIgnoreCase(qName)) {
+                } else if(SECTION.equalsIgnoreCase(qName) && sectionTagCountInSection == 0) {
                     processXml = true;
                     processSection = false;
                     textBuffer.delete(0, textBuffer.length());
@@ -86,13 +98,13 @@ public class CustomReadXml {
                 }
             }
 
-            private boolean processSectionBasedOnTemplateId(Stack<Element> elementStack) {
+            private boolean processSectionBasedOnTemplateId() {
                 int elementSize = elementStack.size()-1;
                 if (!elementStack.isEmpty() && !processSection &&
-                        "templateId".equalsIgnoreCase(elementStack.get(elementSize).getTagName()) &&
-                        "section".equalsIgnoreCase(elementStack.get(elementSize-1).getTagName())) {
-                    processXml = (templateIds[0].equalsIgnoreCase(elementStack.get(elementSize).getAttribute("root")) ||
-                            templateIds[1].equalsIgnoreCase(elementStack.get(elementSize).getAttribute("root")));
+                        TEMPLATE_ID.equalsIgnoreCase(elementStack.get(elementSize).getTagName()) &&
+                        SECTION.equalsIgnoreCase(elementStack.get(elementSize-1).getTagName())) {
+                    processXml = (templateIds[0].equalsIgnoreCase(elementStack.get(elementSize).getAttribute(ROOT)) ||
+                            templateIds[1].equalsIgnoreCase(elementStack.get(elementSize).getAttribute(ROOT)));
                     if(!processXml) {
                         elementStack.pop();
                     } else {
@@ -114,10 +126,13 @@ public class CustomReadXml {
                     el.appendChild(textNode);
                     textBuffer.delete(0, textBuffer.length());
                 }
-
             }
         };
-        parser.parse(inputsource, handler);
-        return doc;
+        try {
+            parser.parse(inputsource, handler);
+            return doc;
+        } catch (RuntimeException e) {
+            throw new CustomReadXmlException("Error while parsing XML in CustomReadXml.readXML:: ", e);
+        }
     }
 }
