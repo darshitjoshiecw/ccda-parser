@@ -1,11 +1,11 @@
 package org.sitenv.ccdaparsing.util;
 
+import org.sitenv.ccdaparsing.model.UsrhII;
+import org.sitenv.ccdaparsing.model.UsrhSubType;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import org.sitenv.ccdaparsing.model.UsrhII;
-import org.sitenv.ccdaparsing.model.UsrhSubType;
 
 public class ApplicationConstants {
 	
@@ -23,17 +23,16 @@ public class ApplicationConstants {
 	
 	public static String ENCOMPASSING_ENCOUNTER_EXPRESSION = "/ClinicalDocument/componentOf/encompassingEncounter[not(@nullFlavor)]";
 	
-	public static String ALLERGIES_EXPRESSION = "/ClinicalDocument/component/structuredBody/component/section[(not(@nullFlavor) or @nullFlavor='NI') and templateId[@root='2.16.840.1.113883.10.20.22.2.6.1']]";
+	public static final String ALLERGIES_EXPRESSION = "/ClinicalDocument/component/structuredBody/component/section[(not(@nullFlavor) or @nullFlavor='NI') and (templateId[@root='2.16.840.1.113883.10.20.22.2.6.1'] or templateId[@root='2.16.840.1.113883.10.20.22.2.6'])]";
     public static String ALLERGY_REACTION_EXPRESSION ="./entryRelationship/observation[(not(@nullFlavor) or @nullFlavor='NI') and templateId[@root='2.16.840.1.113883.10.20.22.4.9']]";
     public static String ALLERGY_SEVERITY_EXPRESSION ="./entryRelationship/observation[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.8']]";
 	
 	
-    public static String ENCOUNTER_EXPRESSION = "/ClinicalDocument/component/structuredBody/component/section[(not(@nullFlavor) or @nullFlavor='NI') and templateId[@root='2.16.840.1.113883.10.20.22.2.22.1']]";
+    public static final String ENCOUNTER_EXPRESSION = "/ClinicalDocument/component/structuredBody/component/section[(not(@nullFlavor) or @nullFlavor='NI') and (templateId[@root='2.16.840.1.113883.10.20.22.2.22.1'] or templateId[@root='2.16.840.1.113883.10.20.22.2.22'])]";
     
-    public static String PROBLEM_EXPRESSION = "/ClinicalDocument/component/structuredBody/component/section[(not(@nullFlavor) or @nullFlavor='NI') and templateId[@root='2.16.840.1.113883.10.20.22.2.5.1']]";
+    public static final String PROBLEM_EXPRESSION = "/ClinicalDocument/component/structuredBody/component/section[(not(@nullFlavor) or @nullFlavor='NI') and (templateId[@root='2.16.840.1.113883.10.20.22.2.5.1'] or templateId[@root='2.16.840.1.113883.10.20.22.2.5'])]";
     public static String PROBLEM_OBS_EXPRESSION = "./entryRelationship/observation[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.4']]";
-    
-    public static String MEDICATION_EXPRESSION = "/ClinicalDocument/component/structuredBody/component/section[(not(@nullFlavor) or @nullFlavor='NI') and templateId[@root='2.16.840.1.113883.10.20.22.2.1.1']]";
+	public static final String MEDICATION_EXPRESSION = "/ClinicalDocument/component/structuredBody/component/section[(not(@nullFlavor) or @nullFlavor='NI') and (templateId[@root='2.16.840.1.113883.10.20.22.2.1.1'] or templateId[@root='2.16.840.1.113883.10.20.22.2.1'])]";
     public static String MEDICATION_SUBSTANCE_EXPRESSION = "./entryRelationship/substanceAdministration[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.147']]";
     
     
@@ -42,17 +41,18 @@ public class ApplicationConstants {
     public static String TOBACCOUSE_EXPRESSION = "./entry/observation[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.85']]";
     public static String SOCIAL_HISTORY_GENDER_EXPRESSION = "./entry/observation[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.200']]";
     
-    public static String RESULTS_EXPRESSION = "/ClinicalDocument/component/structuredBody/component/section[(not(@nullFlavor) or @nullFlavor='NI') and templateId[@root='2.16.840.1.113883.10.20.22.2.3.1']]";
+    public static final String RESULTS_EXPRESSION = "/ClinicalDocument/component/structuredBody/component/section[(not(@nullFlavor) or @nullFlavor='NI') and (templateId[@root='2.16.840.1.113883.10.20.22.2.3.1'] or templateId[@root='2.16.840.1.113883.10.20.22.2.3'])]";
     public static String LAB_RESULTS_EXPRESSION = "./entry/organizer[not(@nullFlavor) and statusCode[@code='completed']]";
     public static String LAB_TESTS_EXPRESSION = "./entry/organizer[not(@nullFlavor) and statusCode[@code='active']]";
-    public static String IMMUNIZATION_EXPRESSION = "/ClinicalDocument/component/structuredBody/component/section[(not(@nullFlavor) or @nullFlavor='NI') and templateId[@root='2.16.840.1.113883.10.20.22.2.2.1']]";
-    public static String VITALSIGNS_EXPRESSION = "/ClinicalDocument/component/structuredBody/component/section[(not(@nullFlavor) or @nullFlavor='NI') and templateId[@root='2.16.840.1.113883.10.20.22.2.4.1']]";
+    public static final String IMMUNIZATION_EXPRESSION = "/ClinicalDocument/component/structuredBody/component/section[(not(@nullFlavor) or @nullFlavor='NI') and (templateId[@root='2.16.840.1.113883.10.20.22.2.2.1'] or templateId[@root='2.16.840.1.113883.10.20.22.2.2'])]";
+    public static final String VITALSIGNS_EXPRESSION = "/ClinicalDocument/component/structuredBody/component/section[(not(@nullFlavor) or @nullFlavor='NI') and (templateId[@root='2.16.840.1.113883.10.20.22.2.4.1'] or templateId[@root='2.16.840.1.113883.10.20.22.2.4'])]";
 
     public static final String FAMILYHX_EXPRESSION = "/ClinicalDocument/component/structuredBody/component/section[(not(@nullFlavor) or @nullFlavor='NI') and templateId[@root='2.16.840.1.113883.10.20.22.2.15']]";
-    public static final String ADV_DIRECTIVE_EXPRESSION = "/ClinicalDocument/component/structuredBody/component/section[(not(@nullFlavor) or @nullFlavor='NI') and templateId[@root='2.16.840.1.113883.10.20.22.2.21']]";    public static final String FUNCTIONAL_STS_EXPRESSION = "/ClinicalDocument/component/structuredBody/component/section[(not(@nullFlavor) or @nullFlavor='NI') and templateId[@root='2.16.840.1.113883.10.20.22.2.14']]";
+    public static final String ADV_DIRECTIVE_EXPRESSION = "/ClinicalDocument/component/structuredBody/component/section[(not(@nullFlavor) or @nullFlavor='NI') and (templateId[@root='2.16.840.1.113883.10.20.22.2.21'] or templateId[@root='2.16.840.1.113883.10.20.22.2.21.1'])]";
+	public static final String FUNCTIONAL_STS_EXPRESSION = "/ClinicalDocument/component/structuredBody/component/section[(not(@nullFlavor) or @nullFlavor='NI') and templateId[@root='2.16.840.1.113883.10.20.22.2.14']]";
     public static final String MENTAL_STS_EXPRESSION = "/ClinicalDocument/component/structuredBody/component/section[(not(@nullFlavor) or @nullFlavor='NI') and templateId[@root='2.16.840.1.113883.10.20.22.2.56']]";
 
-    public static String PROCEDURE_EXPRESSION = "/ClinicalDocument/component/structuredBody/component/section[(not(@nullFlavor) or @nullFlavor='NI') and templateId[@root='2.16.840.1.113883.10.20.22.2.7.1']]";
+    public static final String PROCEDURE_EXPRESSION = "/ClinicalDocument/component/structuredBody/component/section[(not(@nullFlavor) or @nullFlavor='NI') and (templateId[@root='2.16.840.1.113883.10.20.22.2.7.1'] or templateId[@root='2.16.840.1.113883.10.20.22.2.7'])]";
     public static String PROCEDURE_UDI_EXPRESSION ="./participant[not(@nullFlavor) and @typeCode='DEV']/participantRole[not(@nullFlavor)]";
     public static String PROCEDURE_SDL_EXPRESSION ="./participant[not(@nullFlavor) and @typeCode='LOC']/participantRole[not(@nullFlavor)]";
     

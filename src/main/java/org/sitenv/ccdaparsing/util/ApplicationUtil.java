@@ -547,6 +547,7 @@ public class ApplicationUtil {
 		}
 		Element clonedElement = (Element) evaluate.cloneNode(true);
 		clonedElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+		clonedElement.setAttribute("xmlns:sdtc", ApplicationConstants.CCDADocumentNamespaces.sdtc.getNamespace());
 		evaluate = null;
 		return clonedElement;
 	}
@@ -557,6 +558,7 @@ public class ApplicationUtil {
 		}
 		Element clonedElement = (Element) node.cloneNode(true);
 		clonedElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+		clonedElement.setAttribute("xmlns:sdtc", ApplicationConstants.CCDADocumentNamespaces.sdtc.getNamespace());
 		node = null;
 		return clonedElement;
 	}
