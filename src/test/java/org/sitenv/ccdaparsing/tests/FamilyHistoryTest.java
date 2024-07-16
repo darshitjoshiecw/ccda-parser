@@ -38,7 +38,7 @@ public class FamilyHistoryTest {
 		DocumentBuilder builder = factory.newDocumentBuilder();
 		Document doc = builder.parse(new File(CCDA_DOC));
 		XPath xPath = XPathFactory.newInstance().newXPath();
-		familyHistory = familyHistoryProcessor.retrieveFamilyHistoryDetails(xPath, doc).get();
+		familyHistory = familyHistoryProcessor.retrieveFamilyHistoryDetails(xPath, doc);
 
 		familyHxOrgs = new ArrayList<CCDAFamilyHxOrg>();
 

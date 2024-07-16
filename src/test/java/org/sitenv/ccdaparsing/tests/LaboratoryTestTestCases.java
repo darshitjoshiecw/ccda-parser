@@ -41,7 +41,7 @@ public class LaboratoryTestTestCases {
 		DocumentBuilder builder = factory.newDocumentBuilder();
 		Document doc = builder.parse(new File(CCDA_DOC));
 		XPath xPath =  XPathFactory.newInstance().newXPath();
-		labTests = laboratoryResultsProcessor.retrieveLabResults(xPath, doc).get();
+		labTests = laboratoryResultsProcessor.retrieveLabResults(xPath, doc);
 		
 		resultOrgList = new ArrayList<>();
 		CCDALabResultOrg resultOrg = new CCDALabResultOrg();

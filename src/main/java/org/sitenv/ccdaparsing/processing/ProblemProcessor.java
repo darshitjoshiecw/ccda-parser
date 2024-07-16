@@ -9,7 +9,8 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.sitenv.ccdaparsing.model.CCDAAuthor;
 import org.sitenv.ccdaparsing.model.CCDAID;
 import org.sitenv.ccdaparsing.model.CCDAProblem;
@@ -17,6 +18,7 @@ import org.sitenv.ccdaparsing.model.CCDAProblemConcern;
 import org.sitenv.ccdaparsing.model.CCDAProblemObs;
 import org.sitenv.ccdaparsing.util.ApplicationConstants;
 import org.sitenv.ccdaparsing.util.ApplicationUtil;
+import org.sitenv.ccdaparsing.util.ParserUtilities;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
@@ -29,23 +31,25 @@ import org.w3c.dom.NodeList;
 @Service
 public class ProblemProcessor {
 	
-	private static final Logger logger = Logger.getLogger(ProblemProcessor.class);
-	
-	@Async()
-	public Future<CCDAProblem> retrieveProblemDetails(XPath xPath , Document doc) throws XPathExpressionException,TransformerException
+	private static final Logger logger = LogManager.getLogger(ProblemProcessor.class);
+
+	public CCDAProblem retrieveProblemDetails(XPath xPath , Document doc) throws XPathExpressionException,TransformerException
 	{
 		long startTime = System.currentTimeMillis();
     	logger.info("Problems parsing Start time:"+ startTime);
 		CCDAProblem problems = null;
-		Element sectionElement = (Element) xPath.compile(ApplicationConstants.PROBLEM_EXPRESSION).evaluate(doc, XPathConstants.NODE);
+		Element sectionElement = ApplicationUtil.getCloneNode((Element) xPath.compile(ApplicationConstants.PROBLEM_EXPRESSION).evaluate(doc, XPathConstants.NODE));
 		List<CCDAID> idList = new ArrayList<>();
 		if(sectionElement != null)
 		{
 			problems = new CCDAProblem();
+			sectionElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+			problems.setLineNumber(sectionElement.getUserData("lineNumber") + " - " + sectionElement.getUserData("endLineNumber") );
+			problems.setXmlString(ApplicationUtil.nodeToString((Node)sectionElement));
 			if(ApplicationUtil.checkForNullFlavourNI(sectionElement))
 			{
 				problems.setSectionNullFlavourWithNI(true);
-				return new AsyncResult<CCDAProblem>(problems);
+				return problems;
 			}
 			problems.setSectionTemplateId(ApplicationUtil.readTemplateIdList((NodeList) xPath.compile("./templateId[not(@nullFlavor)]").
 											evaluate(sectionElement, XPathConstants.NODESET)));
@@ -53,11 +57,8 @@ public class ProblemProcessor {
 					evaluate(sectionElement, XPathConstants.NODE)));
 			problems.setProblemConcerns(readProblemConcern((NodeList) xPath.compile("./entry/act[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.3']]").
 					evaluate(sectionElement, XPathConstants.NODESET), xPath,idList));
-			
-			sectionElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-			problems.setLineNumber(sectionElement.getUserData("lineNumber") + " - " + sectionElement.getUserData("endLineNumber") );
-			problems.setXmlString(ApplicationUtil.nodeToString((Node)sectionElement));
-			
+			problems.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(sectionElement, XPathConstants.NODE)));
 			Element textElement = (Element) xPath.compile("./text[not(@nullFlavor)]").evaluate(sectionElement, XPathConstants.NODE);
 			
 			if(textElement!=null)
@@ -67,8 +68,27 @@ public class ProblemProcessor {
 			}
 			problems.setIdList(idList);
 		}
+		if (problems != null) {
+			problems.setPastIllnessProblems(readPastIllnessProblems(doc, xPath));
+		}
 		logger.info("Problems parsing End time:"+ (System.currentTimeMillis() - startTime));
-		return new AsyncResult<CCDAProblem>(problems);
+		return problems;
+	}
+
+	public ArrayList<CCDAProblemObs> readPastIllnessProblems(Document doc, XPath xPath) throws XPathExpressionException, TransformerException {
+		ArrayList<CCDAProblemObs> probs = new ArrayList<CCDAProblemObs>();
+
+		Element sectionElement = ApplicationUtil.getCloneNode((Element) CCDAConstants.PAST_ILLNESS_EXP.evaluate(doc, XPathConstants.NODE));
+
+		if(sectionElement != null)
+		{
+			logger.info(" Found Past Illness Section ");
+
+			probs = readProblemObservation((NodeList) CCDAConstants.PAST_ILLNESS_PROBLEM_OBS_EXPRESSION.
+					evaluate(sectionElement, XPathConstants.NODESET), xPath, new ArrayList<>());
+		}
+
+		return probs;
 	}
 	
 	public ArrayList<CCDAProblemConcern> readProblemConcern(NodeList problemConcernNodeList, XPath xPath, List<CCDAID> idList) throws XPathExpressionException,TransformerException
@@ -77,7 +97,7 @@ public class ProblemProcessor {
 		CCDAProblemConcern problemConcern;
 		for (int i = 0; i < problemConcernNodeList.getLength(); i++) {
 			problemConcern = new CCDAProblemConcern();
-			Element problemConcernElement = (Element) problemConcernNodeList.item(i);
+			Element problemConcernElement = ApplicationUtil.getCloneNode((Element) problemConcernNodeList.item(i));
 			
 			problemConcernElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
 			problemConcern.setLineNumber(problemConcernElement.getUserData("lineNumber") + " - " + problemConcernElement.getUserData("endLineNumber") );
@@ -137,8 +157,8 @@ public class ProblemProcessor {
 		for (int i = 0; i < problemObservationNodeList.getLength(); i++) {
 			
 			problemObservation = new CCDAProblemObs();
-			
-			Element problemObservationElement = (Element) problemObservationNodeList.item(i);
+
+			Element problemObservationElement = ApplicationUtil.getCloneNode((Element) problemObservationNodeList.item(i));
 			
 			problemObservation.setNegationInd(Boolean.parseBoolean(problemObservationElement.getAttribute("negationInd")));
 			

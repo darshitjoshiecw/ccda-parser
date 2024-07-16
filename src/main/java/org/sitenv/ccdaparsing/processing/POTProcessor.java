@@ -9,7 +9,8 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.sitenv.ccdaparsing.model.CCDAID;
 import org.sitenv.ccdaparsing.model.CCDAPOT;
 import org.sitenv.ccdaparsing.util.ApplicationConstants;
@@ -26,7 +27,7 @@ import org.w3c.dom.NodeList;
 @Service
 public class POTProcessor {
 	
-	private static final Logger logger = Logger.getLogger(POTProcessor.class);
+	private static final Logger logger = LogManager.getLogger(POTProcessor.class);
 	
 	@Autowired
 	MedicationProcessor medicationProcessor;
@@ -37,21 +38,23 @@ public class POTProcessor {
 	@Autowired
 	ProcedureProcessor procedureProcessor;
 	
-	@Async()
-	public Future<CCDAPOT> retrievePOTDetails(XPath xPath , Document doc) throws XPathExpressionException,TransformerException
+	public CCDAPOT retrievePOTDetails(XPath xPath , Document doc) throws XPathExpressionException,TransformerException
 	{
 		long startTime = System.currentTimeMillis();
     	logger.info("POT parsing Start time:"+ startTime);
 		CCDAPOT pot = null;
-		Element sectionElement = (Element) xPath.compile(ApplicationConstants.POT_EXPRESSION).evaluate(doc, XPathConstants.NODE);
+		Element sectionElement = ApplicationUtil.getCloneNode((Element) xPath.compile(ApplicationConstants.POT_EXPRESSION).evaluate(doc, XPathConstants.NODE));
 		List<CCDAID> idList = new ArrayList<>();
 		if(sectionElement != null)
 		{
 			pot = new CCDAPOT();
+			sectionElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+			pot.setLineNumber(sectionElement.getUserData("lineNumber") + " - " + sectionElement.getUserData("endLineNumber"));
+			pot.setXmlString(ApplicationUtil.nodeToString((Node) sectionElement));
 			if(ApplicationUtil.checkForNullFlavourNI(sectionElement))
 			{
 				pot.setSectionNullFlavourWithNI(true);
-				return new AsyncResult<CCDAPOT>(pot);
+				return pot;
 			}
 			pot.setTemplateId(ApplicationUtil.readTemplateIdList((NodeList) xPath.compile("./templateId[not(@nullFlavor)]").
 									evaluate(sectionElement, XPathConstants.NODESET)));
@@ -70,15 +73,11 @@ public class POTProcessor {
 			
 			NodeList plannedProcedureNodeList = (NodeList) xPath.compile(ApplicationConstants.POT_PROCEDURE_EXPRESSION).evaluate(sectionElement, XPathConstants.NODESET);
 			pot.setPlannedProcedure(procedureProcessor.readProcedures(plannedProcedureNodeList,xPath,idList));
-			
-			sectionElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-			pot.setLineNumber(sectionElement.getUserData("lineNumber") + " - " + sectionElement.getUserData("endLineNumber"));
-			pot.setXmlString(ApplicationUtil.nodeToString((Node) sectionElement));
-			
+
 			pot.setIdList(idList);
 		}
 		logger.info("POT parsing End time:"+ (System.currentTimeMillis() - startTime));
-		return new AsyncResult<CCDAPOT>(pot);
+		return pot;
 	}
 	
 	

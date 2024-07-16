@@ -41,7 +41,7 @@ public class MedicationAllergies {
 		DocumentBuilder builder = factory.newDocumentBuilder();
 		Document doc = builder.parse(new File(CCDA_DOC));
 		XPath xPath =  XPathFactory.newInstance().newXPath();
-		allergies = mediactionAllergiesProcessor.retrieveAllergiesDetails(xPath, doc).get();
+		allergies = mediactionAllergiesProcessor.retrieveAllergiesDetails(xPath, doc);
 		
 		allergyConcernList = new ArrayList<>();
 		CCDAAllergyConcern allergyConcern = new CCDAAllergyConcern();
@@ -275,6 +275,24 @@ public class MedicationAllergies {
 		allergies.getAllergyConcern().get(0).getAllergyObs().get(0).getReactions().get(0).getReferenceText().setXmlString(null);
 		Assert.assertEquals("Allergy concern obs reactions test case failed",allergyConcernList.get(0).getAllergyObs().get(0).getReactions(),
 									allergies.getAllergyConcern().get(0).getAllergyObs().get(0).getReactions());
+	}
+
+	@Test
+	public void testAllergyCCDAAuthor(){
+		Assert.assertEquals("Allergy Author equal","555555559",
+				allergies.getAuthor().getAuthorIds().get(0).getExtValue());
+	}
+
+	@Test
+	public void testAllergyReactionCCDAAuthor(){
+		Assert.assertEquals("Allergy Reaction Author equal", "555555665",
+				allergies.getAllergyConcern().get(0).getAllergyObs().get(0).getReactions().get(0).getAuthor().getAuthorIds().get(0).getExtValue());
+	}
+
+	@Test
+	public void testAllergySeverityCCDAAuthor(){
+		Assert.assertEquals("Allergy Severity Author equal","555565667",
+				allergies.getAllergyConcern().get(0).getAllergyObs().get(0).getReactions().get(0).getSeverity().getAuthor().getAuthorIds().get(0).getExtValue());
 	}
 	
 	/*@Test

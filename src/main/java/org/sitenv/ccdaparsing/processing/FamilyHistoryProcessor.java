@@ -1,6 +1,7 @@
 package org.sitenv.ccdaparsing.processing;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.sitenv.ccdaparsing.model.CCDAFamilyHistory;
 import org.sitenv.ccdaparsing.model.CCDAFamilyHxObs;
 import org.sitenv.ccdaparsing.model.CCDAFamilyHxOrg;
@@ -25,22 +26,24 @@ import java.util.concurrent.Future;
 
 @Service
 public class FamilyHistoryProcessor {
-	private static final Logger logger = Logger.getLogger(FamilyHistoryProcessor.class);
+	private static final Logger logger = LogManager.getLogger(FamilyHistoryProcessor.class);
 
-	@Async()
-	public Future<CCDAFamilyHistory> retrieveFamilyHistoryDetails(XPath xPath, Document doc) throws XPathExpressionException, TransformerException {
+	public CCDAFamilyHistory retrieveFamilyHistoryDetails(XPath xPath, Document doc) throws XPathExpressionException, TransformerException {
 		long startTime = System.currentTimeMillis();
 		logger.info("Family History parsing Start time:" + startTime);
 
 		CCDAFamilyHistory familyHistory = null;
-		Element sectionElement = (Element) xPath.compile(ApplicationConstants.FAMILYHX_EXPRESSION)
-				.evaluate(doc, XPathConstants.NODE);
+		Element sectionElement = ApplicationUtil.getCloneNode((Element) xPath.compile(ApplicationConstants.FAMILYHX_EXPRESSION)
+				.evaluate(doc, XPathConstants.NODE));
 		List<CCDAID> idList = new ArrayList<>();
 		if (sectionElement != null) {
 			familyHistory = new CCDAFamilyHistory();
+			sectionElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+			familyHistory.setLineNumber(sectionElement.getUserData("lineNumber") + " - " + sectionElement.getUserData("endLineNumber"));
+			familyHistory.setXmlString(ApplicationUtil.nodeToString((Node) sectionElement));
 			if (ApplicationUtil.checkForNullFlavourNI(sectionElement)) {
 				familyHistory.setSectionNullFlavourWithNI(true);
-				return new AsyncResult<CCDAFamilyHistory>(familyHistory);
+				return familyHistory;
 			}
 			familyHistory.setTemplateIds(ApplicationUtil
 					.readTemplateIdList((NodeList) xPath.compile("./templateId[not(@nullFlavor)]").
@@ -49,10 +52,6 @@ public class FamilyHistoryProcessor {
 					evaluate(sectionElement, XPathConstants.NODE)));
 			familyHistory.setFamilyHxOrg(readFamilyHxOrganizer((NodeList) xPath.compile("./entry/organizer[not(@nullFlavor)]").
 					evaluate(sectionElement, XPathConstants.NODESET), xPath, idList));
-
-			sectionElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-			familyHistory.setLineNumber(sectionElement.getUserData("lineNumber") + " - " + sectionElement.getUserData("endLineNumber"));
-			familyHistory.setXmlString(ApplicationUtil.nodeToString((Node) sectionElement));
 
 			Element textElement = (Element) xPath.compile("./text[not(@nullFlavor)]").evaluate(sectionElement, XPathConstants.NODE);
 
@@ -63,7 +62,7 @@ public class FamilyHistoryProcessor {
 			familyHistory.setIdList(idList);
 		}
 		logger.info("Family History parsing End time:" + (System.currentTimeMillis() - startTime));
-		return new AsyncResult<CCDAFamilyHistory>(familyHistory);
+		return familyHistory;
 	}
 
 	private ArrayList<CCDAFamilyHxOrg> readFamilyHxOrganizer(NodeList familyHxOrgNodeList, XPath xPath, List<CCDAID> idList) throws TransformerException, XPathExpressionException {
@@ -73,7 +72,7 @@ public class FamilyHistoryProcessor {
 		for (int i = 0; i < familyHxOrgNodeList.getLength(); i++) {
 			familyHxOrganizer = new CCDAFamilyHxOrg();
 
-			Element familyHxOrganizerElement = (Element) familyHxOrgNodeList.item(i);
+			Element familyHxOrganizerElement = ApplicationUtil.getCloneNode((Element) familyHxOrgNodeList.item(i));
 
 			familyHxOrganizerElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
 			familyHxOrganizer.setLineNumber(familyHxOrganizerElement.getUserData("lineNumber") + " - " + familyHxOrganizerElement.getUserData("endLineNumber"));
@@ -123,7 +122,7 @@ public class FamilyHistoryProcessor {
 
 			familyHxObservation = new CCDAFamilyHxObs();
 
-			Element familyHxObsElement = (Element) familyHxObsNodeList.item(i);
+			Element familyHxObsElement = ApplicationUtil.getCloneNode((Element) familyHxObsNodeList.item(i));
 
 			familyHxObsElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
 			familyHxObservation.setLineNumber(familyHxObsElement.getUserData("lineNumber") + " - " + familyHxObsElement.getUserData("endLineNumber"));

@@ -35,7 +35,7 @@ public class GoalsTest {
 		DocumentBuilder builder = factory.newDocumentBuilder();
 		Document doc = builder.parse(new File(CCDA_DOC));
 		XPath xPath =  XPathFactory.newInstance().newXPath();
-		goals = goalsProcessor.retrieveGoalsDetails(xPath, doc).get();
+		goals = goalsProcessor.retrieveGoalsDetails(xPath, doc);
 	}
 	
 	

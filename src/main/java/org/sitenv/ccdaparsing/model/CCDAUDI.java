@@ -8,7 +8,16 @@ public class CCDAUDI extends CCDAXmlSnippet{
 	private ArrayList<CCDAII>     UDIValue;
 	private CCDACode deviceCode;
 	private ArrayList<CCDAII> scopingEntityId;
-	
+	private CCDAAuthor author;
+
+	public CCDAAuthor getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(CCDAAuthor author) {
+		this.author = author;
+	}
+
 	public ArrayList<CCDAII> getTemplateIds() {
 		return templateIds;
 	}

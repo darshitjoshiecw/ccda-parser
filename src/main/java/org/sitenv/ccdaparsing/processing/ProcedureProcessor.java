@@ -9,7 +9,8 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.sitenv.ccdaparsing.model.CCDAAssignedEntity;
 import org.sitenv.ccdaparsing.model.CCDAID;
 import org.sitenv.ccdaparsing.model.CCDAOrganization;
@@ -19,6 +20,7 @@ import org.sitenv.ccdaparsing.model.CCDAServiceDeliveryLoc;
 import org.sitenv.ccdaparsing.model.CCDAUDI;
 import org.sitenv.ccdaparsing.util.ApplicationConstants;
 import org.sitenv.ccdaparsing.util.ApplicationUtil;
+import org.sitenv.ccdaparsing.util.ParserUtilities;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
@@ -29,24 +31,26 @@ import org.w3c.dom.NodeList;
 
 @Service
 public class ProcedureProcessor {
-	
-	private static final Logger logger = Logger.getLogger(ProcedureProcessor.class);
-	
-	@Async()
-	public Future<CCDAProcedure> retrievePrcedureDetails(XPath xPath , Document doc) throws XPathExpressionException,TransformerException
+
+	private static final Logger logger = LogManager.getLogger(ProcedureProcessor.class);
+
+	public CCDAProcedure retrievePrcedureDetails(XPath xPath , Document doc) throws XPathExpressionException,TransformerException
 	{
 		long startTime = System.currentTimeMillis();
     	logger.info("Procedure parsing Start time:"+ startTime);
 		CCDAProcedure procedures = null;
-		Element sectionElement = (Element) xPath.compile(ApplicationConstants.PROCEDURE_EXPRESSION).evaluate(doc, XPathConstants.NODE);
+		Element sectionElement = ApplicationUtil.getCloneNode((Element) xPath.compile(ApplicationConstants.PROCEDURE_EXPRESSION).evaluate(doc, XPathConstants.NODE));
 		List<CCDAID> idList = new ArrayList<>();
 		if(sectionElement !=null)
 		{
 			procedures = new CCDAProcedure();
+			sectionElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+			procedures.setLineNumber(sectionElement.getUserData("lineNumber") + " - " + sectionElement.getUserData("endLineNumber") );
+			procedures.setXmlString(ApplicationUtil.nodeToString((Node)sectionElement));
 			if(ApplicationUtil.checkForNullFlavourNI(sectionElement))
 			{
 				procedures.setSectionNullFlavourWithNI(true);
-				return new AsyncResult<CCDAProcedure>(procedures);
+				return procedures;
 			}
 			procedures.setSectionTemplateId(ApplicationUtil.readTemplateIdList((NodeList) xPath.
 							compile("./templateId[not(@nullFlavor)]").evaluate(sectionElement, XPathConstants.NODESET)));
@@ -54,11 +58,14 @@ public class ProcedureProcessor {
 					evaluate(sectionElement, XPathConstants.NODE)));
 			procedures.setProcActsProcs(readProcedures((NodeList) xPath.compile("./entry/procedure[not(@nullFlavor)]").
 					evaluate(sectionElement, XPathConstants.NODESET), xPath,idList));
-			
-			sectionElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-			procedures.setLineNumber(sectionElement.getUserData("lineNumber") + " - " + sectionElement.getUserData("endLineNumber") );
-			procedures.setXmlString(ApplicationUtil.nodeToString((Node)sectionElement));
-			
+
+			procedures.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(sectionElement, XPathConstants.NODE)));
+
+			// Add Notes Activity if present in Results entry
+			procedures.setNotesActivity(ParserUtilities.readNotesActivity((NodeList) CCDAConstants.REL_NOTES_ACTIVITY_EXPRESSION.
+					evaluate(sectionElement, XPathConstants.NODESET), null));
+
 			Element textElement = (Element) xPath.compile("./text[not(@nullFlavor)]").evaluate(sectionElement, XPathConstants.NODE);
 			
 			if(textElement!=null)
@@ -70,7 +77,7 @@ public class ProcedureProcessor {
 
 		}
 		logger.info("Procedure parsing End time:"+ (System.currentTimeMillis() - startTime));
-		return new AsyncResult<CCDAProcedure>(procedures);
+		return procedures;
 	}
 	
 	public ArrayList<CCDAProcActProc> readProcedures(NodeList proceduresNodeList , XPath xPath , List<CCDAID> idList) throws XPathExpressionException,TransformerException
@@ -84,7 +91,7 @@ public class ProcedureProcessor {
 		for (int i = 0; i < proceduresNodeList.getLength(); i++) {
 			
 			procedure = new CCDAProcActProc();
-			Element procedureElement = (Element) proceduresNodeList.item(i);
+			Element procedureElement = ApplicationUtil.getCloneNode((Element) proceduresNodeList.item(i));
 			
 			procedureElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
 			procedure.setLineNumber(procedureElement.getUserData("lineNumber") + " - " + procedureElement.getUserData("endLineNumber") );
@@ -124,8 +131,15 @@ public class ProcedureProcessor {
 			NodeList serviceDeliveryNodeList = (NodeList) xPath.compile(ApplicationConstants.PROCEDURE_SDL_EXPRESSION).
 						evaluate(procedureElement, XPathConstants.NODESET);
 			procedure.setSdLocs(readServiceDeliveryLocators(serviceDeliveryNodeList, xPath,idList));
-			
-			
+
+			// Add Notes Activity if present in Procedures Procedure Activity Procedure entryRelationship
+			procedure.setNotesActivity(
+					ParserUtilities.readNotesActivity((NodeList) CCDAConstants.REL_ENTRY_REL_NOTES_ACTIVITY_EXPRESSION
+							.evaluate(procedureElement, XPathConstants.NODESET), null));
+
+			procedure.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(procedureElement, XPathConstants.NODE)));
+
 			proceduresList.add(procedure);
 		}
 		return proceduresList;
@@ -141,8 +155,8 @@ public class ProcedureProcessor {
 		CCDAAssignedEntity assignedEntity;
 		
 		for (int i = 0; i < performerEntityNodeList.getLength(); i++) {
-			
-			Element performerEntityElement = (Element) performerEntityNodeList.item(i);
+
+			Element performerEntityElement = ApplicationUtil.getCloneNode((Element) performerEntityNodeList.item(i));
 			assignedEntity = new CCDAAssignedEntity();
 			
 			if(performerEntityElement != null)
@@ -196,8 +210,8 @@ public class ProcedureProcessor {
 		for (int i = 0; i < deviceNodeList.getLength(); i++) {
 			
 			device = new CCDAUDI();
-			
-			Element deviceElement = (Element) deviceNodeList.item(i);
+
+			Element deviceElement = ApplicationUtil.getCloneNode((Element) deviceNodeList.item(i));
 			device.setTemplateIds(ApplicationUtil.readTemplateIdList((NodeList) xPath.compile("./templateId[not(@nullFlavor)]").
 											evaluate(deviceElement, XPathConstants.NODESET)));
 			
@@ -213,7 +227,8 @@ public class ProcedureProcessor {
 					evaluate(deviceElement, XPathConstants.NODE)));
 			device.setScopingEntityId(ApplicationUtil.readTemplateIdList((NodeList) xPath.compile("./scopingEntity/id[not(@nullFlavor)]").
 					evaluate(deviceElement, XPathConstants.NODESET)));
-			
+			device.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(deviceElement, XPathConstants.NODE)));
 			
 			deviceList.add(device);
 			
@@ -234,8 +249,8 @@ public class ProcedureProcessor {
 		for (int i = 0; i < serviceDeliveryLocNodeList.getLength(); i++) {
 			
 			serviceDeliveryLoc = new CCDAServiceDeliveryLoc();
-			
-			Element serviceDeliveryLocElement = (Element) serviceDeliveryLocNodeList.item(i);
+
+			Element serviceDeliveryLocElement = ApplicationUtil.getCloneNode((Element) serviceDeliveryLocNodeList.item(i));
 			serviceDeliveryLoc.setTemplateId(ApplicationUtil.readTemplateIdList((NodeList) xPath.compile("./templateId[not(@nullFlavor)]").
 											evaluate(serviceDeliveryLocElement, XPathConstants.NODESET)));
 			

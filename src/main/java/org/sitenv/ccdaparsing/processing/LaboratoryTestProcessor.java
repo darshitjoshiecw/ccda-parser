@@ -9,7 +9,8 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.sitenv.ccdaparsing.model.CCDAID;
 import org.sitenv.ccdaparsing.model.CCDALabResult;
 import org.sitenv.ccdaparsing.util.ApplicationConstants;
@@ -20,32 +21,35 @@ import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 @Service
 public class LaboratoryTestProcessor {
-	
-	private static final Logger logger = Logger.getLogger(LaboratoryTestProcessor.class);
-	
+
+	private static final Logger logger = LogManager.getLogger(LaboratoryTestProcessor.class);
+
 	@Autowired
 	LaboratoryResultsProcessor laboratoryResultsProcessor;
-	
-	@Async()
-	public Future<CCDALabResult> retrieveLabTests(XPath xPath , Document doc ) throws XPathExpressionException,TransformerException
+
+	public CCDALabResult retrieveLabTests(XPath xPath , Document doc ) throws XPathExpressionException,TransformerException
 	{
 		long startTime = System.currentTimeMillis();
     	logger.info("Lab tests parsing Start time:"+ startTime);
     	
 		CCDALabResult labTests = null;
 		List<CCDAID> idList = new ArrayList<>();
-		Element sectionElement = (Element) xPath.compile(ApplicationConstants.RESULTS_EXPRESSION).evaluate(doc, XPathConstants.NODE);
+		Element sectionElement = ApplicationUtil.getCloneNode((Element) xPath.compile(ApplicationConstants.RESULTS_EXPRESSION).evaluate(doc, XPathConstants.NODE));
 		if(sectionElement != null)
 		{
 			labTests = new CCDALabResult();
+			sectionElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+			labTests.setLineNumber(sectionElement.getUserData("lineNumber") + " - " + sectionElement.getUserData("endLineNumber"));
+			labTests.setXmlString(ApplicationUtil.nodeToString((Node) sectionElement));
 			if(ApplicationUtil.checkForNullFlavourNI(sectionElement))
 			{
 				labTests.setSectionNullFlavourWithNI(true);
-				return new AsyncResult<CCDALabResult>(labTests);
+				return labTests;
 			}
 			labTests.setResultSectionTempalteIds(ApplicationUtil.readTemplateIdList((NodeList) xPath.compile("./templateId[not(@nullFlavor)]").
 								evaluate(sectionElement, XPathConstants.NODESET)));
@@ -59,7 +63,7 @@ public class LaboratoryTestProcessor {
 			labTests.setIdList(idList);
 		}
 		logger.info("Lab tests parsing End time:"+ (System.currentTimeMillis() - startTime));
-		return new AsyncResult<CCDALabResult>(labTests);
+		return labTests;
 	}
 
 }

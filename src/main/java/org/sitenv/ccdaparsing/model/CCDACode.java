@@ -1,12 +1,114 @@
 package org.sitenv.ccdaparsing.model;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.sitenv.ccdaparsing.dto.ContentValidationResult;
+import org.sitenv.ccdaparsing.dto.enums.ContentValidationResultLevel;
+
+import java.util.ArrayList;
+
 public class CCDACode extends CCDADataElement {
 	private String  code;
 	private String  codeSystem;
 	private String  codeSystemName;
 	private String  displayName;
+	private String valueSetOid;
+	private ArrayList<CCDACode> translations;
 	private String nullFlavor;
-	
+
+	public Boolean matches(CCDACode cd, ArrayList<ContentValidationResult> results, String elementName) {
+
+		if( (code != null) && (cd.getCode() != null) &&
+				(codeSystem != null) && (cd.getCodeSystem() != null) &&
+				(code.equalsIgnoreCase(cd.getCode())) &&
+				(codeSystem.equalsIgnoreCase(cd.getCodeSystem()))) {
+			return true;
+		}
+		else
+		{
+			String error = "The " + elementName + " : Code = " + ((code != null)?code:"None Specified")
+					+ " , CodeSystem = " + ((codeSystem != null)?codeSystem:"None Specified")
+					+ " do not match the submitted CCDA : code = " + ((cd.getCode() != null)?cd.getCode():"None Specified")
+					+ " , and CodeSystem = " + ((cd.getCodeSystem() != null)?cd.getCodeSystem():"None Specified");
+
+			ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+			return false;
+		}
+
+	}
+
+	public Boolean codeMatches(CCDACode cd, ArrayList<ContentValidationResult> results, String elementName) {
+
+		if( (code != null) && (cd.getCode() != null) &&
+				(code.equalsIgnoreCase(cd.getCode())) ) {
+			return true;
+		}
+		else
+		{
+			String error = "The " + elementName + " : Code = " + ((code != null)?code:"None Specified")
+					+ " does not match the submitted CCDA : code = " + ((cd.getCode() != null)?cd.getCode():"None Specified");
+
+			ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+			return false;
+
+		}
+	}
+
+	public Boolean isCodePresent(CCDACode cd) {
+
+		// Check if the code is present in this element's code
+		if( (code != null) && (cd.getCode() != null) &&
+				(codeSystem != null) && (cd.getCodeSystem() != null) &&
+				(code.equalsIgnoreCase(cd.getCode())) &&
+				(codeSystem.equalsIgnoreCase(cd.getCodeSystem()))) {
+
+			return true;
+		}
+
+		// Check if the code is present in this element's translation
+		for(CCDACode trans : translations) {
+
+			if( (trans.getCode() != null) && (cd.getCode() != null) &&
+					(trans.getCodeSystem() != null) && (cd.getCodeSystem() != null) &&
+					(trans.getCode().equalsIgnoreCase(cd.getCode())) &&
+					(trans.getCodeSystem().equalsIgnoreCase(cd.getCodeSystem()))) {
+
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public Boolean codeEquals(CCDACode cd) {
+
+		if( (code != null) && (cd.getCode() != null) &&
+				(codeSystem != null) && (cd.getCodeSystem() != null) &&
+				(code.equalsIgnoreCase(cd.getCode())) &&
+				(codeSystem.equalsIgnoreCase(cd.getCodeSystem()))) {
+			return true;
+		}
+		return false;
+	}
+
+	public String getValueSetOid() {
+		return valueSetOid;
+	}
+
+	public void setValueSetOid(String valueSetOid) {
+		this.valueSetOid = valueSetOid;
+	}
+
+	public ArrayList<CCDACode> getTranslations() {
+		return translations;
+	}
+
+	public void setTranslations(ArrayList<CCDACode> translations) {
+		this.translations = translations;
+	}
+
 	public String getCode() {
 		return code;
 	}
@@ -50,6 +152,7 @@ public class CCDACode extends CCDADataElement {
 	public CCDACode()
 	{
 		super();
+		translations = new ArrayList<CCDACode>();
 	}
 
 	@Override
@@ -83,8 +186,19 @@ public class CCDACode extends CCDADataElement {
 			return false;
 		return true;
 	}
-	
-	
-	
+
+	public void addTranslation(CCDACode transCode) {
+		this.translations.add(transCode);
+
+	}
+
+	public Boolean isTranslationPresent() {
+
+		if(translations != null &&
+				translations.size() > 0 )
+			return true;
+		else
+			return false;
+	}
 	
 }

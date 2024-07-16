@@ -1,9 +1,52 @@
 package org.sitenv.ccdaparsing.model;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.util.ArrayList;
+
 public class CCDAII extends CCDADataElement{
+	
 	private String  rootValue;
 	private String  extValue;
-	
+
+	public Boolean isPartOf(ArrayList<CCDAII> list) {
+
+		for( CCDAII item : list) {
+
+			//this.log();
+			//item.log();
+
+			// Both Root and Extensions are present.
+			if( (rootValue != null) && (item.getRootValue() != null) &&
+					(extValue != null)  && (item.getExtValue() != null) &&
+					(rootValue.equalsIgnoreCase(item.getRootValue())) &&
+					(extValue.equalsIgnoreCase(item.getExtValue()))) {
+				return true;
+			}
+			// Only Root value are present
+			else if( (rootValue != null) && (item.getRootValue() != null) &&
+					(extValue == null)  && (item.getExtValue() == null) &&
+					(rootValue.equalsIgnoreCase(item.getRootValue()))) {
+				return true;
+			}
+
+			// continue through the list
+		}
+
+		//if we never hit the postive case
+		return false;
+	}
+
+	public void log() {
+
+		/*log.info(" *** Intance Identifier *** ");
+
+		log.info(" Root : " + rootValue);
+		log.info(" Extension : " + extValue);*/
+
+	}
+
 	public String getRootValue() {
 		return rootValue;
 	}

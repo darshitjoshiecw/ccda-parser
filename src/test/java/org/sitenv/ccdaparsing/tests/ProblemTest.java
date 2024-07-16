@@ -11,6 +11,7 @@ import javax.xml.xpath.XPathFactory;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.sitenv.ccdaparsing.model.CCDAAuthor;
 import org.sitenv.ccdaparsing.model.CCDACode;
 import org.sitenv.ccdaparsing.model.CCDADataElement;
 import org.sitenv.ccdaparsing.model.CCDAEffTime;
@@ -38,7 +39,7 @@ public class ProblemTest {
 		DocumentBuilder builder = factory.newDocumentBuilder();
 		Document doc = builder.parse(new File(CCDA_DOC));
 		XPath xPath =  XPathFactory.newInstance().newXPath();
-		problems = problemProcessor.retrieveProblemDetails(xPath, doc).get();
+		problems = problemProcessor.retrieveProblemDetails(xPath, doc);
 		
 		problemConcernList = new ArrayList<>();
 		
@@ -244,4 +245,33 @@ public class ProblemTest {
 													problems.getProblemConcerns().get(0).getProblemObservations().get(0).getEffTime());
 	}
 
+	@Test
+	public void testProblemPastIllnessProblem(){
+		CCDAProblemObs problemObs = problems.getPastIllnessProblems().get(0);
+		Assert.assertEquals("Problems PastIllness templateId root value comparision test case failed","2.16.840.1.113883.10.20.22.4.4",	problemObs.getTemplateId().get(0).getRootValue());
+		Assert.assertEquals("Problems PastIllness templateId ext value comparision test case failed","2015-08-01",	problemObs.getTemplateId().get(0).getExtValue());
+		Assert.assertEquals("Problems PastIllness problem type code value comparision test case failed","64572001",	problemObs.getProblemType().getCode());
+		Assert.assertEquals("Problems PastIllness problem type code system comparision test case failed","2.16.840.1.113883.6.96",	problemObs.getProblemType().getCodeSystem());
+		Assert.assertEquals("Problems PastIllness problem type code system name comparision test case failed","SNOMED CT",	problemObs.getProblemType().getCodeSystemName());
+		Assert.assertEquals("Problems PastIllness problem type display name comparision test case failed","Condition",	problemObs.getProblemType().getDisplayName());
+		Assert.assertEquals("Problems PastIllness translation problem type code value comparision test case failed","75323-6",	problemObs.getTranslationProblemType().get(0).getCode());
+		Assert.assertEquals("Problems PastIllness translation problem type code system comparision test case failed","2.16.840.1.113883.6.1",	problemObs.getTranslationProblemType().get(0).getCodeSystem());
+		Assert.assertEquals("Problems PastIllness translation problem type code system name comparision test case failed","LOINC",	problemObs.getTranslationProblemType().get(0).getCodeSystemName());
+		Assert.assertEquals("Problems PastIllness effective time low value comparision test case failed","20130703",	problemObs.getEffTime().getLow().getValue());
+		Assert.assertEquals("Problems PastIllness effective time high value comparision test case failed","20080814",	problemObs.getEffTime().getHigh().getValue());
+		Assert.assertEquals("Problems PastIllness problem code value comparision test case failed","233604007",	problemObs.getProblemCode().getCode());
+		Assert.assertEquals("Problems PastIllness problem code display name comparision test case failed","Pneumonia",	problemObs.getProblemCode().getDisplayName());
+		Assert.assertEquals("Problems PastIllness problem code xPath value comparision test case failed","CD",	problemObs.getProblemCode().getXpath());
+		Assert.assertEquals("Problems PastIllness author templateId root value comparision test case failed","2.16.840.1.113883.10.20.22.4.119",	problemObs.getAuthor().getTemplateId().getRootValue());
+		Assert.assertEquals("Problems PastIllness author templateId time comparision test case failed","200808141030-0800",	problemObs.getAuthor().getTime().getValue());
+		Assert.assertEquals("Problems PastIllness templateId negation id comparision test case failed",false, problemObs.getNegationInd());
+	}
+
+	@Test
+	public void testProblemAuthor(){
+		CCDAAuthor author = problems.getAuthor();
+		Assert.assertEquals("Problems author effective time comparision test case failed","199805011145-0800",	author.getEffTime().getValue());
+		Assert.assertEquals("Problems author root value comparision test case failed","1.1.1.1.1.1.1.2", author.getAuthorIds().get(0).getRootValue());
+		Assert.assertEquals("Problems author ext value comparision test case failed","555555555", author.getAuthorIds().get(0).getExtValue());
+	}
 }

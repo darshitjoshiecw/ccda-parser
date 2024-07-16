@@ -9,6 +9,7 @@ public class CCDAAllergyReaction extends CCDAXmlSnippet {
 	private CCDACode					reactionCode;
 	private CCDADataElement referenceText;
 	private CCDAAllergySeverity			severity;
+	private CCDAAuthor					author;
 	
 	public CCDADataElement getReferenceText() {
 		return referenceText;
@@ -48,6 +49,14 @@ public class CCDAAllergyReaction extends CCDAXmlSnippet {
 
 	public void setSectionNullFlavourWithNI(boolean isSectionNullFlavourWithNI) {
 		this.isSectionNullFlavourWithNI = isSectionNullFlavourWithNI;
+	}
+
+	public CCDAAuthor getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(CCDAAuthor author) {
+		this.author = author;
 	}
 
 	public CCDAAllergyReaction()

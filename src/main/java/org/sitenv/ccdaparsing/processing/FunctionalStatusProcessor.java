@@ -1,6 +1,8 @@
 package org.sitenv.ccdaparsing.processing;
 
-import org.apache.log4j.Logger;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.sitenv.ccdaparsing.model.CCDAFunctionalStatus;
 import org.sitenv.ccdaparsing.model.CCDAID;
 import org.sitenv.ccdaparsing.util.ApplicationConstants;
@@ -23,21 +25,24 @@ import java.util.concurrent.Future;
 
 @Service
 public class FunctionalStatusProcessor {
-	private static final Logger logger = Logger.getLogger(FunctionalStatusProcessor.class);
+	private static final Logger logger = LogManager.getLogger(FunctionalStatusProcessor.class);
 
-	@Async()
-	public Future<CCDAFunctionalStatus> retrieveFunctionalStatusDetails(XPath xPath, Document doc) throws XPathExpressionException, TransformerException {
+	public CCDAFunctionalStatus retrieveFunctionalStatusDetails(XPath xPath, Document doc) throws XPathExpressionException, TransformerException {
 		long startTime = System.currentTimeMillis();
 		logger.info("Advance Directive parsing Start time:" + startTime);
 
 		CCDAFunctionalStatus functionalStatus = null;
-		Element sectionElement = (Element) xPath.compile(ApplicationConstants.FUNCTIONAL_STS_EXPRESSION).evaluate(doc, XPathConstants.NODE);
+		Element sectionElement = ApplicationUtil.getCloneNode((Element) xPath.compile(ApplicationConstants.FUNCTIONAL_STS_EXPRESSION).evaluate(doc, XPathConstants.NODE));
+
 		List<CCDAID> idList = new ArrayList<>();
 		if (sectionElement != null) {
 			functionalStatus = new CCDAFunctionalStatus();
+			sectionElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+			functionalStatus.setLineNumber(sectionElement.getUserData("lineNumber") + " - " + sectionElement.getUserData("endLineNumber"));
+			functionalStatus.setXmlString(ApplicationUtil.nodeToString((Node) sectionElement));
 			if (ApplicationUtil.checkForNullFlavourNI(sectionElement)) {
 				functionalStatus.setSectionNullFlavourWithNI(true);
-				return new AsyncResult<CCDAFunctionalStatus>(functionalStatus);
+				return functionalStatus;
 			}
 			functionalStatus.setTemplateIds(ApplicationUtil
 					.readTemplateIdList((NodeList) xPath.compile("./templateId[not(@nullFlavor)]").
@@ -45,11 +50,8 @@ public class FunctionalStatusProcessor {
 			functionalStatus.setSectionCode(ApplicationUtil.readCode((Element) xPath.compile("./code[not(@nullFlavor)]").
 					evaluate(sectionElement, XPathConstants.NODE)));
 
-			sectionElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-			functionalStatus.setLineNumber(sectionElement.getUserData("lineNumber") + " - " + sectionElement.getUserData("endLineNumber"));
-			functionalStatus.setXmlString(ApplicationUtil.nodeToString((Node) sectionElement));
 		}
 
-		return new AsyncResult<CCDAFunctionalStatus>(functionalStatus);
+		return functionalStatus;
 	}
 }

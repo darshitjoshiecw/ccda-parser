@@ -1,11 +1,16 @@
 package org.sitenv.ccdaparsing.model;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.w3c.dom.Element;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import org.w3c.dom.Element;
-
 public class CCDAPatient extends CCDAXmlSnippet{
+
+	private static Logger log = LogManager.getLogger(CCDAPatient.class.getName());
+
 	private CCDADataElement firstName;
 	private CCDADataElement lastName;
 	private CCDADataElement middleName;
@@ -17,6 +22,7 @@ public class CCDAPatient extends CCDAXmlSnippet{
 	private ArrayList<CCDAPL> languageCommunication;
 	private CCDACode raceCodes;
 	private ArrayList<CCDACode> sdtcRaceCodes;
+	private ArrayList<CCDACode> raceCodeExt;
 	private CCDACode administrativeGenderCode;
 	private CCDACode maritalStatusCode;
 	private CCDACode ethnicity;
@@ -161,6 +167,14 @@ public class CCDAPatient extends CCDAXmlSnippet{
 		this.raceCodes = raceCodes;
 	}
 
+	public void addRaceCode(CCDACode raceCode) {
+		if(sdtcRaceCodes == null)
+		{
+			sdtcRaceCodes = new ArrayList<CCDACode>();
+		}
+		sdtcRaceCodes.add(raceCode);
+	}
+	
 	public ArrayList<CCDACode> getSdtcRaceCodes() {
 		if(sdtcRaceCodes == null)
 		{
@@ -215,6 +229,35 @@ public class CCDAPatient extends CCDAXmlSnippet{
 			patientNames = new ArrayList<CCDAPatientName>();
 		}
 		return patientNames;
+	}
+
+	public ArrayList<CCDACode> getRaceCodeExt() {
+		return raceCodeExt;
+	}
+
+	public void setRaceCodeExt(ArrayList<CCDACode> rext) {
+
+		if(rext != null)
+			this.raceCodeExt = rext;
+	}
+
+	public void addRaceCodeExt(CCDACode raceCode) {
+		raceCodeExt.add(raceCode);
+	}
+
+	public Boolean containsRaceCodeExt(CCDACode code) {
+
+		if (raceCodeExt == null)
+			return false;
+
+		for(CCDACode c : raceCodeExt) {
+			if( (c.getCode().equalsIgnoreCase(code.getCode())) &&
+					(c.getCodeSystem().equalsIgnoreCase(code.getCodeSystem())))
+				return true;
+		}
+
+		return false;
+
 	}
 
 	public void setPatientNames(List<CCDAPatientName> patientNames) {

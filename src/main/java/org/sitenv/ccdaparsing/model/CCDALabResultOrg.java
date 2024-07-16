@@ -10,10 +10,28 @@ public class CCDALabResultOrg extends CCDAXmlSnippet {
 	private CCDAEffTime						effTime;
 	private ArrayList<CCDALabResultObs>		resultObs;
 	private CCDADataElement referenceText;
+	private ArrayList<CCDANotesActivity>	notesActivity;
+	private CCDAAuthor						author;
 	
 	public CCDALabResultOrg()
 	{
-		
+		notesActivity = new ArrayList<CCDANotesActivity>();
+	}
+
+	public ArrayList<CCDANotesActivity> getNotesActivity() {
+		return notesActivity;
+	}
+
+	public void setNotesActivity(ArrayList<CCDANotesActivity> notesActivity) {
+		this.notesActivity = notesActivity;
+	}
+
+	public CCDAAuthor getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(CCDAAuthor author) {
+		this.author = author;
 	}
 
 	public ArrayList<CCDAII> getTemplateIds() {

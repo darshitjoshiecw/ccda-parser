@@ -11,7 +11,8 @@ public class CCDAImmunization extends CCDAXmlSnippet {
 	private ArrayList<CCDAImmunizationActivity> immActivity;
 	private ArrayList<String> referenceLinks;
 	private List<CCDAID> idList;
-	
+	private CCDAAuthor	author;
+
 	public boolean isSectionNullFlavourWithNI() {
 		return isSectionNullFlavourWithNI;
 	}
@@ -64,6 +65,14 @@ public class CCDAImmunization extends CCDAXmlSnippet {
 
 	public void setIdList(List<CCDAID> idList) {
 		this.idList = idList;
+	}
+
+	public CCDAAuthor getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(CCDAAuthor author) {
+		this.author = author;
 	}
 
 	public CCDAImmunization() 

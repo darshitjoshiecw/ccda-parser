@@ -32,7 +32,7 @@ public class MentalStatusTest {
 		DocumentBuilder builder = factory.newDocumentBuilder();
 		Document doc = builder.parse(new File(CCDA_DOC));
 		XPath xPath = XPathFactory.newInstance().newXPath();
-		functionalStatus = functionalStatusProcessor.retrieveMentalStatusDetails(xPath, doc).get();
+		functionalStatus = functionalStatusProcessor.retrieveMentalStatusDetails(xPath, doc);
 	}
 
 	private void setMentalStatusSectionCode() {

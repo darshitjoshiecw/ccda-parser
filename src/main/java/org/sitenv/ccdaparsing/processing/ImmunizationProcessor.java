@@ -8,13 +8,16 @@ import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
-import org.apache.log4j.Logger;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.sitenv.ccdaparsing.model.CCDAID;
 import org.sitenv.ccdaparsing.model.CCDAImmunization;
 import org.sitenv.ccdaparsing.model.CCDAImmunizationActivity;
 import org.sitenv.ccdaparsing.model.CCDAOrganization;
 import org.sitenv.ccdaparsing.util.ApplicationConstants;
 import org.sitenv.ccdaparsing.util.ApplicationUtil;
+import org.sitenv.ccdaparsing.util.ParserUtilities;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
@@ -26,27 +29,29 @@ import org.w3c.dom.NodeList;
 
 @Service
 public class ImmunizationProcessor {
-	
-	private static final Logger logger = Logger.getLogger(CareTeamMemberProcessor.class);
-	
+
+	private static final Logger logger = LogManager.getLogger(ImmunizationProcessor.class);
+
 	@Autowired
 	MedicationProcessor medicationProcessor;
 	
-	@Async()
-	public Future<CCDAImmunization> retrieveImmunizationDetails(XPath xPath , Document doc) throws XPathExpressionException,TransformerException
+	public CCDAImmunization retrieveImmunizationDetails(XPath xPath , Document doc) throws XPathExpressionException,TransformerException
 	{
 		long startTime = System.currentTimeMillis();
     	logger.info("Immunization parsing Start time:"+ startTime);
 		CCDAImmunization immunizations = null;
-		Element sectionElement = (Element) xPath.compile(ApplicationConstants.IMMUNIZATION_EXPRESSION).evaluate(doc, XPathConstants.NODE);
+		Element sectionElement = ApplicationUtil.getCloneNode((Element) xPath.compile(ApplicationConstants.IMMUNIZATION_EXPRESSION).evaluate(doc, XPathConstants.NODE));
 		List<CCDAID> idList = new ArrayList<>();
 		if(sectionElement != null)
 		{
 			immunizations = new CCDAImmunization();
+			sectionElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+			immunizations.setLineNumber(sectionElement.getUserData("lineNumber") + " - " + sectionElement.getUserData("endLineNumber") );
+			immunizations.setXmlString(ApplicationUtil.nodeToString((Node)sectionElement));
 			if(ApplicationUtil.checkForNullFlavourNI(sectionElement))
 			{
 				immunizations.setSectionNullFlavourWithNI(true);
-				return new AsyncResult<CCDAImmunization>(immunizations);
+				return immunizations;
 			}
 			immunizations.setTemplateIds(ApplicationUtil.readTemplateIdList((NodeList) xPath.compile("./templateId[not(@nullFlavor)]").
 					evaluate(sectionElement, XPathConstants.NODESET)));
@@ -55,10 +60,8 @@ public class ImmunizationProcessor {
 					evaluate(sectionElement, XPathConstants.NODE)));
 			immunizations.setImmActivity(readImmunization((NodeList) xPath.compile("./entry[not(@nullFlavor)]").
 					evaluate(sectionElement, XPathConstants.NODESET), xPath,idList));
-			sectionElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-			immunizations.setLineNumber(sectionElement.getUserData("lineNumber") + " - " + sectionElement.getUserData("endLineNumber") );
-			immunizations.setXmlString(ApplicationUtil.nodeToString((Node)sectionElement));
-			
+			immunizations.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(sectionElement, XPathConstants.NODE)));
 			Element textElement = (Element) xPath.compile("./text[not(@nullFlavor)]").evaluate(sectionElement, XPathConstants.NODE);
 			
 			if(textElement!=null)
@@ -69,7 +72,7 @@ public class ImmunizationProcessor {
 			immunizations.setIdList(idList);
 		}
 		logger.info("Immunization parsing End time:"+ (System.currentTimeMillis() - startTime));
-		return new AsyncResult<CCDAImmunization>(immunizations);
+		return immunizations;
 	}
 	
 	public ArrayList<CCDAImmunizationActivity> readImmunization(NodeList entryNodeList, XPath xPath,List<CCDAID> idList) throws XPathExpressionException,TransformerException
@@ -80,7 +83,7 @@ public class ImmunizationProcessor {
 		for (int i = 0; i < entryNodeList.getLength(); i++) {
 			
 			immunizationActivity = new CCDAImmunizationActivity();
-			Element entryElement = (Element) entryNodeList.item(i);
+			Element entryElement = ApplicationUtil.getCloneNode((Element) entryNodeList.item(i));
 			
 			Element immunizationActivityElement = (Element) xPath.compile("./substanceAdministration[not(@nullFlavor)]").
 					evaluate(entryElement, XPathConstants.NODE);
@@ -145,6 +148,10 @@ public class ImmunizationProcessor {
 					
 					immunizationActivity.setOrganization(representedOrg);
 				}
+
+				immunizationActivity.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+						evaluate(immunizationActivityElement, XPathConstants.NODE)));
+
 				immunizationActivityList.add(immunizationActivity);
 			}
 		}

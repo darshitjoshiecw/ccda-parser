@@ -25,6 +25,13 @@ public class CCDAMedicalEquipment extends CCDAXmlSnippet {
     private List<CCDANonMedicalSupplyAct>       supplyActivities;
     private List<CCDAProcActProc>               procedureActs;
     private ArrayList<String>                   referenceLinks;
+    private ArrayList<CCDAUDI>			        udis;
+    private CCDAAuthor 	                        author;
+
+    public CCDAMedicalEquipment()
+    {
+        udis = new ArrayList<CCDAUDI>();
+    }
 
     public List<CCDAID> getIds() {
         return ids == null ? new ArrayList<CCDAID>() : new ArrayList<>(ids);
@@ -86,6 +93,36 @@ public class CCDAMedicalEquipment extends CCDAXmlSnippet {
     }
     public void setReferenceLinks(ArrayList<String> referenceLinks) {
         this.referenceLinks = referenceLinks == null ? new ArrayList<String>() : new ArrayList<>(referenceLinks);
+    }
+    public ArrayList<CCDAUDI> getUdis() {
+        return udis;
+    }
+
+    public void setUDIs(ArrayList<CCDAUDI> udis) {
+
+        if(udis != null)
+            this.udis = udis;
+    }
+
+    public void addUDIs(ArrayList<CCDAUDI> udis) {
+
+        if(udis != null){
+            for(int i = 0; i < udis.size(); i++) {
+                this.udis.add(udis.get(i));
+            }
+        }
+    }
+
+    public CCDAAuthor getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(CCDAAuthor author) {
+        this.author = author;
+    }
+
+    public void setUdis(ArrayList<CCDAUDI> udis) {
+        this.udis = udis;
     }
 
     @Override

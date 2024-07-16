@@ -12,6 +12,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.sitenv.ccdaparsing.model.CCDAAddress;
+import org.sitenv.ccdaparsing.model.CCDAAdmissionDiagnosis;
 import org.sitenv.ccdaparsing.model.CCDACode;
 import org.sitenv.ccdaparsing.model.CCDADataElement;
 import org.sitenv.ccdaparsing.model.CCDAEffTime;
@@ -29,6 +30,7 @@ public class EncounterDiagnosisTest {
 	
 	private  static String CCDA_DOC = "src/test/resources/170.315_b1_toc_amb_ccd_r21_sample1_v1.xml";
 	private  static CCDAEncounter encounter;
+	private  static CCDAAdmissionDiagnosis admissionDiagnosis;
 	private ArrayList<CCDAII>    templateIds;
 	private CCDACode  sectionCode;
 	private static ArrayList<CCDAEncounterActivity> encActivities;
@@ -43,7 +45,8 @@ public class EncounterDiagnosisTest {
 		DocumentBuilder builder = factory.newDocumentBuilder();
 		Document doc = builder.parse(new File(CCDA_DOC));
 		XPath xPath =  XPathFactory.newInstance().newXPath();
-		encounter = encounterDiagnosesProcessor.retrieveEncounterDetails(xPath, doc).get();
+		admissionDiagnosis = encounterDiagnosesProcessor.retrieveAdmissionDiagnosisDetails(doc).get();
+		encounter = encounterDiagnosesProcessor.retrieveEncounterDetails(xPath, doc);
 		encounter.getSectionCode().setXmlString(null);
 		ArrayList<CCDAII>   templateId =  new ArrayList<CCDAII>();
 		  for (CCDAII ccdaii : encounter.getTemplateId()) { 		      
@@ -356,6 +359,86 @@ public class EncounterDiagnosisTest {
 	public void testEncounterActivitiyProbObsTransProbType(){
 		Assert.assertEquals("EncounterActivity Prob obs Translation Problem type test case failed",encActivities.get(0).getIndications().get(0).getTranslationProblemType(),
 									encounter.getEncActivities().get(0).getIndications().get(0).getTranslationProblemType());
+	}
+
+	@Test
+	public void testAdmissionDiagnosis(){
+		ArrayList<CCDAProblemObs> probObsList = new ArrayList<>();
+		CCDAProblemObs probObsOne = new CCDAProblemObs();
+
+		ArrayList<CCDAII> probObsTemplateIdList = new ArrayList<CCDAII>();
+		CCDAII probObsTemplateIdOne = new CCDAII();
+		probObsTemplateIdOne.setRootValue("2.16.840.1.113883.10.20.22.4.4");
+		probObsTemplateIdOne.setExtValue("2015-08-01");
+		probObsTemplateIdList.add(probObsTemplateIdOne);
+		CCDAII probObsTemplateIdTwo = new CCDAII();
+		probObsTemplateIdTwo.setRootValue("2.16.840.1.113883.10.20.22.4.4");
+		probObsTemplateIdList.add(probObsTemplateIdTwo);
+
+		probObsOne.setTemplateId(probObsTemplateIdList);
+
+		CCDACode problemType = new CCDACode();
+		problemType.setCode("64572001");
+		problemType.setCodeSystem("2.16.840.1.113883.6.96");
+		problemType.setCodeSystemName("SNOMED-CT");
+		problemType.setDisplayName("Condition");
+		probObsOne.setProblemType(problemType);
+
+		CCDAEffTime probObsEffectiveTime = new CCDAEffTime();
+		probObsEffectiveTime.setLow(new CCDADataElement("20150722"));
+		probObsEffectiveTime.setLowPresent(true);
+		probObsEffectiveTime.setSingleAdministrationValuePresent(false);
+		probObsEffectiveTime.setNullFlavour(false);
+		probObsOne.setEffTime(probObsEffectiveTime);
+
+		CCDACode problemCode = new CCDACode();
+		problemCode.setCode("T23.1");
+		problemCode.setCodeSystem("2.16.840.1.113883.6.90");
+		problemCode.setCodeSystemName("ICD-10");
+		problemCode.setDisplayName("Burn of first degree of wrist and hand");
+
+		ArrayList<CCDACode> translations = new ArrayList<>();
+		CCDACode translation = new CCDACode();
+		translation.setCode("211896002");
+		translation.setCodeSystem("2.16.840.1.113883.6.96");
+		translation.setCodeSystemName("SNOMED-CT");
+		translation.setDisplayName("First degree burn of multiple sites of wrist or hand");
+		translations.add(translation);
+		problemCode.setTranslations(translations);
+		problemCode.setXpath("CD");
+
+		probObsOne.setProblemCode(problemCode);
+
+		ArrayList<CCDACode> translationProblemTypes = new ArrayList<>();
+		CCDACode translationProblemType = new CCDACode();
+		translationProblemType.setCode("75323-6");
+		translationProblemType.setCodeSystem("2.16.840.1.113883.6.1");
+		translationProblemType.setCodeSystemName("LOINC");
+		translationProblemType.setDisplayName("Condition");
+		translationProblemTypes.add(translationProblemType);
+
+		probObsOne.setTranslationProblemType(translationProblemTypes);
+
+		probObsList.add(probObsOne);
+
+		Assert.assertEquals("Admission Diagnosis - Section Code - Code test failed","46241-6", admissionDiagnosis.getSectionCode().getCode());
+		Assert.assertEquals("Admission Diagnosis - Section Code - Code System test failed","2.16.840.1.113883.6.1", admissionDiagnosis.getSectionCode().getCodeSystem());
+		Assert.assertEquals("Admission Diagnosis - Section Code - Display Name test failed","Hospital Admission Diagnosis", admissionDiagnosis.getSectionCode().getDisplayName());
+		Assert.assertEquals("Admission Diagnosis - TemplateId - Root Value test failed","2.16.840.1.113883.10.20.22.2.43", admissionDiagnosis.getTemplateId().get(0).getRootValue());
+		Assert.assertEquals("Admission Diagnosis - Diagnosis - TemplateId test failed",
+				probObsList.get(0).getTemplateId(), admissionDiagnosis.getDiagnosis().get(0).getTemplateId());
+		Assert.assertEquals("Admission Diagnosis - Diagnosis - Problem Type failed",
+				probObsList.get(0).getProblemType(), admissionDiagnosis.getDiagnosis().get(0).getProblemType());
+		Assert.assertEquals("Admission Diagnosis - Diagnosis - Problem Code test failed",
+				probObsList.get(0).getProblemCode(), admissionDiagnosis.getDiagnosis().get(0).getProblemCode());
+		Assert.assertEquals("Admission Diagnosis - Diagnosis - Problem Code test failed",
+				probObsList.get(0).getStatusCode(), admissionDiagnosis.getDiagnosis().get(0).getStatusCode());
+		Assert.assertEquals("Admission Diagnosis - Diagnosis - Author test failed",
+				probObsList.get(0).getAuthor(), admissionDiagnosis.getDiagnosis().get(0).getAuthor());
+		Assert.assertEquals("Admission Diagnosis - Diagnosis - EffectiveTime test failed",
+				probObsList.get(0).getEffTime().getLow().getValue(), admissionDiagnosis.getDiagnosis().get(0).getEffTime().getLow().getValue());
+		Assert.assertEquals("Admission Diagnosis - Diagnosis - EffectiveTime test failed",
+				probObsList.get(0).getEffTime().getLowPresent(), admissionDiagnosis.getDiagnosis().get(0).getEffTime().getLowPresent());
 	}
 	
 	

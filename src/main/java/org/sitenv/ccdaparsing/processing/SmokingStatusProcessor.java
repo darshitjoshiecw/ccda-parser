@@ -9,7 +9,9 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.sitenv.ccdaparsing.model.CCDABirthSexObs;
 import org.sitenv.ccdaparsing.model.CCDAID;
 import org.sitenv.ccdaparsing.model.CCDASmokingStatus;
 import org.sitenv.ccdaparsing.model.CCDASocialHistory;
@@ -17,6 +19,7 @@ import org.sitenv.ccdaparsing.model.CCDASocialHistoryGenderObs;
 import org.sitenv.ccdaparsing.model.CCDATobaccoUse;
 import org.sitenv.ccdaparsing.util.ApplicationConstants;
 import org.sitenv.ccdaparsing.util.ApplicationUtil;
+import org.sitenv.ccdaparsing.util.ParserUtilities;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
@@ -27,25 +30,28 @@ import org.w3c.dom.NodeList;
 
 @Service
 public class SmokingStatusProcessor {
+
+	private static final Logger logger = LogManager.getLogger(SmokingStatusProcessor.class);
 	
-	private static final Logger logger = Logger.getLogger(SmokingStatusProcessor.class);
-	
-	@Async()
-	public Future<CCDASocialHistory> retrieveSmokingStatusDetails(XPath xPath , Document doc) throws XPathExpressionException,TransformerException
+
+	public CCDASocialHistory retrieveSmokingStatusDetails(XPath xPath , Document doc) throws XPathExpressionException,TransformerException
 	{
 		long startTime = System.currentTimeMillis();
     	logger.info("Smoking status parsing Start time:"+ startTime);
     	
 		CCDASocialHistory socailHistory = null;
-		Element sectionElement = (Element) xPath.compile(ApplicationConstants.SMOKING_EXPRESSION).evaluate(doc, XPathConstants.NODE);
+		Element sectionElement = ApplicationUtil.getCloneNode((Element) xPath.compile(ApplicationConstants.SMOKING_EXPRESSION).evaluate(doc, XPathConstants.NODE));
 		List<CCDAID> idList = new ArrayList<>();
 		if(sectionElement != null)
 		{
 			socailHistory = new CCDASocialHistory();
+			sectionElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+			socailHistory.setLineNumber(sectionElement.getUserData("lineNumber") + " - " + sectionElement.getUserData("endLineNumber") );
+			socailHistory.setXmlString(ApplicationUtil.nodeToString((Node)sectionElement));
 			if(ApplicationUtil.checkForNullFlavourNI(sectionElement))
 			{
 				socailHistory.setSectionNullFlavourWithNI(true);
-				return new AsyncResult<CCDASocialHistory>(socailHistory);
+				return socailHistory;
 			}
 			socailHistory.setSectionTemplateIds(ApplicationUtil.readTemplateIdList((NodeList) xPath.compile("./templateId[not(@nullFlavor)]").
 						evaluate(sectionElement, XPathConstants.NODESET)));
@@ -64,10 +70,6 @@ public class SmokingStatusProcessor {
 			Element genderObsElement = (Element) xPath.compile(ApplicationConstants.SOCIAL_HISTORY_GENDER_EXPRESSION).
 					evaluate(sectionElement, XPathConstants.NODE);
 			
-			sectionElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-			socailHistory.setLineNumber(sectionElement.getUserData("lineNumber") + " - " + sectionElement.getUserData("endLineNumber") );
-			socailHistory.setXmlString(ApplicationUtil.nodeToString((Node)sectionElement));
-			
 			Element textElement = (Element) xPath.compile("./text[not(@nullFlavor)]").evaluate(sectionElement, XPathConstants.NODE);
 			
 			if(textElement!=null)
@@ -77,13 +79,21 @@ public class SmokingStatusProcessor {
 			}
 		
 			socailHistory.setTobaccoUse(readTobaccoUse(tobaccoUseNodeList , xPath,idList));
-			
+
+			NodeList bsList = (NodeList) CCDAConstants.REL_BIRTHSEX_OBS_EXP.
+					evaluate(sectionElement, XPathConstants.NODESET);
+
+			socailHistory.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(sectionElement, XPathConstants.NODE)));
+
+			socailHistory.setBirthSex(readBirthSex(bsList));
+
 			socailHistory.setSocialHistoryGenderObs(readGenderCode(genderObsElement , xPath,idList));
 			
 			socailHistory.setIdList(idList);
 		}
 		logger.info("Smoking status parsing End time:"+ (System.currentTimeMillis() - startTime));
-		return new AsyncResult<CCDASocialHistory>(socailHistory);
+		return socailHistory;
 	}
 	
 	public ArrayList<CCDASmokingStatus> readSmokingStatus(NodeList smokingStatusNodeList, XPath xPath, List<CCDAID> idList) throws XPathExpressionException,TransformerException
@@ -96,8 +106,8 @@ public class SmokingStatusProcessor {
 		CCDASmokingStatus smokingStatus;
 		for (int i = 0; i < smokingStatusNodeList.getLength(); i++) {
 			smokingStatus = new CCDASmokingStatus();
-			
-			Element smokingStatusElement = (Element) smokingStatusNodeList.item(i);
+
+			Element smokingStatusElement = ApplicationUtil.getCloneNode((Element) smokingStatusNodeList.item(i));
 			
 			smokingStatusElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
 			smokingStatus.setLineNumber(smokingStatusElement.getUserData("lineNumber") + " - " + smokingStatusElement.getUserData("endLineNumber") );
@@ -121,7 +131,10 @@ public class SmokingStatusProcessor {
 			
 			smokingStatus.setObservationTime(ApplicationUtil.readEffectivetime((Element) xPath.compile("./effectiveTime[not(@nullFlavor)]").
 					evaluate(smokingStatusElement, XPathConstants.NODE),xPath));
-			
+
+			smokingStatus.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(smokingStatusElement, XPathConstants.NODE)));
+
 			smokingStatusList.add(smokingStatus);
 		}
 		return smokingStatusList;
@@ -137,8 +150,8 @@ public class SmokingStatusProcessor {
 		CCDATobaccoUse tobaccoUse;
 		for (int i = 0; i < tobaccoUseNodeList.getLength(); i++) {
 			tobaccoUse = new CCDATobaccoUse();
-			
-			Element tobaccoUseElement = (Element) tobaccoUseNodeList.item(i);
+
+			Element tobaccoUseElement = ApplicationUtil.getCloneNode((Element) tobaccoUseNodeList.item(i));
 			
 			tobaccoUseElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
 			tobaccoUse.setLineNumber(tobaccoUseElement.getUserData("lineNumber") + " - " + tobaccoUseElement.getUserData("endLineNumber") );
@@ -162,6 +175,9 @@ public class SmokingStatusProcessor {
 			
 			tobaccoUse.setTobaccoUseTime(ApplicationUtil.readEffectivetime((Element) xPath.compile("./effectiveTime[not(@nullFlavor)]").
 					evaluate(tobaccoUseElement, XPathConstants.NODE), xPath));
+
+			tobaccoUse.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(tobaccoUseElement, XPathConstants.NODE)));
 			
 			tobaccoUseList.add(tobaccoUse);
 		}
@@ -204,4 +220,29 @@ public class SmokingStatusProcessor {
 		return genderObs;
 	}
 
+	public static CCDABirthSexObs readBirthSex(NodeList bsList) throws XPathExpressionException, TransformerException {
+		CCDABirthSexObs birthSex  = null;
+		for (int i = 0; i < bsList.getLength(); i++) {
+
+			birthSex = new CCDABirthSexObs();
+
+			Element bsElement = ApplicationUtil.getCloneNode((Element) bsList.item(i));
+
+			birthSex.setTemplateIds(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
+					evaluate(bsElement, XPathConstants.NODESET)));
+
+			birthSex.setBirthSexObsCode(ParserUtilities.readCode((Element) CCDAConstants.REL_CODE_EXP.
+					evaluate(bsElement, XPathConstants.NODE)));
+
+			birthSex.setSexCode(ParserUtilities.readCode((Element) CCDAConstants.REL_VAL_EXP.
+					evaluate(bsElement, XPathConstants.NODE)));
+
+			birthSex.setObservationTime(ApplicationUtil.readEffectivetime((Element) CCDAConstants.REL_EFF_TIME_EXP.
+					evaluate(bsElement, XPathConstants.NODE),CCDAConstants.CCDAXPATH));
+
+		}
+
+		return birthSex;
+
+	}
 }

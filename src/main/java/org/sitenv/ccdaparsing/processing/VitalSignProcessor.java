@@ -9,7 +9,8 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.sitenv.ccdaparsing.model.CCDAID;
 import org.sitenv.ccdaparsing.model.CCDAPQ;
 import org.sitenv.ccdaparsing.model.CCDAVitalObs;
@@ -17,6 +18,7 @@ import org.sitenv.ccdaparsing.model.CCDAVitalOrg;
 import org.sitenv.ccdaparsing.model.CCDAVitalSigns;
 import org.sitenv.ccdaparsing.util.ApplicationConstants;
 import org.sitenv.ccdaparsing.util.ApplicationUtil;
+import org.sitenv.ccdaparsing.util.ParserUtilities;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
@@ -27,25 +29,28 @@ import org.w3c.dom.NodeList;
 
 @Service
 public class VitalSignProcessor {
-	
-	private static final Logger logger = Logger.getLogger(VitalSignProcessor.class);
-	
-	@Async()
-	public Future<CCDAVitalSigns> retrieveVitalSigns(XPath xPath , Document doc) throws XPathExpressionException,TransformerException
+
+	private static final Logger logger = LogManager.getLogger(VitalSignProcessor.class);
+
+
+	public CCDAVitalSigns retrieveVitalSigns(XPath xPath , Document doc) throws XPathExpressionException,TransformerException
 	{
 		long startTime = System.currentTimeMillis();
 		logger.info("Vitals parsing Start time:"+ startTime);
 		
 		CCDAVitalSigns vitalSigns = null;
-		Element sectionElement = (Element) xPath.compile(ApplicationConstants.VITALSIGNS_EXPRESSION).evaluate(doc, XPathConstants.NODE);
+		Element sectionElement = ApplicationUtil.getCloneNode((Element) xPath.compile(ApplicationConstants.VITALSIGNS_EXPRESSION).evaluate(doc, XPathConstants.NODE));
 		List<CCDAID> idList = new ArrayList<>();
 		if(sectionElement != null)
 		{
 			vitalSigns = new CCDAVitalSigns();
+			sectionElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+			vitalSigns.setLineNumber(sectionElement.getUserData("lineNumber") + " - " + sectionElement.getUserData("endLineNumber") );
+			vitalSigns.setXmlString(ApplicationUtil.nodeToString((Node)sectionElement));
 			if(ApplicationUtil.checkForNullFlavourNI(sectionElement))
 			{
 				vitalSigns.setSectionNullFlavourWithNI(true);
-				return new AsyncResult<CCDAVitalSigns>(vitalSigns);
+				return vitalSigns;
 			}
 			vitalSigns.setTemplateIds(ApplicationUtil.readTemplateIdList((NodeList) xPath.compile("./templateId[not(@nullFlavor)]").
 					evaluate(sectionElement, XPathConstants.NODESET)));
@@ -53,11 +58,9 @@ public class VitalSignProcessor {
 					evaluate(sectionElement, XPathConstants.NODE)));
 			vitalSigns.setVitalsOrg(readVitalOrganizer((NodeList) xPath.compile("./entry/organizer[not(@nullFlavor)]").
 					evaluate(sectionElement, XPathConstants.NODESET), xPath,idList));
-			
-			sectionElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-			vitalSigns.setLineNumber(sectionElement.getUserData("lineNumber") + " - " + sectionElement.getUserData("endLineNumber") );
-			vitalSigns.setXmlString(ApplicationUtil.nodeToString((Node)sectionElement));
-			
+			vitalSigns.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(sectionElement, XPathConstants.NODE)));
+
 			Element textElement = (Element) xPath.compile("./text[not(@nullFlavor)]").evaluate(sectionElement, XPathConstants.NODE);
 			
 			if(textElement!=null)
@@ -68,7 +71,7 @@ public class VitalSignProcessor {
 			vitalSigns.setIdList(idList);
 		}
 		logger.info("Vitals parsing End time:"+ (System.currentTimeMillis() - startTime));
-		return new AsyncResult<CCDAVitalSigns>(vitalSigns);
+		return vitalSigns;
 	}
 	
 	
@@ -78,8 +81,8 @@ public class VitalSignProcessor {
 		CCDAVitalOrg vitalOrganizer;
 		for (int i = 0; i < vitalOrganizerNodeList.getLength(); i++) {
 			vitalOrganizer = new CCDAVitalOrg();
-			
-			Element vitalOrganizerElement = (Element) vitalOrganizerNodeList.item(i);
+
+			Element vitalOrganizerElement = ApplicationUtil.getCloneNode((Element) vitalOrganizerNodeList.item(i));
 			
 			vitalOrganizerElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
 			vitalOrganizer.setLineNumber(vitalOrganizerElement.getUserData("lineNumber") + " - " + vitalOrganizerElement.getUserData("endLineNumber") );
@@ -112,6 +115,10 @@ public class VitalSignProcessor {
 			
 			vitalOrganizer.setVitalObs(readVitalObservation((NodeList) xPath.compile("./component/observation[not(@nullFlavor)]").
 					evaluate(vitalOrganizerElement, XPathConstants.NODESET), xPath,idList));
+
+			vitalOrganizer.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(vitalOrganizerElement, XPathConstants.NODE)));
+
 			vitalOrganizerList.add(vitalOrganizer);
 		}
 		return vitalOrganizerList;
@@ -125,8 +132,8 @@ public class VitalSignProcessor {
 		for (int i = 0; i < vitalObservationNodeList.getLength(); i++) {
 			
 			vitalObservation = new CCDAVitalObs();
-			
-			Element resultObservationElement = (Element) vitalObservationNodeList.item(i);
+
+			Element resultObservationElement = ApplicationUtil.getCloneNode((Element) vitalObservationNodeList.item(i));
 			
 			resultObservationElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
 			vitalObservation.setLineNumber(resultObservationElement.getUserData("lineNumber") + " - " + resultObservationElement.getUserData("endLineNumber") );
@@ -155,6 +162,9 @@ public class VitalSignProcessor {
 					evaluate(resultObservationElement, XPathConstants.NODE),xPath));
 			
 			vitalObservation.setInterpretationCode(ApplicationUtil.readCode((Element) xPath.compile("./interpretationCode[not(@nullFlavor)]").
+					evaluate(resultObservationElement, XPathConstants.NODE)));
+
+			vitalObservation.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
 					evaluate(resultObservationElement, XPathConstants.NODE)));
 			
 			Element vsResult = (Element) xPath.compile("./value[not(@nullFlavor)]").
@@ -186,9 +196,9 @@ public class VitalSignProcessor {
 					evaluate(resultObservationElement, XPathConstants.NODESET);
 			
 			ArrayList<CCDAPQ> referenceValueList = new ArrayList<>();
-			for (int j = 0; j < referenceRangeNodeList.getLength(); j++) { 
-				
-				Element referenceRangeElement = (Element) referenceRangeNodeList.item(j);
+			for (int j = 0; j < referenceRangeNodeList.getLength(); j++) {
+
+				Element referenceRangeElement = ApplicationUtil.getCloneNode((Element) referenceRangeNodeList.item(j));
 				
 				if(referenceRangeElement != null)
 				{

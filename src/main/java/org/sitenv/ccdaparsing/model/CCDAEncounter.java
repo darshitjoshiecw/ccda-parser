@@ -11,6 +11,8 @@ public class CCDAEncounter extends CCDAXmlSnippet {
 	private ArrayList<CCDAEncounterActivity> encActivities;
 	private ArrayList<String> referenceLinks;
 	private List<CCDAID> idLIst;
+	private ArrayList<CCDANotesActivity> notesActivity;
+	private CCDAAuthor author;
 	
 	public boolean isSectionNullFlavourWithNI() {
 		return isSectionNullFlavourWithNI;
@@ -64,6 +66,22 @@ public class CCDAEncounter extends CCDAXmlSnippet {
 		this.idLIst = idLIst;
 	}
 
+	public ArrayList<CCDANotesActivity> getNotesActivity() {
+		return notesActivity;
+	}
+
+	public void setNotesActivity(ArrayList<CCDANotesActivity> notesActivity) {
+		this.notesActivity = notesActivity;
+	}
+
+	public CCDAAuthor getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(CCDAAuthor author) {
+		this.author = author;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -102,6 +120,10 @@ public class CCDAEncounter extends CCDAXmlSnippet {
 		} else if (!templateId.equals(other.templateId))
 			return false;
 		return true;
+	}
+
+	public void log() {
+
 	}
 
 }

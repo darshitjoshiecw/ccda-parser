@@ -9,7 +9,8 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.sitenv.ccdaparsing.model.CCDACode;
 import org.sitenv.ccdaparsing.model.CCDAID;
 import org.sitenv.ccdaparsing.model.CCDALabResult;
@@ -18,6 +19,7 @@ import org.sitenv.ccdaparsing.model.CCDALabResultOrg;
 import org.sitenv.ccdaparsing.model.CCDAPQ;
 import org.sitenv.ccdaparsing.util.ApplicationConstants;
 import org.sitenv.ccdaparsing.util.ApplicationUtil;
+import org.sitenv.ccdaparsing.util.ParserUtilities;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
@@ -28,25 +30,29 @@ import org.w3c.dom.NodeList;
 
 @Service
 public class LaboratoryResultsProcessor {
+
+	private static final Logger logger = LogManager.getLogger(LaboratoryResultsProcessor.class);
 	
-	private static final Logger logger = Logger.getLogger(LaboratoryResultsProcessor.class);
-	
-	@Async()
-	public Future<CCDALabResult> retrieveLabResults(XPath xPath , Document doc) throws XPathExpressionException,TransformerException
+
+	public CCDALabResult retrieveLabResults(XPath xPath , Document doc) throws XPathExpressionException,TransformerException
 	{
 		long startTime = System.currentTimeMillis();
     	logger.info("lab results parsing Start time:"+ startTime);
     	
 		CCDALabResult labResults = null;
-		Element sectionElement = (Element) xPath.compile(ApplicationConstants.RESULTS_EXPRESSION).evaluate(doc, XPathConstants.NODE);
+		Element sectionElement = ApplicationUtil.getCloneNode((Element) xPath.compile(ApplicationConstants.RESULTS_EXPRESSION).evaluate(doc, XPathConstants.NODE));
+
 		List<CCDAID> idList = new ArrayList<>();
 		if(sectionElement != null)
 		{
 			labResults = new CCDALabResult();
+			sectionElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+			labResults.setLineNumber(sectionElement.getUserData("lineNumber") + " - " + sectionElement.getUserData("endLineNumber") );
+			labResults.setXmlString(ApplicationUtil.nodeToString((Node)sectionElement));
 			if(ApplicationUtil.checkForNullFlavourNI(sectionElement))
 			{
 				labResults.setSectionNullFlavourWithNI(true);
-				return new AsyncResult<CCDALabResult>(labResults);
+				return labResults;
 			}
 			labResults.setResultSectionTempalteIds(ApplicationUtil.readTemplateIdList((NodeList) xPath.compile("./templateId[not(@nullFlavor)]").
 													evaluate(sectionElement, XPathConstants.NODESET)));
@@ -56,9 +62,7 @@ public class LaboratoryResultsProcessor {
 			
 			labResults.setResultOrg(readResultOrganizer((NodeList) xPath.compile(ApplicationConstants.LAB_RESULTS_EXPRESSION).
 									evaluate(sectionElement, XPathConstants.NODESET),xPath, idList));
-			sectionElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-			labResults.setLineNumber(sectionElement.getUserData("lineNumber") + " - " + sectionElement.getUserData("endLineNumber") );
-			labResults.setXmlString(ApplicationUtil.nodeToString((Node)sectionElement));
+
 			
 			Element textElement = (Element) xPath.compile("./text[not(@nullFlavor)]").evaluate(sectionElement, XPathConstants.NODE);
 			
@@ -69,10 +73,18 @@ public class LaboratoryResultsProcessor {
 			
 			}
 			labResults.setIsLabTestInsteadOfResult(false);
+
+			// Add Notes Activity if present in Results entry
+			labResults.setNotesActivity(ParserUtilities.readNotesActivity((NodeList) CCDAConstants.REL_NOTES_ACTIVITY_EXPRESSION.
+					evaluate(sectionElement, XPathConstants.NODESET), null));
+
+			labResults.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(sectionElement, XPathConstants.NODE)));
+
 			labResults.setIdList(idList);
 		}
 		logger.info("lab results parsing End time:"+ (System.currentTimeMillis() - startTime));
-		return new AsyncResult<CCDALabResult>(labResults);
+		return labResults;
 	}
 	
 	
@@ -83,7 +95,7 @@ public class LaboratoryResultsProcessor {
 		for (int i = 0; i < resultOrganizerNodeList.getLength(); i++) {
 			labResultOrg = new CCDALabResultOrg();
 			
-			Element labResultOrgElement = (Element) resultOrganizerNodeList.item(i);
+			Element labResultOrgElement =  ApplicationUtil.getCloneNode((Element) resultOrganizerNodeList.item(i));
 			
 			labResultOrgElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
 			labResultOrg.setLineNumber(labResultOrgElement.getUserData("lineNumber") + " - " + labResultOrgElement.getUserData("endLineNumber") );
@@ -117,6 +129,15 @@ public class LaboratoryResultsProcessor {
 			
 			labResultOrg.setResultObs(readResultObservation((NodeList) xPath.compile("./component/observation[not(@nullFlavor)]").
 					evaluate(labResultOrgElement, XPathConstants.NODESET), xPath, idList));
+
+			// Add Notes Activity if present in Lab Result Observtaion entryRelationship
+			labResultOrg.setNotesActivity(
+					ParserUtilities.readNotesActivity((NodeList) CCDAConstants.REL_COMPONENT_ACTIVITY_EXPRESSION
+							.evaluate(labResultOrgElement, XPathConstants.NODESET), null));
+
+			labResultOrg.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(labResultOrgElement, XPathConstants.NODE)));
+
 			labResultOrgList.add(labResultOrg);
 		}
 		return labResultOrgList;
@@ -131,7 +152,7 @@ public class LaboratoryResultsProcessor {
 			
 			resultObservation = new CCDALabResultObs();
 			
-			Element resultObservationElement = (Element) resultObservationNodeList.item(i);
+			Element resultObservationElement =  ApplicationUtil.getCloneNode((Element) resultObservationNodeList.item(i));
 			
 			resultObservationElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
 			resultObservation.setLineNumber(resultObservationElement.getUserData("lineNumber") + " - " + resultObservationElement.getUserData("endLineNumber") );
@@ -161,6 +182,14 @@ public class LaboratoryResultsProcessor {
 					evaluate(resultObservationElement, XPathConstants.NODE), xPath));
 			
 			resultObservation.setInterpretationCode(ApplicationUtil.readCode((Element) xPath.compile("./interpretationCode[not(@nullFlavor)]").
+					evaluate(resultObservationElement, XPathConstants.NODE)));
+
+			// Add Notes Activity if present in Lab Result Observtaion entryRelationship
+			resultObservation.setNotesActivity(
+					ParserUtilities.readNotesActivity((NodeList) CCDAConstants.REL_ENTRY_REL_NOTES_ACTIVITY_EXPRESSION
+							.evaluate(resultObservationElement, XPathConstants.NODESET), null));
+
+			resultObservation.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
 					evaluate(resultObservationElement, XPathConstants.NODE)));
 			
 			Element resultValue = (Element) xPath.compile("./value[not(@nullFlavor)]").
@@ -192,6 +221,8 @@ public class LaboratoryResultsProcessor {
 					else if (xsiType.equalsIgnoreCase("ST"))
 					{
 						resultObservation.setResults(new CCDAPQ(resultValue.getTextContent(),"ST"));
+						String value = resultValue.getFirstChild() != null ? resultValue.getFirstChild().getNodeValue() : "";
+						resultObservation.setResultString(value);
 					}
 					else if (xsiType.equalsIgnoreCase("ED"))
 					{

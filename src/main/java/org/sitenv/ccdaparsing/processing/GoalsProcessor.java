@@ -7,7 +7,8 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.sitenv.ccdaparsing.model.CCDAGoals;
 import org.sitenv.ccdaparsing.util.ApplicationConstants;
 import org.sitenv.ccdaparsing.util.ApplicationUtil;
@@ -21,25 +22,27 @@ import org.w3c.dom.NodeList;
 
 @Service
 public class GoalsProcessor {
-	
-	private static final Logger logger = Logger.getLogger(GoalsProcessor.class);
-	
-	@Async()
-	public Future<CCDAGoals> retrieveGoalsDetails(XPath xPath , Document doc) throws XPathExpressionException,TransformerException
+
+	private static final Logger logger = LogManager.getLogger(GoalsProcessor.class);
+
+	public CCDAGoals retrieveGoalsDetails(XPath xPath , Document doc) throws XPathExpressionException,TransformerException
 	{
 		long startTime = System.currentTimeMillis();
     	logger.info("Goals parsing Start time:"+ startTime);
 		
 		CCDAGoals goals = null;
-		Element sectionElement = (Element) xPath.compile(ApplicationConstants.GOALS_EXPRESSION).evaluate(doc, XPathConstants.NODE);
+		Element sectionElement = ApplicationUtil.getCloneNode((Element) xPath.compile(ApplicationConstants.GOALS_EXPRESSION).evaluate(doc, XPathConstants.NODE));
 		
 		if(sectionElement != null)
 		{
 			goals = new CCDAGoals();
+			sectionElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+			goals.setLineNumber(sectionElement.getUserData("lineNumber") + " - " + sectionElement.getUserData("endLineNumber"));
+			goals.setXmlString(ApplicationUtil.nodeToString((Node) sectionElement));
 			if(ApplicationUtil.checkForNullFlavourNI(sectionElement))
 			{
 				goals.setSectionNullFlavourWithNI(true);
-				return new AsyncResult<CCDAGoals>(goals);
+				return goals;
 			}
 			goals.setTemplateId(ApplicationUtil.readTemplateIdList((NodeList) xPath.compile("./templateId[not(@nullFlavor)]").
 										evaluate(sectionElement, XPathConstants.NODESET)));
@@ -50,14 +53,11 @@ public class GoalsProcessor {
 			goals.setNarrativeText(ApplicationUtil.readTextContent((Element) xPath.compile("./text[not(@nullFlavor)]").
 					evaluate(sectionElement, XPathConstants.NODE)));
 
-			sectionElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-			goals.setLineNumber(sectionElement.getUserData("lineNumber") + " - " + sectionElement.getUserData("endLineNumber"));
-			goals.setXmlString(ApplicationUtil.nodeToString((Node) sectionElement));
 		}
 		
 		logger.info("Goals parsing End time:"+ (System.currentTimeMillis() - startTime));
 		
-		return new AsyncResult<CCDAGoals>(goals);
+		return goals;
 	}
 
 }

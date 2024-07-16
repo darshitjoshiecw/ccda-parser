@@ -40,7 +40,7 @@ public class VitalSignTest {
 		DocumentBuilder builder = factory.newDocumentBuilder();
 		Document doc = builder.parse(new File(CCDA_DOC));
 		XPath xPath =  XPathFactory.newInstance().newXPath();
-		vitalSigns = vitalSignProcessor.retrieveVitalSigns(xPath, doc).get();
+		vitalSigns = vitalSignProcessor.retrieveVitalSigns(xPath, doc);
 		
 		vitalsOrg = new ArrayList<CCDAVitalOrg>();
 		
@@ -251,6 +251,45 @@ public class VitalSignTest {
 		setVitalsignTemplateIds();
 		Assert.assertEquals("VitalObs Interpretation Code test case failed",vitalSigns.getVitalsOrg().get(0).getVitalObs().get(0).getInterpretationCode(),
 																	vitalsOrg.get(0).getVitalObs().get(0).getInterpretationCode());
+	}
+
+	@Test
+	public void testVitalsignsVitalOrgAuthor(){
+		Assert.assertEquals("Vital Signs - Vital Org Author ExtValue test case failed", "123456555",vitalSigns.getVitalsOrg().get(0).getAuthor().getAuthorIds().get(0).getExtValue());
+		Assert.assertEquals("Vital Signs - Vital Org Author Root Value test case failed", "1.1.1.1.1.1.1.2",vitalSigns.getVitalsOrg().get(0).getAuthor().getAuthorIds().get(0).getRootValue());
+		Assert.assertEquals("Vital Signs - Vital Org Author test case failed", "199805011145-0800",vitalSigns.getVitalsOrg().get(0).getAuthor().getEffTime().getValue());
+		Assert.assertEquals("Vital Signs - Vital Org Author test case failed", null, vitalSigns.getVitalsOrg().get(0).getAuthor().getTemplateIds());
+		Assert.assertEquals("Vital Signs - Vital Org Author test case failed", null, vitalSigns.getVitalsOrg().get(0).getAuthor().getAuthorName());
+		Assert.assertEquals("Vital Signs - Vital Org Author test case failed", null, vitalSigns.getVitalsOrg().get(0).getAuthor().getAuthorFirstName());
+		Assert.assertEquals("Vital Signs - Vital Org Author test case failed", null, vitalSigns.getVitalsOrg().get(0).getAuthor().getAuthorLastName());
+		Assert.assertEquals("Vital Signs - Vital Org Author test case failed", null, vitalSigns.getVitalsOrg().get(0).getAuthor().getRepOrgIds());
+		Assert.assertEquals("Vital Signs - Vital Org Author test case failed", null, vitalSigns.getVitalsOrg().get(0).getAuthor().getTelecoms());
+	}
+
+	@Test
+	public void testVitalsignsAuthor(){
+		Assert.assertEquals("Vital Signs Author ExtValue test case failed", "123455555",vitalSigns.getAuthor().getAuthorIds().get(0).getExtValue());
+		Assert.assertEquals("Vital Signs Author Root Value test case failed", "1.1.1.1.1.1.1.2",vitalSigns.getAuthor().getAuthorIds().get(0).getRootValue());
+		Assert.assertEquals("Vital Signs Author test case failed", "199805011146-0800",vitalSigns.getAuthor().getEffTime().getValue());
+		Assert.assertEquals("Vital Signs Author test case failed", null, vitalSigns.getAuthor().getTemplateIds());
+		Assert.assertEquals("Vital Signs Author test case failed", null, vitalSigns.getAuthor().getAuthorName());
+		Assert.assertEquals("Vital Signs Author test case failed", null, vitalSigns.getAuthor().getAuthorFirstName());
+		Assert.assertEquals("Vital Signs Author test case failed", null, vitalSigns.getAuthor().getAuthorLastName());
+		Assert.assertEquals("Vital Signs Author test case failed", null, vitalSigns.getAuthor().getRepOrgIds());
+		Assert.assertEquals("Vital Signs Author test case failed", null, vitalSigns.getAuthor().getTelecoms());
+	}
+
+	@Test
+	public void testVitalsignsVitalObsAuthor(){
+		Assert.assertEquals("Vital Signs - Vital Observation - Author ExtValue test case failed", "555555555",vitalSigns.getVitalsOrg().get(0).getVitalObs().get(0).getAuthor().getAuthorIds().get(0).getExtValue());
+		Assert.assertEquals("Vital Signs - Vital Observation - Author Root Value test case failed", "2.16.840.1.113883.4.6",vitalSigns.getVitalsOrg().get(0).getVitalObs().get(0).getAuthor().getAuthorIds().get(0).getRootValue());
+		Assert.assertEquals("Vital Signs - Vital Observation - Author test case failed", "20150622",vitalSigns.getVitalsOrg().get(0).getVitalObs().get(0).getAuthor().getEffTime().getValue());
+		Assert.assertEquals("Vital Signs - Vital Observation - Author test case failed", "2.16.840.1.113883.10.20.22.4.119", vitalSigns.getVitalsOrg().get(0).getVitalObs().get(0).getAuthor().getTemplateIds().get(0).getRootValue());
+		Assert.assertEquals("Vital Signs - Vital Observation - Author test case failed", null, vitalSigns.getVitalsOrg().get(0).getVitalObs().get(0).getAuthor().getAuthorName());
+		Assert.assertEquals("Vital Signs - Vital Observation - Author test case failed", null, vitalSigns.getVitalsOrg().get(0).getVitalObs().get(0).getAuthor().getAuthorFirstName());
+		Assert.assertEquals("Vital Signs - Vital Observation - Author test case failed", null, vitalSigns.getVitalsOrg().get(0).getVitalObs().get(0).getAuthor().getAuthorLastName());
+		Assert.assertEquals("Vital Signs - Vital Observation - Author test case failed", null, vitalSigns.getVitalsOrg().get(0).getVitalObs().get(0).getAuthor().getRepOrgIds());
+		Assert.assertEquals("Vital Signs - Vital Observation - Author test case failed", null, vitalSigns.getVitalsOrg().get(0).getVitalObs().get(0).getAuthor().getTelecoms());
 	}
 
 

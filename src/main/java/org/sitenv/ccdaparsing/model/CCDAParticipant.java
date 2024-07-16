@@ -1,7 +1,12 @@
 package org.sitenv.ccdaparsing.model;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class CCDAParticipant extends CCDAXmlSnippet{
-	
+
+	private static Logger log = LogManager.getLogger(CCDAParticipant.class.getName());
+
 	private CCDADataElement firstName;
 	private CCDADataElement lastName;
 	private CCDADataElement middleName;
@@ -9,10 +14,23 @@ public class CCDAParticipant extends CCDAXmlSnippet{
 	private CCDADataElement suffix;
 	private CCDAAddress     address;
 	private CCDADataElement telecom;
+	private CCDACode participantRole;
 	
 	public CCDAParticipant()
 	{
 		
+	}
+
+	public void log()
+	{
+		log.info(" First Name = " + ((firstName==null)?"No Data":firstName.getValue()));
+		log.info(" Last Name = " + ((lastName==null)?"No Data":lastName.getValue()));
+		log.info(" Middle Name = " + ((middleName==null)?"No Data":middleName.getValue()));
+
+		/*if(address != null)
+			address.log();
+		if(telecom != null)
+			telecom.log();*/
 	}
 
 	public CCDADataElement getFirstName() {
@@ -69,6 +87,14 @@ public class CCDAParticipant extends CCDAXmlSnippet{
 
 	public void setTelecom(CCDADataElement telecom) {
 		this.telecom = telecom;
+	}
+
+	public CCDACode getParticipantRole() {
+		return participantRole;
+	}
+
+	public void setParticipantRole(CCDACode participantRole) {
+		this.participantRole = participantRole;
 	}
 
 	@Override

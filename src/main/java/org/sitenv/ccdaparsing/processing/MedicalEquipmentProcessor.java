@@ -1,12 +1,15 @@
 package org.sitenv.ccdaparsing.processing;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.sitenv.ccdaparsing.model.CCDAID;
 import org.sitenv.ccdaparsing.model.CCDAMedicalEquipment;
 import org.sitenv.ccdaparsing.model.CCDAMedicalEquipmentOrg;
 import org.sitenv.ccdaparsing.model.CCDANonMedicalSupplyAct;
+import org.sitenv.ccdaparsing.model.CCDAUDI;
 import org.sitenv.ccdaparsing.util.ApplicationConstants;
 import org.sitenv.ccdaparsing.util.ApplicationUtil;
+import org.sitenv.ccdaparsing.util.ParserUtilities;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
@@ -26,36 +29,50 @@ import java.util.concurrent.Future;
 
 @Service
 public class MedicalEquipmentProcessor {
-    private static final Logger logger = Logger.getLogger(MedicalEquipmentProcessor.class);
+
+    private static final Logger logger = LogManager.getLogger(MedicalEquipmentProcessor.class);
 
     @Autowired
     ProcedureProcessor procedureProcessor;
 
-    @Async()
-    public Future<CCDAMedicalEquipment> retrieveMedicalEquipment(XPath xPath , Document doc) throws XPathExpressionException, TransformerException {
+    public CCDAMedicalEquipment retrieveMedicalEquipment(XPath xPath , Document doc) throws XPathExpressionException, TransformerException {
         long startTime = System.currentTimeMillis();
         logger.info("medical equipment parsing Start time:"+ startTime);
         CCDAMedicalEquipment medicalEquipments = null;
-        Element sectionElement = (Element) xPath.compile(ApplicationConstants.MEDICAL_EQUIPMENT_EXPRESSION).evaluate(doc, XPathConstants.NODE);
+        Element sectionElement = ApplicationUtil.getCloneNode((Element) xPath.compile(ApplicationConstants.MEDICAL_EQUIPMENT_EXPRESSION).evaluate(doc, XPathConstants.NODE));
         List<CCDAID> ids = new ArrayList<>();
         if(sectionElement != null){
             medicalEquipments = new CCDAMedicalEquipment();
+            sectionElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+            medicalEquipments.setLineNumber(sectionElement.getUserData("lineNumber") + " - " + sectionElement.getUserData("endLineNumber"));
+            medicalEquipments.setXmlString(ApplicationUtil.nodeToString((Node) sectionElement));
             if(ApplicationUtil.checkForNullFlavourNI(sectionElement)) {
                 medicalEquipments.setSectionNullFlavourWithNI(true);
-                return new AsyncResult<>(medicalEquipments);
+                return medicalEquipments;
             }
             medicalEquipments.setSectionTemplateId(ApplicationUtil.readTemplateIdList((NodeList) xPath.compile(ApplicationConstants.TEMPLATE_ID_EXPRESSION).
                     evaluate(sectionElement, XPathConstants.NODESET)));
             medicalEquipments.setSectionCode(ApplicationUtil.readCode((Element) xPath.compile(ApplicationConstants.CODE_EXPRESSION).
                     evaluate(sectionElement, XPathConstants.NODE)));
+
+            logger.info(" Adding UDIs from Organizers ");
+            // Account for UDIs
+            medicalEquipments.addUDIs(readUDIsFromOrganizer((NodeList)CCDAConstants.MEDICAL_EQUIPMENT_ORG_EXPRESSION.
+                    evaluate(sectionElement, XPathConstants.NODESET)));
+
+            logger.info("Adding UDIs from Procedures Activity Procedures ");
+            medicalEquipments.addUDIs(readUDIsFromProcedures((NodeList)CCDAConstants.REL_PROC_ACT_PROC_EXP.
+                    evaluate(sectionElement, XPathConstants.NODESET)));
+
+            medicalEquipments.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+                    evaluate(sectionElement, XPathConstants.NODE)));
+
             medicalEquipments.setProcActsProcs(procedureProcessor.readProcedures((NodeList) xPath.compile("./entry/procedure[not(@nullFlavor)]").
                     evaluate(sectionElement, XPathConstants.NODESET), xPath,ids));
             medicalEquipments.setSupplyActivities(readSupplyActivities((NodeList) xPath.compile("./entry/supply[not(@nullFlavor)]").
                     evaluate(sectionElement, XPathConstants.NODESET), xPath,ids));
             medicalEquipments.setOrganizers(readOrganizers((NodeList) xPath.compile("./entry/organizer[not(@nullFlavor)]").
                     evaluate(sectionElement, XPathConstants.NODESET), xPath,ids));
-            medicalEquipments.setLineNumber(sectionElement.getUserData("lineNumber") + " - " + sectionElement.getUserData("endLineNumber"));
-            medicalEquipments.setXmlString(ApplicationUtil.nodeToString((Node) sectionElement));
             Element textElement = (Element) xPath.compile("./text[not(@nullFlavor)]").evaluate(sectionElement, XPathConstants.NODE);
 
             if (textElement != null) {
@@ -65,7 +82,86 @@ public class MedicalEquipmentProcessor {
             medicalEquipments.setIds(ids);
         }
         logger.info("medical equipment parsing End time:"+ (System.currentTimeMillis() - startTime));
-        return new AsyncResult<>(medicalEquipments);
+        return medicalEquipments;
+    }
+
+    public ArrayList<CCDAUDI> readUDIsFromOrganizer(NodeList orgNodeList) throws XPathExpressionException
+    {
+        ArrayList<CCDAUDI> udisList = null;
+
+        for (int i = 0; i < orgNodeList.getLength(); i++) {
+
+            logger.info(" Reading UDIs from Organizer ");
+            Element orgElement = ApplicationUtil.getCloneNode((Element) orgNodeList.item(i));
+
+            readUDIsFromProcedures((NodeList)CCDAConstants.MEDICAL_EQUIPMENT_ORG_PAP_EXPRESSION.
+                    evaluate(orgElement, XPathConstants.NODESET));
+        }
+
+        return udisList;
+    }
+
+    public ArrayList<CCDAUDI> readUDIsFromProcedures(NodeList proceduresNodeList ) throws XPathExpressionException
+    {
+        ArrayList<CCDAUDI> udis = new ArrayList<CCDAUDI>();
+        for (int i = 0; i < proceduresNodeList.getLength(); i++) {
+
+            logger.info("Adding UDIs from procs ");
+
+            Element procedureElement = ApplicationUtil.getCloneNode((Element) proceduresNodeList.item(i));
+
+            if(procedureElement != null) {
+
+                logger.info(" Procedure Not null ");
+
+                NodeList deviceNodeList = (NodeList) CCDAConstants.REL_PROCEDURE_UDI_EXPRESSION.
+                        evaluate(procedureElement, XPathConstants.NODESET);
+
+                ArrayList<CCDAUDI> devices = readUDI(deviceNodeList);
+                if(devices != null)
+                    udis.addAll(devices);
+            }
+
+
+        }
+
+        return udis;
+    }
+    
+    public ArrayList<CCDAUDI> readUDI(NodeList deviceNodeList) throws XPathExpressionException
+    {
+        ArrayList<CCDAUDI> deviceList =  null;
+        if(!ParserUtilities.isNodeListEmpty(deviceNodeList))
+        {
+            deviceList = new ArrayList<>();
+        }
+        CCDAUDI device;
+        for (int i = 0; i < deviceNodeList.getLength(); i++) {
+
+            logger.info("Adding UDIs");
+            device = new CCDAUDI();
+
+            Element deviceElement = ApplicationUtil.getCloneNode((Element) deviceNodeList.item(i));
+            device.setTemplateIds(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
+                    evaluate(deviceElement, XPathConstants.NODESET)));
+
+            device.setUDIValue(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_ID_EXP.
+                    evaluate(deviceElement, XPathConstants.NODESET)));
+
+            device.setDeviceCode(ParserUtilities.readCode((Element) CCDAConstants.REL_PLAYING_DEV_CODE_EXP.
+                    evaluate(deviceElement, XPathConstants.NODE)));
+
+            device.setScopingEntityId(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_SCOPING_ENTITY_ID_EXP.
+                    evaluate(deviceElement, XPathConstants.NODESET)));
+
+            device.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+                    evaluate(deviceElement, XPathConstants.NODE)));
+            deviceList.add(device);
+
+        }
+
+        return deviceList;
+
     }
 
     private List<CCDAMedicalEquipmentOrg> readOrganizers(NodeList orgNodes, XPath xPath, List<CCDAID> ids) throws TransformerException, XPathExpressionException {
@@ -76,7 +172,7 @@ public class MedicalEquipmentProcessor {
         CCDAMedicalEquipmentOrg medicalEquipmentOrg;
         for (int i = 0; i < orgNodes.getLength(); i++) {
             medicalEquipmentOrg = new CCDAMedicalEquipmentOrg();
-            Element orgElement = (Element) orgNodes.item(i);
+            Element orgElement = ApplicationUtil.getCloneNode((Element) orgNodes.item(i));
         orgElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
             medicalEquipmentOrg.setLineNumber(orgElement.getUserData("lineNumber") + " - " + orgElement.getUserData("endLineNumber") );
             medicalEquipmentOrg.setXmlString(ApplicationUtil.nodeToString((Node)orgElement));
@@ -110,7 +206,7 @@ public class MedicalEquipmentProcessor {
         CCDANonMedicalSupplyAct supplyAct;
         for (int i = 0; i < supplyNodes.getLength(); i++) {
             supplyAct = new CCDANonMedicalSupplyAct();
-            Element supplyElement = (Element) supplyNodes.item(i);
+            Element supplyElement = ApplicationUtil.getCloneNode((Element) supplyNodes.item(i));
             supplyElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
             supplyAct.setLineNumber(supplyElement.getUserData(ApplicationConstants.LINE_NUMBER_KEY_NAME) + " - " + supplyElement.getUserData(ApplicationConstants.END_LINE_NUMBER_KEY_NAME) );
             supplyAct.setXmlString(ApplicationUtil.nodeToString((Node)supplyElement));

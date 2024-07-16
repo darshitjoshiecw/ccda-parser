@@ -1,6 +1,7 @@
 package org.sitenv.ccdaparsing.processing;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.sitenv.ccdaparsing.model.CCDAAdvanceDirective;
 import org.sitenv.ccdaparsing.model.CCDAAdvanceDirectiveObs;
 import org.sitenv.ccdaparsing.model.CCDAAdvanceDirectiveOrg;
@@ -26,22 +27,25 @@ import java.util.concurrent.Future;
 
 @Service
 public class AdvanceDirectiveProcesser {
-	private static final Logger logger = Logger.getLogger(AdvanceDirectiveProcesser.class);
+	
+	private static final Logger logger = LogManager.getLogger(AdvanceDirectiveProcesser.class);
 
-	@Async()
-	public Future<CCDAAdvanceDirective> retrieveAdvanceDirectiveDetails(XPath xPath, Document doc) throws XPathExpressionException, TransformerException {
+	public CCDAAdvanceDirective retrieveAdvanceDirectiveDetails(XPath xPath, Document doc) throws XPathExpressionException, TransformerException {
 		long startTime = System.currentTimeMillis();
 		logger.info("Advance Directive parsing Start time:" + startTime);
 
 		CCDAAdvanceDirective advanceDirective = null;
-		Element sectionElement = (Element) xPath.compile(ApplicationConstants.ADV_DIRECTIVE_EXPRESSION)
-				.evaluate(doc, XPathConstants.NODE);
+		Element sectionElement = ApplicationUtil.getCloneNode((Element) xPath.compile(ApplicationConstants.ADV_DIRECTIVE_EXPRESSION)
+				.evaluate(doc, XPathConstants.NODE));
 		List<CCDAID> idList = new ArrayList<>();
 		if (sectionElement != null) {
 			advanceDirective = new CCDAAdvanceDirective();
+			sectionElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+			advanceDirective.setLineNumber(sectionElement.getUserData("lineNumber") + " - " + sectionElement.getUserData("endLineNumber"));
+			advanceDirective.setXmlString(ApplicationUtil.nodeToString((Node) sectionElement));
 			if (ApplicationUtil.checkForNullFlavourNI(sectionElement)) {
 				advanceDirective.setSectionNullFlavourWithNI(true);
-				return new AsyncResult<CCDAAdvanceDirective>(advanceDirective);
+				return advanceDirective;
 			}
 			advanceDirective.setTemplateIds(ApplicationUtil
 					.readTemplateIdList((NodeList) xPath
@@ -55,10 +59,6 @@ public class AdvanceDirectiveProcesser {
 					.compile("./entry/organizer[not(@nullFlavor)] | ./entry/observation[not(@nullFlavor)]").
 					evaluate(sectionElement, XPathConstants.NODESET), xPath, idList));
 
-			sectionElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-			advanceDirective.setLineNumber(sectionElement.getUserData("lineNumber") + " - " + sectionElement.getUserData("endLineNumber"));
-			advanceDirective.setXmlString(ApplicationUtil.nodeToString((Node) sectionElement));
-
 			Element textElement = (Element) xPath.compile("./text[not(@nullFlavor)]")
 					.evaluate(sectionElement, XPathConstants.NODE);
 
@@ -70,7 +70,7 @@ public class AdvanceDirectiveProcesser {
 			advanceDirective.setIdList(idList);
 		}
 		logger.info("Advance Directive parsing End time:" + (System.currentTimeMillis() - startTime));
-		return new AsyncResult<CCDAAdvanceDirective>(advanceDirective);
+		return advanceDirective;
 	}
 
 	private ArrayList<CCDAAdvanceDirectiveOrg> readAdvanceDirectiveOrganizers(NodeList advDirectiveOrgNodeList, XPath xPath, List<CCDAID> idList) throws XPathExpressionException, TransformerException {
@@ -79,7 +79,7 @@ public class AdvanceDirectiveProcesser {
 		for (int i = 0; i < advDirectiveOrgNodeList.getLength(); i++) {
 			advDirectiveOrg = new CCDAAdvanceDirectiveOrg();
 
-			Element advDirectiveOrgElement = (Element) advDirectiveOrgNodeList.item(i);
+			Element advDirectiveOrgElement = ApplicationUtil.getCloneNode((Element) advDirectiveOrgNodeList.item(i));
 
 			if (advDirectiveOrgElement.getTagName().equalsIgnoreCase("organizer")) {
 				setAdvDirectiveOrg(advDirectiveOrg, advDirectiveOrgElement, xPath, idList);
@@ -131,7 +131,7 @@ public class AdvanceDirectiveProcesser {
 				evaluate(advDirectiveOrgElement, XPathConstants.NODESET);
 		ArrayList<CCDAAdvanceDirectiveObs> obsList = new ArrayList<>();
 		for (int i = 0; i < obsNodeList.getLength(); i++) {
-			Element advDirectiveObsElement = (Element) obsNodeList.item(i);
+			Element advDirectiveObsElement = ApplicationUtil.getCloneNode((Element) obsNodeList.item(i));
 			CCDAAdvanceDirectiveObs advanceDirectiveObs = readObservations(advDirectiveObsElement, xPath, idList);
 			obsList.add(advanceDirectiveObs);
 		}
@@ -212,7 +212,7 @@ public class AdvanceDirectiveProcesser {
 			NodeList giveNameNodeList = (NodeList) xPath.compile("./given[not(@nullFlavor)]").
 					evaluate(nameElement, XPathConstants.NODESET);
 			for (int i = 0; i < giveNameNodeList.getLength(); i++) {
-				Element givenNameElement = (Element) giveNameNodeList.item(i);
+				Element givenNameElement = ApplicationUtil.getCloneNode((Element) giveNameNodeList.item(i));
 				if(!ApplicationUtil.isEmpty(givenNameElement.getAttribute("qualifier")))
 				{
 					participant.setPreviousName(ApplicationUtil.readTextContent(givenNameElement));

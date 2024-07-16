@@ -35,7 +35,7 @@ public class HealthConernTest {
 		DocumentBuilder builder = factory.newDocumentBuilder();
 		Document doc = builder.parse(new File(CCDA_DOC));
 		XPath xPath =  XPathFactory.newInstance().newXPath();
-		healthConcerns = healthConcernsProcessor.retrieveHealthConcernDetails(xPath, doc).get();
+		healthConcerns = healthConcernsProcessor.retrieveHealthConcernDetails(xPath, doc);
 	}
 	
 	

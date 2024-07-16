@@ -32,7 +32,7 @@ public class FunctionalStatusTest {
 		DocumentBuilder builder = factory.newDocumentBuilder();
 		Document doc = builder.parse(new File(CCDA_DOC));
 		XPath xPath = XPathFactory.newInstance().newXPath();
-		functionalStatus = functionalStatusProcessor.retrieveFunctionalStatusDetails(xPath, doc).get();
+		functionalStatus = functionalStatusProcessor.retrieveFunctionalStatusDetails(xPath, doc);
 	}
 
 	private void setFunctionalStatusSectionCode() {
